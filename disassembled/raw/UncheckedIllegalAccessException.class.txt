@@ -1,0 +1,5 @@
+Compiled from "UncheckedIllegalAccessException.java"
+public class org.apache.commons.lang3.exception.UncheckedIllegalAccessException extends org.apache.commons.lang3.exception.UncheckedReflectiveOperationException {
+  private static final long serialVersionUID;
+  public org.apache.commons.lang3.exception.UncheckedIllegalAccessException(java.lang.Throwable);
+}

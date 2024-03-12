@@ -31,8 +31,16 @@ docstring = """
  * This is a multi-line comment.
  * Another line.
  */
-public returnType functionName(dataType arg1, dataType arg2) {
+public Task<ActionResult<Dictionary<string, long>>> functionName(dataType arg1, dataType arg2) {
 """
+#docstring_fun_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+\w+\s+\w+\s*\((?:.*?)\)'
+#docstring_fun_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+([\w\[\]]+)\s+(\w+)\s*\((?:.*?)\)'
+#docstring_fun_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+([\w<> \[\]]+)\s+(\w+)\s*\((?:.*?)\)'
+#docstring_fun_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+([^()\s]+)\s+(\w+)\s*\((?:.*?)\)'
+#docstring_fun_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+([\w\s<>]+)\s+(\w+)\s*\((?:.*?)\)'
+#docstring_fun_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+([^()\s]+(?:\s*<[^>]*>)?)\s+(\w+)\s*\((?:.*?)\)'
+docstring_fun_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+([^()\s]+(?:\s*<[^>]*>)?)\s+(\w+)\s*\((?:.*?)\)'
+
 
 docstring_static = """
 /**
@@ -41,6 +49,9 @@ docstring_static = """
  */
 public static returnType functionName(dataType arg1, dataType arg2) {
 """
+#docstring_static_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+static\s+(\w+)\s+(\w+)\s*\((.*?)\)\s*\{'
+docstring_static_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+static\s+([\w\[\]]+)\s+(\w+)\s*\((.*?)\)\s*\{'
+
 
 docstring_class = """
 /**
@@ -86,11 +97,13 @@ docstring_protected = """
 /**
  * This is a multi-line comment.
  * Another line.
+ *fnfea
  */
-protected returnType functionName(dataType arg1, dataType arg2) {
+protected returnType functionName(dataType arg1, dataType arg2, final dataType arg3) {
 """
 docstring_protected_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*protected\s+(\w+)\s+(\w+)\s*\((.*?)\)\s*\{'
 
+
 # Find the first match for either pattern in the Java code
-match = re.findall(docstring_protected_pattern, docstring_protected, re.DOTALL)
+match = re.findall(docstring_fun_pattern, docstring, re.DOTALL)
 print(match)

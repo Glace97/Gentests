@@ -1,0 +1,16 @@
+Compiled from "Memoizer.java"
+public class org.apache.commons.lang3.concurrent.Memoizer<I, O> implements org.apache.commons.lang3.concurrent.Computable<I, O> {
+  private final java.util.concurrent.ConcurrentMap<I, java.util.concurrent.Future<O>> cache;
+  private final java.util.function.Function<? super I, ? extends java.util.concurrent.Future<O>> mappingFunction;
+  private final boolean recalculate;
+  public org.apache.commons.lang3.concurrent.Memoizer(org.apache.commons.lang3.concurrent.Computable<I, O>);
+  public org.apache.commons.lang3.concurrent.Memoizer(org.apache.commons.lang3.concurrent.Computable<I, O>, boolean);
+  public org.apache.commons.lang3.concurrent.Memoizer(java.util.function.Function<I, O>);
+  public org.apache.commons.lang3.concurrent.Memoizer(java.util.function.Function<I, O>, boolean);
+  public O compute(I) throws java.lang.InterruptedException;
+  private java.lang.RuntimeException launderException(java.lang.Throwable);
+  private static java.util.concurrent.Future lambda$new$3(java.util.function.Function, java.lang.Object);
+  private static java.lang.Object lambda$new$2(java.util.function.Function, java.lang.Object) throws java.lang.Exception;
+  private static java.util.concurrent.Future lambda$new$1(org.apache.commons.lang3.concurrent.Computable, java.lang.Object);
+  private static java.lang.Object lambda$new$0(org.apache.commons.lang3.concurrent.Computable, java.lang.Object) throws java.lang.Exception;
+}

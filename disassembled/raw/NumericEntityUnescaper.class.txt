@@ -1,0 +1,7 @@
+Compiled from "NumericEntityUnescaper.java"
+public class org.apache.commons.lang3.text.translate.NumericEntityUnescaper extends org.apache.commons.lang3.text.translate.CharSequenceTranslator {
+  private final java.util.EnumSet<org.apache.commons.lang3.text.translate.NumericEntityUnescaper$OPTION> options;
+  public org.apache.commons.lang3.text.translate.NumericEntityUnescaper(org.apache.commons.lang3.text.translate.NumericEntityUnescaper$OPTION...);
+  public boolean isSet(org.apache.commons.lang3.text.translate.NumericEntityUnescaper$OPTION);
+  public int translate(java.lang.CharSequence, int, java.io.Writer) throws java.io.IOException;
+}

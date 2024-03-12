@@ -1,0 +1,16 @@
+Compiled from "MethodInvokers.java"
+public final class org.apache.commons.lang3.function.MethodInvokers {
+  public static <T, U> java.util.function.BiConsumer<T, U> asBiConsumer(java.lang.reflect.Method);
+  public static <T, U, R> java.util.function.BiFunction<T, U, R> asBiFunction(java.lang.reflect.Method);
+  public static <T, U> org.apache.commons.lang3.function.FailableBiConsumer<T, U, java.lang.Throwable> asFailableBiConsumer(java.lang.reflect.Method);
+  public static <T, U, R> org.apache.commons.lang3.function.FailableBiFunction<T, U, R, java.lang.Throwable> asFailableBiFunction(java.lang.reflect.Method);
+  public static <T, R> org.apache.commons.lang3.function.FailableFunction<T, R, java.lang.Throwable> asFailableFunction(java.lang.reflect.Method);
+  public static <R> org.apache.commons.lang3.function.FailableSupplier<R, java.lang.Throwable> asFailableSupplier(java.lang.reflect.Method);
+  public static <T, R> java.util.function.Function<T, R> asFunction(java.lang.reflect.Method);
+  public static <T> T asInterfaceInstance(java.lang.Class<T>, java.lang.reflect.Method);
+  public static <R> java.util.function.Supplier<R> asSupplier(java.lang.reflect.Method);
+  private static java.lang.reflect.Method requireMethod(java.lang.reflect.Method);
+  private static java.lang.invoke.MethodHandle unreflect(java.lang.reflect.Method) throws java.lang.IllegalAccessException;
+  private static java.lang.invoke.MethodHandle unreflectUnchecked(java.lang.reflect.Method);
+  private org.apache.commons.lang3.function.MethodInvokers();
+}

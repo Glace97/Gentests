@@ -1,0 +1,5 @@
+Compiled from "NumberRange.java"
+public class org.apache.commons.lang3.NumberRange<N extends java.lang.Number> extends org.apache.commons.lang3.Range<N> {
+  private static final long serialVersionUID;
+  public org.apache.commons.lang3.NumberRange(N, N, java.util.Comparator<N>);
+}

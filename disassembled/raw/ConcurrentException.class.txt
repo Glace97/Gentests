@@ -1,0 +1,7 @@
+Compiled from "ConcurrentException.java"
+public class org.apache.commons.lang3.concurrent.ConcurrentException extends java.lang.Exception {
+  private static final long serialVersionUID;
+  protected org.apache.commons.lang3.concurrent.ConcurrentException();
+  public org.apache.commons.lang3.concurrent.ConcurrentException(java.lang.String, java.lang.Throwable);
+  public org.apache.commons.lang3.concurrent.ConcurrentException(java.lang.Throwable);
+}

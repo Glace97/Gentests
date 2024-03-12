@@ -1,0 +1,6 @@
+Compiled from "TriConsumer.java"
+public interface org.apache.commons.lang3.function.TriConsumer<T, U, V> {
+  public abstract void accept(T, U, V);
+  public default org.apache.commons.lang3.function.TriConsumer<T, U, V> andThen(org.apache.commons.lang3.function.TriConsumer<? super T, ? super U, ? super V>);
+  private void lambda$andThen$0(org.apache.commons.lang3.function.TriConsumer, java.lang.Object, java.lang.Object, java.lang.Object);
+}

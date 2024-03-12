@@ -1,0 +1,8 @@
+Compiled from "FailableObjLongConsumer.java"
+public interface org.apache.commons.lang3.function.FailableObjLongConsumer<T, E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableObjLongConsumer NOP;
+  public static <T, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableObjLongConsumer<T, E> nop();
+  public abstract void accept(T, long) throws E;
+  private static void lambda$static$0(java.lang.Object, long) throws java.lang.Throwable;
+  static {};
+}

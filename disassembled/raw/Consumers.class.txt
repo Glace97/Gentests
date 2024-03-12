@@ -1,0 +1,7 @@
+Compiled from "Consumers.java"
+public class org.apache.commons.lang3.function.Consumers {
+  private static final java.util.function.Consumer NOP;
+  public static <T> java.util.function.Consumer<T> nop();
+  private org.apache.commons.lang3.function.Consumers();
+  static {};
+}

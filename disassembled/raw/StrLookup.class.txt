@@ -1,0 +1,11 @@
+Compiled from "StrLookup.java"
+public abstract class org.apache.commons.lang3.text.StrLookup<V> {
+  private static final org.apache.commons.lang3.text.StrLookup<java.lang.String> NONE_LOOKUP;
+  private static final org.apache.commons.lang3.text.StrLookup<java.lang.String> SYSTEM_PROPERTIES_LOOKUP;
+  public static <V> org.apache.commons.lang3.text.StrLookup<V> mapLookup(java.util.Map<java.lang.String, V>);
+  public static org.apache.commons.lang3.text.StrLookup<?> noneLookup();
+  public static org.apache.commons.lang3.text.StrLookup<java.lang.String> systemPropertiesLookup();
+  protected org.apache.commons.lang3.text.StrLookup();
+  public abstract java.lang.String lookup(java.lang.String);
+  static {};
+}

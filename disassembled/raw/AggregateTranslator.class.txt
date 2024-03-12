@@ -1,0 +1,6 @@
+Compiled from "AggregateTranslator.java"
+public class org.apache.commons.lang3.text.translate.AggregateTranslator extends org.apache.commons.lang3.text.translate.CharSequenceTranslator {
+  private final org.apache.commons.lang3.text.translate.CharSequenceTranslator[] translators;
+  public org.apache.commons.lang3.text.translate.AggregateTranslator(org.apache.commons.lang3.text.translate.CharSequenceTranslator...);
+  public int translate(java.lang.CharSequence, int, java.io.Writer) throws java.io.IOException;
+}

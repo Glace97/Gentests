@@ -1,0 +1,10 @@
+Compiled from "FailableIntConsumer.java"
+public interface org.apache.commons.lang3.function.FailableIntConsumer<E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableIntConsumer NOP;
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntConsumer<E> nop();
+  public abstract void accept(int) throws E;
+  public default org.apache.commons.lang3.function.FailableIntConsumer<E> andThen(org.apache.commons.lang3.function.FailableIntConsumer<E>);
+  private void lambda$andThen$1(org.apache.commons.lang3.function.FailableIntConsumer, int) throws java.lang.Throwable;
+  private static void lambda$static$0(int) throws java.lang.Throwable;
+  static {};
+}

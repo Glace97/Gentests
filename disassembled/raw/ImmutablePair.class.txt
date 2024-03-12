@@ -1,0 +1,20 @@
+Compiled from "ImmutablePair.java"
+public class org.apache.commons.lang3.tuple.ImmutablePair<L, R> extends org.apache.commons.lang3.tuple.Pair<L, R> {
+  public static final org.apache.commons.lang3.tuple.ImmutablePair<?, ?>[] EMPTY_ARRAY;
+  private static final org.apache.commons.lang3.tuple.ImmutablePair NULL;
+  private static final long serialVersionUID;
+  public final L left;
+  public final R right;
+  public static <L, R> org.apache.commons.lang3.tuple.ImmutablePair<L, R>[] emptyArray();
+  public static <L, R> org.apache.commons.lang3.tuple.Pair<L, R> left(L);
+  public static <L, R> org.apache.commons.lang3.tuple.ImmutablePair<L, R> nullPair();
+  public static <L, R> org.apache.commons.lang3.tuple.ImmutablePair<L, R> of(L, R);
+  public static <L, R> org.apache.commons.lang3.tuple.ImmutablePair<L, R> of(java.util.Map$Entry<L, R>);
+  public static <L, R> org.apache.commons.lang3.tuple.ImmutablePair<L, R> ofNonNull(L, R);
+  public static <L, R> org.apache.commons.lang3.tuple.Pair<L, R> right(R);
+  public org.apache.commons.lang3.tuple.ImmutablePair(L, R);
+  public L getLeft();
+  public R getRight();
+  public R setValue(R);
+  static {};
+}

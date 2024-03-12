@@ -1,0 +1,15 @@
+Compiled from "AtomicInitializer.java"
+public class org.apache.commons.lang3.concurrent.AtomicInitializer<T> extends org.apache.commons.lang3.concurrent.AbstractConcurrentInitializer<T, org.apache.commons.lang3.concurrent.ConcurrentException> {
+  private static final java.lang.Object NO_INIT;
+  private final java.util.concurrent.atomic.AtomicReference<T> reference;
+  public static <T> org.apache.commons.lang3.concurrent.AtomicInitializer$Builder<org.apache.commons.lang3.concurrent.AtomicInitializer<T>, T> builder();
+  public org.apache.commons.lang3.concurrent.AtomicInitializer();
+  private org.apache.commons.lang3.concurrent.AtomicInitializer(org.apache.commons.lang3.function.FailableSupplier<T, org.apache.commons.lang3.concurrent.ConcurrentException>, org.apache.commons.lang3.function.FailableConsumer<T, org.apache.commons.lang3.concurrent.ConcurrentException>);
+  public T get() throws org.apache.commons.lang3.concurrent.ConcurrentException;
+  private T getNoInit();
+  protected org.apache.commons.lang3.concurrent.ConcurrentException getTypedException(java.lang.Exception);
+  public boolean isInitialized();
+  protected java.lang.Exception getTypedException(java.lang.Exception);
+  org.apache.commons.lang3.concurrent.AtomicInitializer(org.apache.commons.lang3.function.FailableSupplier, org.apache.commons.lang3.function.FailableConsumer, org.apache.commons.lang3.concurrent.AtomicInitializer$1);
+  static {};
+}

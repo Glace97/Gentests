@@ -1,0 +1,5 @@
+Compiled from "Reflection.java"
+final class org.apache.commons.lang3.builder.Reflection {
+  org.apache.commons.lang3.builder.Reflection();
+  static java.lang.Object getUnchecked(java.lang.reflect.Field, java.lang.Object);
+}

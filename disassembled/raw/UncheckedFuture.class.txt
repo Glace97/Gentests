@@ -1,0 +1,8 @@
+Compiled from "UncheckedFuture.java"
+public interface org.apache.commons.lang3.concurrent.UncheckedFuture<V> extends java.util.concurrent.Future<V> {
+  public static <T> java.util.stream.Stream<org.apache.commons.lang3.concurrent.UncheckedFuture<T>> map(java.util.Collection<java.util.concurrent.Future<T>>);
+  public static <T> java.util.Collection<org.apache.commons.lang3.concurrent.UncheckedFuture<T>> on(java.util.Collection<java.util.concurrent.Future<T>>);
+  public static <T> org.apache.commons.lang3.concurrent.UncheckedFuture<T> on(java.util.concurrent.Future<T>);
+  public abstract V get();
+  public abstract V get(long, java.util.concurrent.TimeUnit);
+}

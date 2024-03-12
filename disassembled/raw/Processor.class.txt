@@ -1,0 +1,16 @@
+Compiled from "Processor.java"
+public class org.apache.commons.lang3.arch.Processor {
+  private final org.apache.commons.lang3.arch.Processor$Arch arch;
+  private final org.apache.commons.lang3.arch.Processor$Type type;
+  public org.apache.commons.lang3.arch.Processor(org.apache.commons.lang3.arch.Processor$Arch, org.apache.commons.lang3.arch.Processor$Type);
+  public org.apache.commons.lang3.arch.Processor$Arch getArch();
+  public org.apache.commons.lang3.arch.Processor$Type getType();
+  public boolean is32Bit();
+  public boolean is64Bit();
+  public boolean isAarch64();
+  public boolean isIA64();
+  public boolean isPPC();
+  public boolean isRISCV();
+  public boolean isX86();
+  public java.lang.String toString();
+}

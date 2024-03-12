@@ -1,0 +1,27 @@
+Compiled from "CharRange.java"
+final class org.apache.commons.lang3.CharRange implements java.lang.Iterable<java.lang.Character>, java.io.Serializable {
+  private static final long serialVersionUID;
+  static final org.apache.commons.lang3.CharRange[] EMPTY_ARRAY;
+  private final char start;
+  private final char end;
+  private final boolean negated;
+  private transient java.lang.String iToString;
+  public static org.apache.commons.lang3.CharRange is(char);
+  public static org.apache.commons.lang3.CharRange isIn(char, char);
+  public static org.apache.commons.lang3.CharRange isNot(char);
+  public static org.apache.commons.lang3.CharRange isNotIn(char, char);
+  private org.apache.commons.lang3.CharRange(char, char, boolean);
+  public boolean contains(char);
+  public boolean contains(org.apache.commons.lang3.CharRange);
+  public boolean equals(java.lang.Object);
+  public char getEnd();
+  public char getStart();
+  public int hashCode();
+  public boolean isNegated();
+  public java.util.Iterator<java.lang.Character> iterator();
+  public java.lang.String toString();
+  static boolean access$000(org.apache.commons.lang3.CharRange);
+  static char access$100(org.apache.commons.lang3.CharRange);
+  static char access$200(org.apache.commons.lang3.CharRange);
+  static {};
+}

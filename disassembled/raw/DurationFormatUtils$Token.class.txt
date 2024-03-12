@@ -1,0 +1,19 @@
+Compiled from "DurationFormatUtils.java"
+class org.apache.commons.lang3.time.DurationFormatUtils$Token {
+  private static final org.apache.commons.lang3.time.DurationFormatUtils$Token[] EMPTY_ARRAY;
+  private final java.lang.Object value;
+  private int count;
+  private int optionalIndex;
+  static boolean containsTokenWithValue(org.apache.commons.lang3.time.DurationFormatUtils$Token[], java.lang.Object);
+  org.apache.commons.lang3.time.DurationFormatUtils$Token(java.lang.Object, boolean, int);
+  public boolean equals(java.lang.Object);
+  int getCount();
+  java.lang.Object getValue();
+  public int hashCode();
+  void increment();
+  public java.lang.String toString();
+  private static boolean lambda$containsTokenWithValue$0(java.lang.Object, org.apache.commons.lang3.time.DurationFormatUtils$Token);
+  static int access$000(org.apache.commons.lang3.time.DurationFormatUtils$Token);
+  static org.apache.commons.lang3.time.DurationFormatUtils$Token[] access$100();
+  static {};
+}

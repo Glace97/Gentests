@@ -1,0 +1,5 @@
+Compiled from "FutureTasks.java"
+public class org.apache.commons.lang3.concurrent.FutureTasks {
+  public static <V> java.util.concurrent.FutureTask<V> run(java.util.concurrent.Callable<V>);
+  private org.apache.commons.lang3.concurrent.FutureTasks();
+}

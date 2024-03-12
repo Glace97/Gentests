@@ -1,0 +1,40 @@
+Compiled from "MutableFloat.java"
+public class org.apache.commons.lang3.mutable.MutableFloat extends java.lang.Number implements java.lang.Comparable<org.apache.commons.lang3.mutable.MutableFloat>, org.apache.commons.lang3.mutable.Mutable<java.lang.Number> {
+  private static final long serialVersionUID;
+  private float value;
+  public org.apache.commons.lang3.mutable.MutableFloat();
+  public org.apache.commons.lang3.mutable.MutableFloat(float);
+  public org.apache.commons.lang3.mutable.MutableFloat(java.lang.Number);
+  public org.apache.commons.lang3.mutable.MutableFloat(java.lang.String);
+  public void add(float);
+  public void add(java.lang.Number);
+  public float addAndGet(float);
+  public float addAndGet(java.lang.Number);
+  public int compareTo(org.apache.commons.lang3.mutable.MutableFloat);
+  public void decrement();
+  public float decrementAndGet();
+  public double doubleValue();
+  public boolean equals(java.lang.Object);
+  public float floatValue();
+  public float getAndAdd(float);
+  public float getAndAdd(java.lang.Number);
+  public float getAndDecrement();
+  public float getAndIncrement();
+  public java.lang.Float getValue();
+  public int hashCode();
+  public void increment();
+  public float incrementAndGet();
+  public int intValue();
+  public boolean isInfinite();
+  public boolean isNaN();
+  public long longValue();
+  public void setValue(float);
+  public void setValue(java.lang.Number);
+  public void subtract(float);
+  public void subtract(java.lang.Number);
+  public java.lang.Float toFloat();
+  public java.lang.String toString();
+  public int compareTo(java.lang.Object);
+  public void setValue(java.lang.Object);
+  public java.lang.Object getValue();
+}

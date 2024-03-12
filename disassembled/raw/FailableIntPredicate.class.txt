@@ -1,0 +1,17 @@
+Compiled from "FailableIntPredicate.java"
+public interface org.apache.commons.lang3.function.FailableIntPredicate<E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableIntPredicate FALSE;
+  public static final org.apache.commons.lang3.function.FailableIntPredicate TRUE;
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntPredicate<E> falsePredicate();
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntPredicate<E> truePredicate();
+  public default org.apache.commons.lang3.function.FailableIntPredicate<E> and(org.apache.commons.lang3.function.FailableIntPredicate<E>);
+  public default org.apache.commons.lang3.function.FailableIntPredicate<E> negate();
+  public default org.apache.commons.lang3.function.FailableIntPredicate<E> or(org.apache.commons.lang3.function.FailableIntPredicate<E>);
+  public abstract boolean test(int) throws E;
+  private boolean lambda$or$4(org.apache.commons.lang3.function.FailableIntPredicate, int) throws java.lang.Throwable;
+  private boolean lambda$negate$3(int) throws java.lang.Throwable;
+  private boolean lambda$and$2(org.apache.commons.lang3.function.FailableIntPredicate, int) throws java.lang.Throwable;
+  private static boolean lambda$static$1(int) throws java.lang.Throwable;
+  private static boolean lambda$static$0(int) throws java.lang.Throwable;
+  static {};
+}

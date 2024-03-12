@@ -1,0 +1,9 @@
+Compiled from "EventUtils.java"
+final class org.apache.commons.lang3.event.EventUtils$EventBindingInvocationHandler implements java.lang.reflect.InvocationHandler {
+  private final java.lang.Object target;
+  private final java.lang.String methodName;
+  private final java.util.Set<java.lang.String> eventTypes;
+  org.apache.commons.lang3.event.EventUtils$EventBindingInvocationHandler(java.lang.Object, java.lang.String, java.lang.String[]);
+  private boolean hasMatchingParametersMethod(java.lang.reflect.Method);
+  public java.lang.Object invoke(java.lang.Object, java.lang.reflect.Method, java.lang.Object[]) throws java.lang.Throwable;
+}

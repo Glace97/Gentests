@@ -1,0 +1,12 @@
+Compiled from "CharEncoding.java"
+public class org.apache.commons.lang3.CharEncoding {
+  public static final java.lang.String ISO_8859_1;
+  public static final java.lang.String US_ASCII;
+  public static final java.lang.String UTF_16;
+  public static final java.lang.String UTF_16BE;
+  public static final java.lang.String UTF_16LE;
+  public static final java.lang.String UTF_8;
+  public org.apache.commons.lang3.CharEncoding();
+  public static boolean isSupported(java.lang.String);
+  static {};
+}

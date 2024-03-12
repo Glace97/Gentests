@@ -1,0 +1,35 @@
+Compiled from "ExtendedMessageFormat.java"
+public class org.apache.commons.lang3.text.ExtendedMessageFormat extends java.text.MessageFormat {
+  private static final long serialVersionUID;
+  private static final int HASH_SEED;
+  private static final java.lang.String DUMMY_PATTERN;
+  private static final char START_FMT;
+  private static final char END_FE;
+  private static final char START_FE;
+  private static final char QUOTE;
+  private java.lang.String toPattern;
+  private final java.util.Map<java.lang.String, ? extends org.apache.commons.lang3.text.FormatFactory> registry;
+  static final boolean $assertionsDisabled;
+  public org.apache.commons.lang3.text.ExtendedMessageFormat(java.lang.String);
+  public org.apache.commons.lang3.text.ExtendedMessageFormat(java.lang.String, java.util.Locale);
+  public org.apache.commons.lang3.text.ExtendedMessageFormat(java.lang.String, java.util.Locale, java.util.Map<java.lang.String, ? extends org.apache.commons.lang3.text.FormatFactory>);
+  public org.apache.commons.lang3.text.ExtendedMessageFormat(java.lang.String, java.util.Map<java.lang.String, ? extends org.apache.commons.lang3.text.FormatFactory>);
+  private java.lang.StringBuilder appendQuotedString(java.lang.String, java.text.ParsePosition, java.lang.StringBuilder);
+  public final void applyPattern(java.lang.String);
+  private boolean containsElements(java.util.Collection<?>);
+  public boolean equals(java.lang.Object);
+  private java.text.Format getFormat(java.lang.String);
+  private void getQuotedString(java.lang.String, java.text.ParsePosition);
+  public int hashCode();
+  private java.lang.String insertFormats(java.lang.String, java.util.ArrayList<java.lang.String>);
+  private java.text.ParsePosition next(java.text.ParsePosition);
+  private java.lang.String parseFormatDescription(java.lang.String, java.text.ParsePosition);
+  private int readArgumentIndex(java.lang.String, java.text.ParsePosition);
+  private void seekNonWs(java.lang.String, java.text.ParsePosition);
+  public void setFormat(int, java.text.Format);
+  public void setFormatByArgumentIndex(int, java.text.Format);
+  public void setFormats(java.text.Format[]);
+  public void setFormatsByArgumentIndex(java.text.Format[]);
+  public java.lang.String toPattern();
+  static {};
+}

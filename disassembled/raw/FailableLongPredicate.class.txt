@@ -1,0 +1,17 @@
+Compiled from "FailableLongPredicate.java"
+public interface org.apache.commons.lang3.function.FailableLongPredicate<E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableLongPredicate FALSE;
+  public static final org.apache.commons.lang3.function.FailableLongPredicate TRUE;
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableLongPredicate<E> falsePredicate();
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableLongPredicate<E> truePredicate();
+  public default org.apache.commons.lang3.function.FailableLongPredicate<E> and(org.apache.commons.lang3.function.FailableLongPredicate<E>);
+  public default org.apache.commons.lang3.function.FailableLongPredicate<E> negate();
+  public default org.apache.commons.lang3.function.FailableLongPredicate<E> or(org.apache.commons.lang3.function.FailableLongPredicate<E>);
+  public abstract boolean test(long) throws E;
+  private boolean lambda$or$4(org.apache.commons.lang3.function.FailableLongPredicate, long) throws java.lang.Throwable;
+  private boolean lambda$negate$3(long) throws java.lang.Throwable;
+  private boolean lambda$and$2(org.apache.commons.lang3.function.FailableLongPredicate, long) throws java.lang.Throwable;
+  private static boolean lambda$static$1(long) throws java.lang.Throwable;
+  private static boolean lambda$static$0(long) throws java.lang.Throwable;
+  static {};
+}

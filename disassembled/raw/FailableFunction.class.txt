@@ -1,0 +1,15 @@
+Compiled from "FailableFunction.java"
+public interface org.apache.commons.lang3.function.FailableFunction<T, R, E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableFunction NOP;
+  public static <T, R, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableFunction<T, R, E> function(org.apache.commons.lang3.function.FailableFunction<T, R, E>);
+  public static <T, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableFunction<T, T, E> identity();
+  public static <T, R, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableFunction<T, R, E> nop();
+  public default <V> org.apache.commons.lang3.function.FailableFunction<T, V, E> andThen(org.apache.commons.lang3.function.FailableFunction<? super R, ? extends V, E>);
+  public abstract R apply(T) throws E;
+  public default <V> org.apache.commons.lang3.function.FailableFunction<V, R, E> compose(org.apache.commons.lang3.function.FailableFunction<? super V, ? extends T, E>);
+  private java.lang.Object lambda$compose$3(org.apache.commons.lang3.function.FailableFunction, java.lang.Object) throws java.lang.Throwable;
+  private java.lang.Object lambda$andThen$2(org.apache.commons.lang3.function.FailableFunction, java.lang.Object) throws java.lang.Throwable;
+  private static java.lang.Object lambda$identity$1(java.lang.Object) throws java.lang.Throwable;
+  private static java.lang.Object lambda$static$0(java.lang.Object) throws java.lang.Throwable;
+  static {};
+}

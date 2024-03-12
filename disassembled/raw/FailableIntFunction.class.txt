@@ -1,0 +1,8 @@
+Compiled from "FailableIntFunction.java"
+public interface org.apache.commons.lang3.function.FailableIntFunction<R, E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableIntFunction NOP;
+  public static <R, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntFunction<R, E> nop();
+  public abstract R apply(int) throws E;
+  private static java.lang.Object lambda$static$0(int) throws java.lang.Throwable;
+  static {};
+}

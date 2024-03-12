@@ -1,0 +1,8 @@
+Compiled from "FailableIntToLongFunction.java"
+public interface org.apache.commons.lang3.function.FailableIntToLongFunction<E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableIntToLongFunction NOP;
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntToLongFunction<E> nop();
+  public abstract long applyAsLong(int) throws E;
+  private static long lambda$static$0(int) throws java.lang.Throwable;
+  static {};
+}

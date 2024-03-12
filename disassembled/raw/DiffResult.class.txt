@@ -1,0 +1,19 @@
+Compiled from "DiffResult.java"
+public class org.apache.commons.lang3.builder.DiffResult<T> implements java.lang.Iterable<org.apache.commons.lang3.builder.Diff<?>> {
+  public static final java.lang.String OBJECTS_SAME_STRING;
+  private final java.util.List<org.apache.commons.lang3.builder.Diff<?>> diffList;
+  private final T lhs;
+  private final T rhs;
+  private final org.apache.commons.lang3.builder.ToStringStyle style;
+  private final java.lang.String toStringFormat;
+  org.apache.commons.lang3.builder.DiffResult(T, T, java.util.List<org.apache.commons.lang3.builder.Diff<?>>, org.apache.commons.lang3.builder.ToStringStyle, java.lang.String);
+  public java.util.List<org.apache.commons.lang3.builder.Diff<?>> getDiffs();
+  public T getLeft();
+  public int getNumberOfDiffs();
+  public T getRight();
+  public org.apache.commons.lang3.builder.ToStringStyle getToStringStyle();
+  public java.util.Iterator<org.apache.commons.lang3.builder.Diff<?>> iterator();
+  public java.lang.String toString();
+  public java.lang.String toString(org.apache.commons.lang3.builder.ToStringStyle);
+  private static void lambda$toString$0(org.apache.commons.lang3.builder.ToStringBuilder, org.apache.commons.lang3.builder.ToStringBuilder, org.apache.commons.lang3.builder.Diff);
+}

@@ -1,0 +1,12 @@
+Compiled from "LangCollectors.java"
+public final class org.apache.commons.lang3.stream.LangCollectors {
+  private static final java.util.Set<java.util.stream.Collector$Characteristics> CH_NOID;
+  public static java.util.stream.Collector<java.lang.Object, ?, java.lang.String> joining();
+  public static java.util.stream.Collector<java.lang.Object, ?, java.lang.String> joining(java.lang.CharSequence);
+  public static java.util.stream.Collector<java.lang.Object, ?, java.lang.String> joining(java.lang.CharSequence, java.lang.CharSequence, java.lang.CharSequence);
+  public static java.util.stream.Collector<java.lang.Object, ?, java.lang.String> joining(java.lang.CharSequence, java.lang.CharSequence, java.lang.CharSequence, java.util.function.Function<java.lang.Object, java.lang.String>);
+  private org.apache.commons.lang3.stream.LangCollectors();
+  private static void lambda$joining$1(java.util.function.Function, java.util.StringJoiner, java.lang.Object);
+  private static java.util.StringJoiner lambda$joining$0(java.lang.CharSequence, java.lang.CharSequence, java.lang.CharSequence);
+  static {};
+}

@@ -1,0 +1,30 @@
+Compiled from "EventCountCircuitBreaker.java"
+public class org.apache.commons.lang3.concurrent.EventCountCircuitBreaker extends org.apache.commons.lang3.concurrent.AbstractCircuitBreaker<java.lang.Integer> {
+  private static final java.util.Map<org.apache.commons.lang3.concurrent.AbstractCircuitBreaker$State, org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$StateStrategy> STRATEGY_MAP;
+  private final java.util.concurrent.atomic.AtomicReference<org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$CheckIntervalData> checkIntervalData;
+  private final int openingThreshold;
+  private final long openingInterval;
+  private final int closingThreshold;
+  private final long closingInterval;
+  private static java.util.Map<org.apache.commons.lang3.concurrent.AbstractCircuitBreaker$State, org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$StateStrategy> createStrategyMap();
+  private static org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$StateStrategy stateStrategy(org.apache.commons.lang3.concurrent.AbstractCircuitBreaker$State);
+  public org.apache.commons.lang3.concurrent.EventCountCircuitBreaker(int, long, java.util.concurrent.TimeUnit);
+  public org.apache.commons.lang3.concurrent.EventCountCircuitBreaker(int, long, java.util.concurrent.TimeUnit, int);
+  public org.apache.commons.lang3.concurrent.EventCountCircuitBreaker(int, long, java.util.concurrent.TimeUnit, int, long, java.util.concurrent.TimeUnit);
+  private void changeStateAndStartNewCheckInterval(org.apache.commons.lang3.concurrent.AbstractCircuitBreaker$State);
+  public boolean checkState();
+  public void close();
+  public long getClosingInterval();
+  public int getClosingThreshold();
+  public long getOpeningInterval();
+  public int getOpeningThreshold();
+  public boolean incrementAndCheckState();
+  public boolean incrementAndCheckState(java.lang.Integer);
+  long nanoTime();
+  private org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$CheckIntervalData nextCheckIntervalData(int, org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$CheckIntervalData, org.apache.commons.lang3.concurrent.AbstractCircuitBreaker$State, long);
+  public void open();
+  private boolean performStateCheck(int);
+  private boolean updateCheckIntervalData(org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$CheckIntervalData, org.apache.commons.lang3.concurrent.EventCountCircuitBreaker$CheckIntervalData);
+  public boolean incrementAndCheckState(java.lang.Object);
+  static {};
+}

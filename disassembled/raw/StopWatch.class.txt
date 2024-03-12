@@ -1,0 +1,38 @@
+Compiled from "StopWatch.java"
+public class org.apache.commons.lang3.time.StopWatch {
+  private static final long NANO_2_MILLIS;
+  private final java.lang.String message;
+  private org.apache.commons.lang3.time.StopWatch$State runningState;
+  private org.apache.commons.lang3.time.StopWatch$SplitState splitState;
+  private long startTimeNanos;
+  private long startTimeMillis;
+  private long stopTimeMillis;
+  private long stopTimeNanos;
+  public static org.apache.commons.lang3.time.StopWatch create();
+  public static org.apache.commons.lang3.time.StopWatch createStarted();
+  public org.apache.commons.lang3.time.StopWatch();
+  public org.apache.commons.lang3.time.StopWatch(java.lang.String);
+  public java.lang.String formatSplitTime();
+  public java.lang.String formatTime();
+  public java.lang.String getMessage();
+  public long getNanoTime();
+  public long getSplitNanoTime();
+  public long getSplitTime();
+  public long getStartTime();
+  public long getStopTime();
+  public long getTime();
+  public long getTime(java.util.concurrent.TimeUnit);
+  public boolean isStarted();
+  public boolean isStopped();
+  public boolean isSuspended();
+  private long nanosToMillis(long);
+  public void reset();
+  public void resume();
+  public void split();
+  public void start();
+  public void stop();
+  public void suspend();
+  public java.lang.String toSplitString();
+  public java.lang.String toString();
+  public void unsplit();
+}

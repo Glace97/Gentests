@@ -1,0 +1,39 @@
+Compiled from "MutableByte.java"
+public class org.apache.commons.lang3.mutable.MutableByte extends java.lang.Number implements java.lang.Comparable<org.apache.commons.lang3.mutable.MutableByte>, org.apache.commons.lang3.mutable.Mutable<java.lang.Number> {
+  private static final long serialVersionUID;
+  private byte value;
+  public org.apache.commons.lang3.mutable.MutableByte();
+  public org.apache.commons.lang3.mutable.MutableByte(byte);
+  public org.apache.commons.lang3.mutable.MutableByte(java.lang.Number);
+  public org.apache.commons.lang3.mutable.MutableByte(java.lang.String);
+  public void add(byte);
+  public void add(java.lang.Number);
+  public byte addAndGet(byte);
+  public byte addAndGet(java.lang.Number);
+  public byte byteValue();
+  public int compareTo(org.apache.commons.lang3.mutable.MutableByte);
+  public void decrement();
+  public byte decrementAndGet();
+  public double doubleValue();
+  public boolean equals(java.lang.Object);
+  public float floatValue();
+  public byte getAndAdd(byte);
+  public byte getAndAdd(java.lang.Number);
+  public byte getAndDecrement();
+  public byte getAndIncrement();
+  public java.lang.Byte getValue();
+  public int hashCode();
+  public void increment();
+  public byte incrementAndGet();
+  public int intValue();
+  public long longValue();
+  public void setValue(byte);
+  public void setValue(java.lang.Number);
+  public void subtract(byte);
+  public void subtract(java.lang.Number);
+  public java.lang.Byte toByte();
+  public java.lang.String toString();
+  public int compareTo(java.lang.Object);
+  public void setValue(java.lang.Object);
+  public java.lang.Object getValue();
+}

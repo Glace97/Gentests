@@ -1,0 +1,14 @@
+Compiled from "UnicodeEscaper.java"
+public class org.apache.commons.lang3.text.translate.UnicodeEscaper extends org.apache.commons.lang3.text.translate.CodePointTranslator {
+  private final int below;
+  private final int above;
+  private final boolean between;
+  public static org.apache.commons.lang3.text.translate.UnicodeEscaper above(int);
+  public static org.apache.commons.lang3.text.translate.UnicodeEscaper below(int);
+  public static org.apache.commons.lang3.text.translate.UnicodeEscaper between(int, int);
+  public static org.apache.commons.lang3.text.translate.UnicodeEscaper outsideOf(int, int);
+  public org.apache.commons.lang3.text.translate.UnicodeEscaper();
+  protected org.apache.commons.lang3.text.translate.UnicodeEscaper(int, int, boolean);
+  protected java.lang.String toUtf16Escape(int);
+  public boolean translate(int, java.io.Writer) throws java.io.IOException;
+}

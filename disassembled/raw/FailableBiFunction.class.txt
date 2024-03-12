@@ -1,0 +1,10 @@
+Compiled from "FailableBiFunction.java"
+public interface org.apache.commons.lang3.function.FailableBiFunction<T, U, R, E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableBiFunction NOP;
+  public static <T, U, R, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableBiFunction<T, U, R, E> nop();
+  public default <V> org.apache.commons.lang3.function.FailableBiFunction<T, U, V, E> andThen(org.apache.commons.lang3.function.FailableFunction<? super R, ? extends V, E>);
+  public abstract R apply(T, U) throws E;
+  private java.lang.Object lambda$andThen$1(org.apache.commons.lang3.function.FailableFunction, java.lang.Object, java.lang.Object) throws java.lang.Throwable;
+  private static java.lang.Object lambda$static$0(java.lang.Object, java.lang.Object) throws java.lang.Throwable;
+  static {};
+}

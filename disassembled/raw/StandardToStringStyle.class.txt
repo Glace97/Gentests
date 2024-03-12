@@ -1,0 +1,45 @@
+Compiled from "StandardToStringStyle.java"
+public class org.apache.commons.lang3.builder.StandardToStringStyle extends org.apache.commons.lang3.builder.ToStringStyle {
+  private static final long serialVersionUID;
+  public org.apache.commons.lang3.builder.StandardToStringStyle();
+  public java.lang.String getArrayEnd();
+  public java.lang.String getArraySeparator();
+  public java.lang.String getArrayStart();
+  public java.lang.String getContentEnd();
+  public java.lang.String getContentStart();
+  public java.lang.String getFieldNameValueSeparator();
+  public java.lang.String getFieldSeparator();
+  public java.lang.String getNullText();
+  public java.lang.String getSizeEndText();
+  public java.lang.String getSizeStartText();
+  public java.lang.String getSummaryObjectEndText();
+  public java.lang.String getSummaryObjectStartText();
+  public boolean isArrayContentDetail();
+  public boolean isDefaultFullDetail();
+  public boolean isFieldSeparatorAtEnd();
+  public boolean isFieldSeparatorAtStart();
+  public boolean isUseClassName();
+  public boolean isUseFieldNames();
+  public boolean isUseIdentityHashCode();
+  public boolean isUseShortClassName();
+  public void setArrayContentDetail(boolean);
+  public void setArrayEnd(java.lang.String);
+  public void setArraySeparator(java.lang.String);
+  public void setArrayStart(java.lang.String);
+  public void setContentEnd(java.lang.String);
+  public void setContentStart(java.lang.String);
+  public void setDefaultFullDetail(boolean);
+  public void setFieldNameValueSeparator(java.lang.String);
+  public void setFieldSeparator(java.lang.String);
+  public void setFieldSeparatorAtEnd(boolean);
+  public void setFieldSeparatorAtStart(boolean);
+  public void setNullText(java.lang.String);
+  public void setSizeEndText(java.lang.String);
+  public void setSizeStartText(java.lang.String);
+  public void setSummaryObjectEndText(java.lang.String);
+  public void setSummaryObjectStartText(java.lang.String);
+  public void setUseClassName(boolean);
+  public void setUseFieldNames(boolean);
+  public void setUseIdentityHashCode(boolean);
+  public void setUseShortClassName(boolean);
+}

@@ -1,0 +1,29 @@
+Compiled from "EnumUtils.java"
+public class org.apache.commons.lang3.EnumUtils {
+  private static final java.lang.String CANNOT_STORE_S_S_VALUES_IN_S_BITS;
+  private static final java.lang.String ENUM_CLASS_MUST_BE_DEFINED;
+  private static final java.lang.String NULL_ELEMENTS_NOT_PERMITTED;
+  private static final java.lang.String S_DOES_NOT_SEEM_TO_BE_AN_ENUM_TYPE;
+  private static <E extends java.lang.Enum<E>> java.lang.Class<E> asEnum(java.lang.Class<E>);
+  private static <E extends java.lang.Enum<E>> java.lang.Class<E> checkBitVectorable(java.lang.Class<E>);
+  public static <E extends java.lang.Enum<E>> long generateBitVector(java.lang.Class<E>, E...);
+  public static <E extends java.lang.Enum<E>> long generateBitVector(java.lang.Class<E>, java.lang.Iterable<? extends E>);
+  public static <E extends java.lang.Enum<E>> long[] generateBitVectors(java.lang.Class<E>, E...);
+  public static <E extends java.lang.Enum<E>> long[] generateBitVectors(java.lang.Class<E>, java.lang.Iterable<? extends E>);
+  public static <E extends java.lang.Enum<E>> E getEnum(java.lang.Class<E>, java.lang.String);
+  public static <E extends java.lang.Enum<E>> E getEnum(java.lang.Class<E>, java.lang.String, E);
+  public static <E extends java.lang.Enum<E>> E getEnumIgnoreCase(java.lang.Class<E>, java.lang.String);
+  public static <E extends java.lang.Enum<E>> E getEnumIgnoreCase(java.lang.Class<E>, java.lang.String, E);
+  public static <E extends java.lang.Enum<E>> java.util.List<E> getEnumList(java.lang.Class<E>);
+  public static <E extends java.lang.Enum<E>> java.util.Map<java.lang.String, E> getEnumMap(java.lang.Class<E>);
+  public static <E extends java.lang.Enum<E>, K> java.util.Map<K, E> getEnumMap(java.lang.Class<E>, java.util.function.Function<E, K>);
+  public static <E extends java.lang.Enum<E>> E getEnumSystemProperty(java.lang.Class<E>, java.lang.String, E);
+  public static <E extends java.lang.Enum<E>> E getFirstEnumIgnoreCase(java.lang.Class<E>, java.lang.String, java.util.function.Function<E, java.lang.String>, E);
+  public static <E extends java.lang.Enum<E>> boolean isValidEnum(java.lang.Class<E>, java.lang.String);
+  public static <E extends java.lang.Enum<E>> boolean isValidEnumIgnoreCase(java.lang.Class<E>, java.lang.String);
+  public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> processBitVector(java.lang.Class<E>, long);
+  public static <E extends java.lang.Enum<E>> java.util.EnumSet<E> processBitVectors(java.lang.Class<E>, long...);
+  public org.apache.commons.lang3.EnumUtils();
+  private static boolean lambda$getFirstEnumIgnoreCase$1(java.lang.String, java.util.function.Function, java.lang.Enum);
+  private static void lambda$generateBitVectors$0(java.util.EnumSet, java.lang.Enum);
+}

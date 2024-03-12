@@ -1,0 +1,16 @@
+Compiled from "RandomUtils.java"
+public class org.apache.commons.lang3.RandomUtils {
+  public static boolean nextBoolean();
+  public static byte[] nextBytes(int);
+  public static double nextDouble();
+  public static double nextDouble(double, double);
+  public static float nextFloat();
+  public static float nextFloat(float, float);
+  public static int nextInt();
+  public static int nextInt(int, int);
+  public static long nextLong();
+  private static long nextLong(long);
+  public static long nextLong(long, long);
+  private static java.util.concurrent.ThreadLocalRandom random();
+  public org.apache.commons.lang3.RandomUtils();
+}

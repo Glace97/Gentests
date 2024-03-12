@@ -1,0 +1,12 @@
+Compiled from "CompositeFormat.java"
+public class org.apache.commons.lang3.text.CompositeFormat extends java.text.Format {
+  private static final long serialVersionUID;
+  private final java.text.Format parser;
+  private final java.text.Format formatter;
+  public org.apache.commons.lang3.text.CompositeFormat(java.text.Format, java.text.Format);
+  public java.lang.StringBuffer format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition);
+  public java.text.Format getFormatter();
+  public java.text.Format getParser();
+  public java.lang.Object parseObject(java.lang.String, java.text.ParsePosition);
+  public java.lang.String reformat(java.lang.String) throws java.text.ParseException;
+}

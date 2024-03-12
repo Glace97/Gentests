@@ -1,0 +1,36 @@
+Compiled from "Range.java"
+public class org.apache.commons.lang3.Range<T> implements java.io.Serializable {
+  private static final long serialVersionUID;
+  private final java.util.Comparator<T> comparator;
+  private transient int hashCode;
+  private final T maximum;
+  private final T minimum;
+  private transient java.lang.String toString;
+  public static <T extends java.lang.Comparable<? super T>> org.apache.commons.lang3.Range<T> between(T, T);
+  public static <T> org.apache.commons.lang3.Range<T> between(T, T, java.util.Comparator<T>);
+  public static <T extends java.lang.Comparable<? super T>> org.apache.commons.lang3.Range<T> is(T);
+  public static <T> org.apache.commons.lang3.Range<T> is(T, java.util.Comparator<T>);
+  public static <T extends java.lang.Comparable<? super T>> org.apache.commons.lang3.Range<T> of(T, T);
+  public static <T> org.apache.commons.lang3.Range<T> of(T, T, java.util.Comparator<T>);
+  org.apache.commons.lang3.Range(T, T, java.util.Comparator<T>);
+  public boolean contains(T);
+  public boolean containsRange(org.apache.commons.lang3.Range<T>);
+  public int elementCompareTo(T);
+  public boolean equals(java.lang.Object);
+  public T fit(T);
+  public java.util.Comparator<T> getComparator();
+  public T getMaximum();
+  public T getMinimum();
+  public int hashCode();
+  public org.apache.commons.lang3.Range<T> intersectionWith(org.apache.commons.lang3.Range<T>);
+  public boolean isAfter(T);
+  public boolean isAfterRange(org.apache.commons.lang3.Range<T>);
+  public boolean isBefore(T);
+  public boolean isBeforeRange(org.apache.commons.lang3.Range<T>);
+  public boolean isEndedBy(T);
+  public boolean isNaturalOrdering();
+  public boolean isOverlappedBy(org.apache.commons.lang3.Range<T>);
+  public boolean isStartedBy(T);
+  public java.lang.String toString();
+  public java.lang.String toString(java.lang.String);
+}

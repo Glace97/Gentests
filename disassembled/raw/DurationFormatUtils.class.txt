@@ -1,0 +1,23 @@
+Compiled from "DurationFormatUtils.java"
+public class org.apache.commons.lang3.time.DurationFormatUtils {
+  public static final java.lang.String ISO_EXTENDED_FORMAT_PATTERN;
+  static final java.lang.String y;
+  static final java.lang.String M;
+  static final java.lang.String d;
+  static final java.lang.String H;
+  static final java.lang.String m;
+  static final java.lang.String s;
+  static final java.lang.String S;
+  static java.lang.String format(org.apache.commons.lang3.time.DurationFormatUtils$Token[], long, long, long, long, long, long, long, boolean);
+  public static java.lang.String formatDuration(long, java.lang.String);
+  public static java.lang.String formatDuration(long, java.lang.String, boolean);
+  public static java.lang.String formatDurationHMS(long);
+  public static java.lang.String formatDurationISO(long);
+  public static java.lang.String formatDurationWords(long, boolean, boolean);
+  public static java.lang.String formatPeriod(long, long, java.lang.String);
+  public static java.lang.String formatPeriod(long, long, java.lang.String, boolean, java.util.TimeZone);
+  public static java.lang.String formatPeriodISO(long, long);
+  static org.apache.commons.lang3.time.DurationFormatUtils$Token[] lexx(java.lang.String);
+  private static java.lang.String paddedValue(long, boolean, int);
+  public org.apache.commons.lang3.time.DurationFormatUtils();
+}

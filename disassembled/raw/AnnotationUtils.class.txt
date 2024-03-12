@@ -1,0 +1,15 @@
+Compiled from "AnnotationUtils.java"
+public class org.apache.commons.lang3.AnnotationUtils {
+  private static final org.apache.commons.lang3.builder.ToStringStyle TO_STRING_STYLE;
+  private static boolean annotationArrayMemberEquals(java.lang.annotation.Annotation[], java.lang.annotation.Annotation[]);
+  private static boolean arrayMemberEquals(java.lang.Class<?>, java.lang.Object, java.lang.Object);
+  private static int arrayMemberHash(java.lang.Class<?>, java.lang.Object);
+  public static boolean equals(java.lang.annotation.Annotation, java.lang.annotation.Annotation);
+  public static int hashCode(java.lang.annotation.Annotation);
+  private static int hashMember(java.lang.String, java.lang.Object);
+  public static boolean isValidAnnotationMemberType(java.lang.Class<?>);
+  private static boolean memberEquals(java.lang.Class<?>, java.lang.Object, java.lang.Object);
+  public static java.lang.String toString(java.lang.annotation.Annotation);
+  public org.apache.commons.lang3.AnnotationUtils();
+  static {};
+}

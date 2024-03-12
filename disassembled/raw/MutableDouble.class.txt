@@ -1,0 +1,40 @@
+Compiled from "MutableDouble.java"
+public class org.apache.commons.lang3.mutable.MutableDouble extends java.lang.Number implements java.lang.Comparable<org.apache.commons.lang3.mutable.MutableDouble>, org.apache.commons.lang3.mutable.Mutable<java.lang.Number> {
+  private static final long serialVersionUID;
+  private double value;
+  public org.apache.commons.lang3.mutable.MutableDouble();
+  public org.apache.commons.lang3.mutable.MutableDouble(double);
+  public org.apache.commons.lang3.mutable.MutableDouble(java.lang.Number);
+  public org.apache.commons.lang3.mutable.MutableDouble(java.lang.String);
+  public void add(double);
+  public void add(java.lang.Number);
+  public double addAndGet(double);
+  public double addAndGet(java.lang.Number);
+  public int compareTo(org.apache.commons.lang3.mutable.MutableDouble);
+  public void decrement();
+  public double decrementAndGet();
+  public double doubleValue();
+  public boolean equals(java.lang.Object);
+  public float floatValue();
+  public double getAndAdd(double);
+  public double getAndAdd(java.lang.Number);
+  public double getAndDecrement();
+  public double getAndIncrement();
+  public java.lang.Double getValue();
+  public int hashCode();
+  public void increment();
+  public double incrementAndGet();
+  public int intValue();
+  public boolean isInfinite();
+  public boolean isNaN();
+  public long longValue();
+  public void setValue(double);
+  public void setValue(java.lang.Number);
+  public void subtract(double);
+  public void subtract(java.lang.Number);
+  public java.lang.Double toDouble();
+  public java.lang.String toString();
+  public int compareTo(java.lang.Object);
+  public void setValue(java.lang.Object);
+  public java.lang.Object getValue();
+}

@@ -1,0 +1,37 @@
+Compiled from "StringEscapeUtils.java"
+public class org.apache.commons.lang3.StringEscapeUtils {
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_JAVA;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_ECMASCRIPT;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_JSON;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_XML;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_XML10;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_XML11;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_HTML3;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_HTML4;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator ESCAPE_CSV;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator UNESCAPE_JAVA;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator UNESCAPE_ECMASCRIPT;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator UNESCAPE_JSON;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator UNESCAPE_HTML3;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator UNESCAPE_HTML4;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator UNESCAPE_XML;
+  public static final org.apache.commons.lang3.text.translate.CharSequenceTranslator UNESCAPE_CSV;
+  public static final java.lang.String escapeCsv(java.lang.String);
+  public static final java.lang.String escapeEcmaScript(java.lang.String);
+  public static final java.lang.String escapeHtml3(java.lang.String);
+  public static final java.lang.String escapeHtml4(java.lang.String);
+  public static final java.lang.String escapeJava(java.lang.String);
+  public static final java.lang.String escapeJson(java.lang.String);
+  public static final java.lang.String escapeXml(java.lang.String);
+  public static java.lang.String escapeXml10(java.lang.String);
+  public static java.lang.String escapeXml11(java.lang.String);
+  public static final java.lang.String unescapeCsv(java.lang.String);
+  public static final java.lang.String unescapeEcmaScript(java.lang.String);
+  public static final java.lang.String unescapeHtml3(java.lang.String);
+  public static final java.lang.String unescapeHtml4(java.lang.String);
+  public static final java.lang.String unescapeJava(java.lang.String);
+  public static final java.lang.String unescapeJson(java.lang.String);
+  public static final java.lang.String unescapeXml(java.lang.String);
+  public org.apache.commons.lang3.StringEscapeUtils();
+  static {};
+}

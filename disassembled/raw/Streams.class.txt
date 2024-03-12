@@ -1,0 +1,21 @@
+Compiled from "Streams.java"
+public class org.apache.commons.lang3.stream.Streams {
+  public static <T> org.apache.commons.lang3.stream.Streams$FailableStream<T> failableStream(java.util.Collection<T>);
+  public static <T> org.apache.commons.lang3.stream.Streams$FailableStream<T> failableStream(java.util.stream.Stream<T>);
+  public static <T> org.apache.commons.lang3.stream.Streams$FailableStream<T> failableStream(T...);
+  public static <E> java.util.stream.Stream<E> instancesOf(java.lang.Class<? super E>, java.util.Collection<? super E>);
+  private static <E> java.util.stream.Stream<E> instancesOf(java.lang.Class<? super E>, java.util.stream.Stream<?>);
+  public static <E> java.util.stream.Stream<E> nonNull(java.util.Collection<E>);
+  public static <E> java.util.stream.Stream<E> nonNull(E...);
+  public static <E> java.util.stream.Stream<E> nonNull(java.util.stream.Stream<E>);
+  public static <E> java.util.stream.Stream<E> of(java.util.Collection<E>);
+  public static <E> java.util.stream.Stream<E> of(java.util.Enumeration<E>);
+  public static <E> java.util.stream.Stream<E> of(java.lang.Iterable<E>);
+  public static <E> java.util.stream.Stream<E> of(java.util.Iterator<E>);
+  private static <E> java.util.stream.Stream<E> of(java.util.stream.Stream<E>);
+  public static <T> java.util.stream.Stream<T> of(T...);
+  public static <E> org.apache.commons.lang3.stream.Streams$FailableStream<E> stream(java.util.Collection<E>);
+  public static <T> org.apache.commons.lang3.stream.Streams$FailableStream<T> stream(java.util.stream.Stream<T>);
+  public static <T> java.util.stream.Collector<T, ?, T[]> toArray(java.lang.Class<T>);
+  public org.apache.commons.lang3.stream.Streams();
+}

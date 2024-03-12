@@ -1,0 +1,7 @@
+Compiled from "OctalUnescaper.java"
+public class org.apache.commons.lang3.text.translate.OctalUnescaper extends org.apache.commons.lang3.text.translate.CharSequenceTranslator {
+  public org.apache.commons.lang3.text.translate.OctalUnescaper();
+  private boolean isOctalDigit(char);
+  private boolean isZeroToThree(char);
+  public int translate(java.lang.CharSequence, int, java.io.Writer) throws java.io.IOException;
+}

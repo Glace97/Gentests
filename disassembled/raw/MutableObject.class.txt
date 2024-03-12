@@ -1,0 +1,12 @@
+Compiled from "MutableObject.java"
+public class org.apache.commons.lang3.mutable.MutableObject<T> implements org.apache.commons.lang3.mutable.Mutable<T>, java.io.Serializable {
+  private static final long serialVersionUID;
+  private T value;
+  public org.apache.commons.lang3.mutable.MutableObject();
+  public org.apache.commons.lang3.mutable.MutableObject(T);
+  public boolean equals(java.lang.Object);
+  public T getValue();
+  public int hashCode();
+  public void setValue(T);
+  public java.lang.String toString();
+}

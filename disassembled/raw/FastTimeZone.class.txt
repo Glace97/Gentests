@@ -1,0 +1,12 @@
+Compiled from "FastTimeZone.java"
+public class org.apache.commons.lang3.time.FastTimeZone {
+  private static final java.util.regex.Pattern GMT_PATTERN;
+  private static final java.util.TimeZone GREENWICH;
+  public static java.util.TimeZone getGmtTimeZone();
+  public static java.util.TimeZone getGmtTimeZone(java.lang.String);
+  public static java.util.TimeZone getTimeZone(java.lang.String);
+  private static int parseInt(java.lang.String);
+  private static boolean parseSign(java.lang.String);
+  private org.apache.commons.lang3.time.FastTimeZone();
+  static {};
+}

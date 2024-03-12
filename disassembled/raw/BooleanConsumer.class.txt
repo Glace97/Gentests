@@ -1,0 +1,10 @@
+Compiled from "BooleanConsumer.java"
+public interface org.apache.commons.lang3.function.BooleanConsumer {
+  public static final org.apache.commons.lang3.function.BooleanConsumer NOP;
+  public static org.apache.commons.lang3.function.BooleanConsumer nop();
+  public abstract void accept(boolean);
+  public default org.apache.commons.lang3.function.BooleanConsumer andThen(org.apache.commons.lang3.function.BooleanConsumer);
+  private void lambda$andThen$1(org.apache.commons.lang3.function.BooleanConsumer, boolean);
+  private static void lambda$static$0(boolean);
+  static {};
+}

@@ -1,0 +1,9 @@
+Compiled from "FailableConsumer.java"
+public interface org.apache.commons.lang3.function.FailableConsumer<T, E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableConsumer NOP;
+  public static <T, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableConsumer<T, E> nop();
+  public abstract void accept(T) throws E;
+  public default org.apache.commons.lang3.function.FailableConsumer<T, E> andThen(org.apache.commons.lang3.function.FailableConsumer<? super T, E>);
+  private void lambda$andThen$0(org.apache.commons.lang3.function.FailableConsumer, java.lang.Object) throws java.lang.Throwable;
+  static {};
+}

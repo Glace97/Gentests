@@ -1,0 +1,20 @@
+Compiled from "ReflectionDiffBuilder.java"
+public class org.apache.commons.lang3.builder.ReflectionDiffBuilder<T> implements org.apache.commons.lang3.builder.Builder<org.apache.commons.lang3.builder.DiffResult<T>> {
+  private final org.apache.commons.lang3.builder.DiffBuilder<T> diffBuilder;
+  private java.lang.String[] excludeFieldNames;
+  public static <T> org.apache.commons.lang3.builder.ReflectionDiffBuilder$Builder<T> builder();
+  private static java.lang.String[] toExcludeFieldNames(java.lang.String[]);
+  private org.apache.commons.lang3.builder.ReflectionDiffBuilder(org.apache.commons.lang3.builder.DiffBuilder<T>, java.lang.String[]);
+  public org.apache.commons.lang3.builder.ReflectionDiffBuilder(T, T, org.apache.commons.lang3.builder.ToStringStyle);
+  private boolean accept(java.lang.reflect.Field);
+  private void appendFields(java.lang.Class<?>);
+  public org.apache.commons.lang3.builder.DiffResult<T> build();
+  public java.lang.String[] getExcludeFieldNames();
+  private T getLeft();
+  private T getRight();
+  private java.lang.Object readField(java.lang.reflect.Field, java.lang.Object) throws java.lang.IllegalAccessException;
+  public org.apache.commons.lang3.builder.ReflectionDiffBuilder<T> setExcludeFieldNames(java.lang.String...);
+  public java.lang.Object build();
+  org.apache.commons.lang3.builder.ReflectionDiffBuilder(org.apache.commons.lang3.builder.DiffBuilder, java.lang.String[], org.apache.commons.lang3.builder.ReflectionDiffBuilder$1);
+  static java.lang.String[] access$100(java.lang.String[]);
+}

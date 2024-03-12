@@ -1,0 +1,14 @@
+Compiled from "FailableIntUnaryOperator.java"
+public interface org.apache.commons.lang3.function.FailableIntUnaryOperator<E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableIntUnaryOperator NOP;
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntUnaryOperator<E> identity();
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntUnaryOperator<E> nop();
+  public default org.apache.commons.lang3.function.FailableIntUnaryOperator<E> andThen(org.apache.commons.lang3.function.FailableIntUnaryOperator<E>);
+  public abstract int applyAsInt(int) throws E;
+  public default org.apache.commons.lang3.function.FailableIntUnaryOperator<E> compose(org.apache.commons.lang3.function.FailableIntUnaryOperator<E>);
+  private int lambda$compose$3(org.apache.commons.lang3.function.FailableIntUnaryOperator, int) throws java.lang.Throwable;
+  private int lambda$andThen$2(org.apache.commons.lang3.function.FailableIntUnaryOperator, int) throws java.lang.Throwable;
+  private static int lambda$identity$1(int) throws java.lang.Throwable;
+  private static int lambda$static$0(int) throws java.lang.Throwable;
+  static {};
+}

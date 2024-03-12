@@ -1,0 +1,18 @@
+Compiled from "WordUtils.java"
+public class org.apache.commons.lang3.text.WordUtils {
+  public static java.lang.String capitalize(java.lang.String);
+  public static java.lang.String capitalize(java.lang.String, char...);
+  public static java.lang.String capitalizeFully(java.lang.String);
+  public static java.lang.String capitalizeFully(java.lang.String, char...);
+  public static boolean containsAllWords(java.lang.CharSequence, java.lang.CharSequence...);
+  public static java.lang.String initials(java.lang.String);
+  public static java.lang.String initials(java.lang.String, char...);
+  private static boolean isDelimiter(char, char[]);
+  public static java.lang.String swapCase(java.lang.String);
+  public static java.lang.String uncapitalize(java.lang.String);
+  public static java.lang.String uncapitalize(java.lang.String, char...);
+  public static java.lang.String wrap(java.lang.String, int);
+  public static java.lang.String wrap(java.lang.String, int, java.lang.String, boolean);
+  public static java.lang.String wrap(java.lang.String, int, java.lang.String, boolean, java.lang.String);
+  public org.apache.commons.lang3.text.WordUtils();
+}

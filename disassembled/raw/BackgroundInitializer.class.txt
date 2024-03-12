@@ -1,0 +1,23 @@
+Compiled from "BackgroundInitializer.java"
+public class org.apache.commons.lang3.concurrent.BackgroundInitializer<T> extends org.apache.commons.lang3.concurrent.AbstractConcurrentInitializer<T, java.lang.Exception> {
+  private java.util.concurrent.ExecutorService externalExecutor;
+  private java.util.concurrent.ExecutorService executor;
+  private java.util.concurrent.Future<T> future;
+  public static <T> org.apache.commons.lang3.concurrent.BackgroundInitializer$Builder<org.apache.commons.lang3.concurrent.BackgroundInitializer<T>, T> builder();
+  protected org.apache.commons.lang3.concurrent.BackgroundInitializer();
+  protected org.apache.commons.lang3.concurrent.BackgroundInitializer(java.util.concurrent.ExecutorService);
+  private org.apache.commons.lang3.concurrent.BackgroundInitializer(org.apache.commons.lang3.function.FailableSupplier<T, org.apache.commons.lang3.concurrent.ConcurrentException>, org.apache.commons.lang3.function.FailableConsumer<T, org.apache.commons.lang3.concurrent.ConcurrentException>, java.util.concurrent.ExecutorService);
+  private java.util.concurrent.ExecutorService createExecutor();
+  private java.util.concurrent.Callable<T> createTask(java.util.concurrent.ExecutorService);
+  public T get() throws org.apache.commons.lang3.concurrent.ConcurrentException;
+  protected final synchronized java.util.concurrent.ExecutorService getActiveExecutor();
+  public final synchronized java.util.concurrent.ExecutorService getExternalExecutor();
+  public synchronized java.util.concurrent.Future<T> getFuture();
+  protected int getTaskCount();
+  protected java.lang.Exception getTypedException(java.lang.Exception);
+  public synchronized boolean isInitialized();
+  public synchronized boolean isStarted();
+  public final synchronized void setExternalExecutor(java.util.concurrent.ExecutorService);
+  public synchronized boolean start();
+  org.apache.commons.lang3.concurrent.BackgroundInitializer(org.apache.commons.lang3.function.FailableSupplier, org.apache.commons.lang3.function.FailableConsumer, java.util.concurrent.ExecutorService, org.apache.commons.lang3.concurrent.BackgroundInitializer$1);
+}

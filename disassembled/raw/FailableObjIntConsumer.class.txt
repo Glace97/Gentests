@@ -1,0 +1,8 @@
+Compiled from "FailableObjIntConsumer.java"
+public interface org.apache.commons.lang3.function.FailableObjIntConsumer<T, E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableObjIntConsumer NOP;
+  public static <T, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableObjIntConsumer<T, E> nop();
+  public abstract void accept(T, int) throws E;
+  private static void lambda$static$0(java.lang.Object, int) throws java.lang.Throwable;
+  static {};
+}

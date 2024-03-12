@@ -1,0 +1,8 @@
+Compiled from "FailableIntToDoubleFunction.java"
+public interface org.apache.commons.lang3.function.FailableIntToDoubleFunction<E extends java.lang.Throwable> {
+  public static final org.apache.commons.lang3.function.FailableIntToDoubleFunction NOP;
+  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableIntToDoubleFunction<E> nop();
+  public abstract double applyAsDouble(int) throws E;
+  private static double lambda$static$0(int) throws java.lang.Throwable;
+  static {};
+}

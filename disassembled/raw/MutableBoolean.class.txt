@@ -1,0 +1,24 @@
+Compiled from "MutableBoolean.java"
+public class org.apache.commons.lang3.mutable.MutableBoolean implements org.apache.commons.lang3.mutable.Mutable<java.lang.Boolean>, java.io.Serializable, java.lang.Comparable<org.apache.commons.lang3.mutable.MutableBoolean> {
+  private static final long serialVersionUID;
+  private boolean value;
+  public org.apache.commons.lang3.mutable.MutableBoolean();
+  public org.apache.commons.lang3.mutable.MutableBoolean(boolean);
+  public org.apache.commons.lang3.mutable.MutableBoolean(java.lang.Boolean);
+  public boolean booleanValue();
+  public int compareTo(org.apache.commons.lang3.mutable.MutableBoolean);
+  public boolean equals(java.lang.Object);
+  public java.lang.Boolean getValue();
+  public int hashCode();
+  public boolean isFalse();
+  public boolean isTrue();
+  public void setFalse();
+  public void setTrue();
+  public void setValue(boolean);
+  public void setValue(java.lang.Boolean);
+  public java.lang.Boolean toBoolean();
+  public java.lang.String toString();
+  public void setValue(java.lang.Object);
+  public java.lang.Object getValue();
+  public int compareTo(java.lang.Object);
+}

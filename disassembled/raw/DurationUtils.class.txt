@@ -1,0 +1,19 @@
+Compiled from "DurationUtils.java"
+public class org.apache.commons.lang3.time.DurationUtils {
+  static final org.apache.commons.lang3.LongRange LONG_TO_INT_RANGE;
+  public static <T extends java.lang.Throwable> void accept(org.apache.commons.lang3.function.FailableBiConsumer<java.lang.Long, java.lang.Integer, T>, java.time.Duration) throws T;
+  public static int getNanosOfMiili(java.time.Duration);
+  public static int getNanosOfMilli(java.time.Duration);
+  public static boolean isPositive(java.time.Duration);
+  private static <E extends java.lang.Throwable> java.time.Instant now(org.apache.commons.lang3.function.FailableConsumer<java.time.Instant, E>) throws E;
+  public static <E extends java.lang.Throwable> java.time.Duration of(org.apache.commons.lang3.function.FailableConsumer<java.time.Instant, E>) throws E;
+  public static <E extends java.lang.Throwable> java.time.Duration of(org.apache.commons.lang3.function.FailableRunnable<E>) throws E;
+  public static java.time.Duration since(java.time.temporal.Temporal);
+  static java.time.temporal.ChronoUnit toChronoUnit(java.util.concurrent.TimeUnit);
+  public static java.time.Duration toDuration(long, java.util.concurrent.TimeUnit);
+  public static int toMillisInt(java.time.Duration);
+  public static java.time.Duration zeroIfNull(java.time.Duration);
+  public org.apache.commons.lang3.time.DurationUtils();
+  private static void lambda$of$0(org.apache.commons.lang3.function.FailableRunnable, java.time.Instant) throws java.lang.Throwable;
+  static {};
+}

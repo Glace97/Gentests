@@ -1,0 +1,3 @@
+Compiled from "DiffExclude.java"
+public interface org.apache.commons.lang3.builder.DiffExclude extends java.lang.annotation.Annotation {
+}

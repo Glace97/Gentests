@@ -1,0 +1,24 @@
+Compiled from "RandomStringUtils.java"
+public class org.apache.commons.lang3.RandomStringUtils {
+  private static java.util.concurrent.ThreadLocalRandom random();
+  public static java.lang.String random(int);
+  public static java.lang.String random(int, boolean, boolean);
+  public static java.lang.String random(int, char...);
+  public static java.lang.String random(int, int, int, boolean, boolean);
+  public static java.lang.String random(int, int, int, boolean, boolean, char...);
+  public static java.lang.String random(int, int, int, boolean, boolean, char[], java.util.Random);
+  public static java.lang.String random(int, java.lang.String);
+  public static java.lang.String randomAlphabetic(int);
+  public static java.lang.String randomAlphabetic(int, int);
+  public static java.lang.String randomAlphanumeric(int);
+  public static java.lang.String randomAlphanumeric(int, int);
+  public static java.lang.String randomAscii(int);
+  public static java.lang.String randomAscii(int, int);
+  public static java.lang.String randomGraph(int);
+  public static java.lang.String randomGraph(int, int);
+  public static java.lang.String randomNumeric(int);
+  public static java.lang.String randomNumeric(int, int);
+  public static java.lang.String randomPrint(int);
+  public static java.lang.String randomPrint(int, int);
+  public org.apache.commons.lang3.RandomStringUtils();
+}

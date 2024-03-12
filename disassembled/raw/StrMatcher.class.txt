@@ -1,0 +1,29 @@
+Compiled from "StrMatcher.java"
+public abstract class org.apache.commons.lang3.text.StrMatcher {
+  private static final org.apache.commons.lang3.text.StrMatcher COMMA_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher TAB_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher SPACE_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher SPLIT_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher TRIM_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher SINGLE_QUOTE_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher DOUBLE_QUOTE_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher QUOTE_MATCHER;
+  private static final org.apache.commons.lang3.text.StrMatcher NONE_MATCHER;
+  public static org.apache.commons.lang3.text.StrMatcher charMatcher(char);
+  public static org.apache.commons.lang3.text.StrMatcher charSetMatcher(char...);
+  public static org.apache.commons.lang3.text.StrMatcher charSetMatcher(java.lang.String);
+  public static org.apache.commons.lang3.text.StrMatcher commaMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher doubleQuoteMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher noneMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher quoteMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher singleQuoteMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher spaceMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher splitMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher stringMatcher(java.lang.String);
+  public static org.apache.commons.lang3.text.StrMatcher tabMatcher();
+  public static org.apache.commons.lang3.text.StrMatcher trimMatcher();
+  protected org.apache.commons.lang3.text.StrMatcher();
+  public int isMatch(char[], int);
+  public abstract int isMatch(char[], int, int, int);
+  static {};
+}

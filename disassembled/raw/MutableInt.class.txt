@@ -1,0 +1,38 @@
+Compiled from "MutableInt.java"
+public class org.apache.commons.lang3.mutable.MutableInt extends java.lang.Number implements java.lang.Comparable<org.apache.commons.lang3.mutable.MutableInt>, org.apache.commons.lang3.mutable.Mutable<java.lang.Number> {
+  private static final long serialVersionUID;
+  private int value;
+  public org.apache.commons.lang3.mutable.MutableInt();
+  public org.apache.commons.lang3.mutable.MutableInt(int);
+  public org.apache.commons.lang3.mutable.MutableInt(java.lang.Number);
+  public org.apache.commons.lang3.mutable.MutableInt(java.lang.String);
+  public void add(int);
+  public void add(java.lang.Number);
+  public int addAndGet(int);
+  public int addAndGet(java.lang.Number);
+  public int compareTo(org.apache.commons.lang3.mutable.MutableInt);
+  public void decrement();
+  public int decrementAndGet();
+  public double doubleValue();
+  public boolean equals(java.lang.Object);
+  public float floatValue();
+  public int getAndAdd(int);
+  public int getAndAdd(java.lang.Number);
+  public int getAndDecrement();
+  public int getAndIncrement();
+  public java.lang.Integer getValue();
+  public int hashCode();
+  public void increment();
+  public int incrementAndGet();
+  public int intValue();
+  public long longValue();
+  public void setValue(int);
+  public void setValue(java.lang.Number);
+  public void subtract(int);
+  public void subtract(java.lang.Number);
+  public java.lang.Integer toInteger();
+  public java.lang.String toString();
+  public int compareTo(java.lang.Object);
+  public void setValue(java.lang.Object);
+  public java.lang.Object getValue();
+}

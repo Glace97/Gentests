@@ -1,0 +1,9 @@
+Compiled from "CallableBackgroundInitializer.java"
+public class org.apache.commons.lang3.concurrent.CallableBackgroundInitializer<T> extends org.apache.commons.lang3.concurrent.BackgroundInitializer<T> {
+  private final java.util.concurrent.Callable<T> callable;
+  public org.apache.commons.lang3.concurrent.CallableBackgroundInitializer(java.util.concurrent.Callable<T>);
+  public org.apache.commons.lang3.concurrent.CallableBackgroundInitializer(java.util.concurrent.Callable<T>, java.util.concurrent.ExecutorService);
+  private void checkCallable(java.util.concurrent.Callable<T>);
+  protected java.lang.Exception getTypedException(java.lang.Exception);
+  protected T initialize() throws java.lang.Exception;
+}

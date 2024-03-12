@@ -1,0 +1,21 @@
+Compiled from "ContextedRuntimeException.java"
+public class org.apache.commons.lang3.exception.ContextedRuntimeException extends java.lang.RuntimeException implements org.apache.commons.lang3.exception.ExceptionContext {
+  private static final long serialVersionUID;
+  private final org.apache.commons.lang3.exception.ExceptionContext exceptionContext;
+  public org.apache.commons.lang3.exception.ContextedRuntimeException();
+  public org.apache.commons.lang3.exception.ContextedRuntimeException(java.lang.String);
+  public org.apache.commons.lang3.exception.ContextedRuntimeException(java.lang.String, java.lang.Throwable);
+  public org.apache.commons.lang3.exception.ContextedRuntimeException(java.lang.String, java.lang.Throwable, org.apache.commons.lang3.exception.ExceptionContext);
+  public org.apache.commons.lang3.exception.ContextedRuntimeException(java.lang.Throwable);
+  public org.apache.commons.lang3.exception.ContextedRuntimeException addContextValue(java.lang.String, java.lang.Object);
+  public java.util.List<org.apache.commons.lang3.tuple.Pair<java.lang.String, java.lang.Object>> getContextEntries();
+  public java.util.Set<java.lang.String> getContextLabels();
+  public java.util.List<java.lang.Object> getContextValues(java.lang.String);
+  public java.lang.Object getFirstContextValue(java.lang.String);
+  public java.lang.String getFormattedExceptionMessage(java.lang.String);
+  public java.lang.String getMessage();
+  public java.lang.String getRawMessage();
+  public org.apache.commons.lang3.exception.ContextedRuntimeException setContextValue(java.lang.String, java.lang.Object);
+  public org.apache.commons.lang3.exception.ExceptionContext setContextValue(java.lang.String, java.lang.Object);
+  public org.apache.commons.lang3.exception.ExceptionContext addContextValue(java.lang.String, java.lang.Object);
+}

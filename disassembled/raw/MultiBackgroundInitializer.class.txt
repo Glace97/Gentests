@@ -1,0 +1,14 @@
+Compiled from "MultiBackgroundInitializer.java"
+public class org.apache.commons.lang3.concurrent.MultiBackgroundInitializer extends org.apache.commons.lang3.concurrent.BackgroundInitializer<org.apache.commons.lang3.concurrent.MultiBackgroundInitializer$MultiBackgroundInitializerResults> {
+  private final java.util.Map<java.lang.String, org.apache.commons.lang3.concurrent.BackgroundInitializer<?>> childInitializers;
+  public org.apache.commons.lang3.concurrent.MultiBackgroundInitializer();
+  public org.apache.commons.lang3.concurrent.MultiBackgroundInitializer(java.util.concurrent.ExecutorService);
+  public void addInitializer(java.lang.String, org.apache.commons.lang3.concurrent.BackgroundInitializer<?>);
+  public void close() throws org.apache.commons.lang3.concurrent.ConcurrentException;
+  protected int getTaskCount();
+  protected org.apache.commons.lang3.concurrent.MultiBackgroundInitializer$MultiBackgroundInitializerResults initialize() throws java.lang.Exception;
+  public boolean isInitialized();
+  protected java.lang.Object initialize() throws java.lang.Exception;
+  private static void lambda$initialize$1(java.util.Map, java.util.Map, java.lang.String, org.apache.commons.lang3.concurrent.BackgroundInitializer);
+  private static void lambda$initialize$0(java.util.concurrent.ExecutorService, org.apache.commons.lang3.concurrent.BackgroundInitializer);
+}

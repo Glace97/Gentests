@@ -1,0 +1,19 @@
+Compiled from "BasicThreadFactory.java"
+public class org.apache.commons.lang3.concurrent.BasicThreadFactory implements java.util.concurrent.ThreadFactory {
+  private final java.util.concurrent.atomic.AtomicLong threadCounter;
+  private final java.util.concurrent.ThreadFactory wrappedFactory;
+  private final java.lang.Thread$UncaughtExceptionHandler uncaughtExceptionHandler;
+  private final java.lang.String namingPattern;
+  private final java.lang.Integer priority;
+  private final java.lang.Boolean daemon;
+  private org.apache.commons.lang3.concurrent.BasicThreadFactory(org.apache.commons.lang3.concurrent.BasicThreadFactory$Builder);
+  public final java.lang.Boolean getDaemonFlag();
+  public final java.lang.String getNamingPattern();
+  public final java.lang.Integer getPriority();
+  public long getThreadCount();
+  public final java.lang.Thread$UncaughtExceptionHandler getUncaughtExceptionHandler();
+  public final java.util.concurrent.ThreadFactory getWrappedFactory();
+  private void initializeThread(java.lang.Thread);
+  public java.lang.Thread newThread(java.lang.Runnable);
+  org.apache.commons.lang3.concurrent.BasicThreadFactory(org.apache.commons.lang3.concurrent.BasicThreadFactory$Builder, org.apache.commons.lang3.concurrent.BasicThreadFactory$1);
+}

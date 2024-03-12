@@ -1,0 +1,8 @@
+Compiled from "TimeZones.java"
+public class org.apache.commons.lang3.time.TimeZones {
+  public static final java.lang.String GMT_ID;
+  public static final java.util.TimeZone GMT;
+  public static java.util.TimeZone toTimeZone(java.util.TimeZone);
+  private org.apache.commons.lang3.time.TimeZones();
+  static {};
+}

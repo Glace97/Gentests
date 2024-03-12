@@ -1,0 +1,13 @@
+Compiled from "NotImplementedException.java"
+public class org.apache.commons.lang3.NotImplementedException extends java.lang.UnsupportedOperationException {
+  private static final long serialVersionUID;
+  private final java.lang.String code;
+  public org.apache.commons.lang3.NotImplementedException();
+  public org.apache.commons.lang3.NotImplementedException(java.lang.String);
+  public org.apache.commons.lang3.NotImplementedException(java.lang.String, java.lang.String);
+  public org.apache.commons.lang3.NotImplementedException(java.lang.String, java.lang.Throwable);
+  public org.apache.commons.lang3.NotImplementedException(java.lang.String, java.lang.Throwable, java.lang.String);
+  public org.apache.commons.lang3.NotImplementedException(java.lang.Throwable);
+  public org.apache.commons.lang3.NotImplementedException(java.lang.Throwable, java.lang.String);
+  public java.lang.String getCode();
+}

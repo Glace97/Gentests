@@ -1,0 +1,6 @@
+Compiled from "IntStreams.java"
+public class org.apache.commons.lang3.stream.IntStreams {
+  public static java.util.stream.IntStream range(int);
+  public static java.util.stream.IntStream rangeClosed(int);
+  public org.apache.commons.lang3.stream.IntStreams();
+}

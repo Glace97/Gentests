@@ -1,0 +1,11 @@
+Compiled from "ClassLoaderUtils.java"
+public class org.apache.commons.lang3.ClassLoaderUtils {
+  private static final java.net.URL[] EMPTY_URL_ARRAY;
+  public static java.net.URL[] getSystemURLs();
+  public static java.net.URL[] getThreadURLs();
+  private static java.net.URL[] getURLs(java.lang.ClassLoader);
+  public static java.lang.String toString(java.lang.ClassLoader);
+  public static java.lang.String toString(java.net.URLClassLoader);
+  public org.apache.commons.lang3.ClassLoaderUtils();
+  static {};
+}

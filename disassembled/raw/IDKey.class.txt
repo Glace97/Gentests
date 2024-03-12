@@ -1,0 +1,8 @@
+Compiled from "IDKey.java"
+final class org.apache.commons.lang3.builder.IDKey {
+  private final java.lang.Object value;
+  private final int id;
+  org.apache.commons.lang3.builder.IDKey(java.lang.Object);
+  public boolean equals(java.lang.Object);
+  public int hashCode();
+}

@@ -1,0 +1,5 @@
+Compiled from "UncheckedException.java"
+public class org.apache.commons.lang3.exception.UncheckedException extends java.lang.RuntimeException {
+  private static final long serialVersionUID;
+  public org.apache.commons.lang3.exception.UncheckedException(java.lang.Throwable);
+}

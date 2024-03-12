@@ -1,0 +1,6 @@
+Compiled from "UncheckedFutureImpl.java"
+final class org.apache.commons.lang3.concurrent.UncheckedFutureImpl<V> extends org.apache.commons.lang3.concurrent.AbstractFutureProxy<V> implements org.apache.commons.lang3.concurrent.UncheckedFuture<V> {
+  org.apache.commons.lang3.concurrent.UncheckedFutureImpl(java.util.concurrent.Future<V>);
+  public V get();
+  public V get(long, java.util.concurrent.TimeUnit);
+}
