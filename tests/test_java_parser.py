@@ -65,10 +65,6 @@ docstring_static = """
  */
 public static returnType functionName(dataType arg1, dataType arg2) {
 """
-#docstring_static_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+static\s+(\w+)\s+(\w+)\s*\((.*?)\)\s*\{'
-docstring_static_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+static\s+([\w\[\]]+)\s+(\w+)\s*\((.*?)\)\s*\{'
-
-
 
 # PRIVATE AND PROTECTED FUNCTIONS WITH DOCSTRING
 
@@ -88,10 +84,8 @@ docstring_private = """
  */
 private returnType functionName(dataType arg1, dataType arg2) {
 """
-docstring_private_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*private\s+(\w+)\s+(\w+)\s*\((.*?)\)\s*\{'
 
 # PRIVATE AND PROTECTED FUNCTIONS WITH DOCSTRING
-
 docstring_protected_static = """
 /**
  * This is a multi-line comment.
@@ -99,7 +93,6 @@ docstring_protected_static = """
  */
 protected static returnType functionName(dataType arg1, dataType arg2) {
 """
-docstring_protected_static_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*protected\s+static\s+(\w+)\s+(\w+)\s*\((.*?)\)\s*\{'
 
 docstring_protected = """
 /**
@@ -109,23 +102,11 @@ docstring_protected = """
  */
 protected returnType functionName(dataType arg1, dataType arg2, final dataType arg3) {
 """
-docstring_protected_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*protected\s+(\w+)\s+(\w+)\s*\((.*?)\)\s*\{'
-
-
 
 # SHOULD NEVER MATCH
 
 constructor = """
 public className(dataType arg1, dataType arg2, final dataType arg3) {
-"""
-
-public_class = """
-/**
- * This is a multi-line comment.
- * Another line.
- *fnfea
- */
-public className {
 """
 
 docstring_class = """
@@ -136,11 +117,23 @@ docstring_class = """
 public class AnnotationUtils {
 """
 
+public_class =  """
+public class AnnotationUtils {
+"""
+
 # Does not match against methods with arrays as returnvalue?
-match_all_pattern = r'(public|private|static|protected|abstract|native|synchronized)\s+([a-zA-Z0-9<>._?, ]+)(?:\[\])*\s+([a-zA-Z0-9_]+)\s*\([a-zA-Z0-9<>\[\]._?, \n]*\)\s*([a-zA-Z0-9_ ,\n]*)\s*{'
-docstring_match_all_pattern = r'/\*\*.*?\*/\s*(public|private|static|protected|abstract|native|synchronized)\s+([a-zA-Z0-9<>._?, ]+)(?:\[\])*\s+([a-zA-Z0-9_]+)\s*\([a-zA-Z0-9<>\[\]._?, \n]*\)\s*([a-zA-Z0-9_ ,\n]*)\s*{'
+#match_all_pattern = r'(public|private|static|protected|abstract|native|synchronized)\s+([a-zA-Z0-9<>._?, ]+)(?:\[\])*\s+([a-zA-Z0-9_]+)\s*\([a-zA-Z0-9<>\[\]._?, \n]*\)\s*([a-zA-Z0-9_ ,\n]*)\s*{'
+#docstring_match_all_pattern = r'/\*\*.*?\*/\s*(public|private|static|protected|abstract|native|synchronized)\s+([a-zA-Z0-9<>._?, ]+)(?:\[\])*\s+([a-zA-Z0-9_]+)\s*\([a-zA-Z0-9<>\[\]._?, \n]*\)\s*([a-zA-Z0-9_ ,\n]*)\s*{'
+
+
+# Combined, docstring is optional
+match_all_pattern = r'(?:/\*\*.*?\*/\s*)?(public|private|static|protected|abstract|native|synchronized)\s+([a-zA-Z0-9<>._?, ]+)(?:\[\])*\s+([a-zA-Z0-9_]+)\s*\([a-zA-Z0-9<>\[\]._?, \n]*\)\s*([a-zA-Z0-9_ ,\n]*)\s*{'
+
 
 
 # Find the first match for either pattern in the Java code
-match = re.findall(docstring_match_all_pattern, public_docstring_awful_returnvalue, re.DOTALL)
+#match = re.findall(docstring_match_all_pattern, docstring_class, re.DOTALL)
+#match = re.findall(match_all_pattern, )
+match = re.findall(match_all_pattern, docstring_class)
+
 print(match)

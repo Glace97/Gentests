@@ -72,49 +72,28 @@ def remove_private_funcs(file):
         output_file.write(meta_data)
 
 
-def parse_metadata(): 
-    #TODO: add pattern to the variable names
-    doc_string_fun = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+\w+\s+\w+\s*\((?:.*?)\)'
-    docstring_static_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+static\s+([\w\[\]]+)\s+(\w+)\s*\((.*?)\)\s*\{'
-
-    # TODO: pass as argument
-    path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/ArrayFill.java"
+def parse_metadata(path): 
+    match_all_pattern = r'(?:/\*\*.*?\*/\s*)?(public|private|static|protected|abstract|native|synchronized)\s+([a-zA-Z0-9<>._?, ]+)(?:\[\])*\s+([a-zA-Z0-9_]+)\s*\([a-zA-Z0-9<>\[\]._?, \n]*\)\s*([a-zA-Z0-9_ ,\n]*)\s*{'
 
     with open(path, "r") as input_file:
         java_code = input_file.read()
 
-    print(java_code)
-    # Find the first match for either pattern in the Java code
-    match1 = re.search(doc_string_fun, java_code, re.DOTALL)
-    match2 = re.search(docstring_static_pattern, java_code, re.DOTALL)
-    print('match1: ', match1)
-    print('match2: ', match2)
-
-    if match1 and match2:
-        # Determine which match occurred first
-        if match1.start() < match2.start():
-            match = match1
-        else:
-            match = match2
-    elif match1:
-        match = match1
-    elif match2:
-        match = match2
-    else:
-        match = None
+    # Find the first function (or possible docstring prior to function)
+    match = re.search(match_all_pattern, java_code)
+    print('match: ', match)
 
     if match:
         # Extract content up to the matched position
         content_before_match = java_code[:match.start()]
         
-        #TODO: write to buffer? File is not found once remove_private_funcs() is called
-        # Write the extracted content to the output file
+        # Write the extracted content to the output file as metadata
         with open('metadata.txt', 'w') as output_file:
             output_file.write(content_before_match)
 
 
 def main():
-    parse_metadata()
+    path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/ArrayFill.java"
+    parse_metadata(path)
     #remove_private_funcs('metadata.txt')
 
 if __name__ == "__main__":
