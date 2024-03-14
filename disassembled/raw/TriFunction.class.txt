@@ -1,6 +1,0 @@
-Compiled from "TriFunction.java"
-public interface org.apache.commons.lang3.function.TriFunction<T, U, V, R> {
-  public default <W> org.apache.commons.lang3.function.TriFunction<T, U, V, W> andThen(java.util.function.Function<? super R, ? extends W>);
-  public abstract R apply(T, U, V);
-  private java.lang.Object lambda$andThen$0(java.util.function.Function, java.lang.Object, java.lang.Object, java.lang.Object);
-}

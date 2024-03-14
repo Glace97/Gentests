@@ -1,7 +1,0 @@
-Compiled from "LongRange.java"
-public final class org.apache.commons.lang3.LongRange extends org.apache.commons.lang3.NumberRange<java.lang.Long> {
-  private static final long serialVersionUID;
-  public static org.apache.commons.lang3.LongRange of(long, long);
-  public static org.apache.commons.lang3.LongRange of(java.lang.Long, java.lang.Long);
-  private org.apache.commons.lang3.LongRange(java.lang.Long, java.lang.Long);
-}

@@ -1,7 +1,0 @@
-Compiled from "CloneFailedException.java"
-public class org.apache.commons.lang3.exception.CloneFailedException extends java.lang.RuntimeException {
-  private static final long serialVersionUID;
-  public org.apache.commons.lang3.exception.CloneFailedException(java.lang.String);
-  public org.apache.commons.lang3.exception.CloneFailedException(java.lang.String, java.lang.Throwable);
-  public org.apache.commons.lang3.exception.CloneFailedException(java.lang.Throwable);
-}

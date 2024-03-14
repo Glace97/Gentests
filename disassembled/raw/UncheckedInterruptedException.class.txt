@@ -1,5 +1,0 @@
-Compiled from "UncheckedInterruptedException.java"
-public class org.apache.commons.lang3.exception.UncheckedInterruptedException extends org.apache.commons.lang3.exception.UncheckedException {
-  private static final long serialVersionUID;
-  public org.apache.commons.lang3.exception.UncheckedInterruptedException(java.lang.Throwable);
-}

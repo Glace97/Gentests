@@ -1,9 +1,0 @@
-Compiled from "CircuitBreaker.java"
-public interface org.apache.commons.lang3.concurrent.CircuitBreaker<T> {
-  public abstract boolean checkState();
-  public abstract void close();
-  public abstract boolean incrementAndCheckState(T);
-  public abstract boolean isClosed();
-  public abstract boolean isOpen();
-  public abstract void open();
-}

@@ -1,5 +1,0 @@
-Compiled from "UnicodeUnescaper.java"
-public class org.apache.commons.lang3.text.translate.UnicodeUnescaper extends org.apache.commons.lang3.text.translate.CharSequenceTranslator {
-  public org.apache.commons.lang3.text.translate.UnicodeUnescaper();
-  public int translate(java.lang.CharSequence, int, java.io.Writer) throws java.io.IOException;
-}

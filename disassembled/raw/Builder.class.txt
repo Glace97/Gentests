@@ -1,4 +1,0 @@
-Compiled from "Builder.java"
-public interface org.apache.commons.lang3.builder.Builder<T> {
-  public abstract T build();
-}

@@ -1,7 +1,0 @@
-Compiled from "Charsets.java"
-final class org.apache.commons.lang3.Charsets {
-  org.apache.commons.lang3.Charsets();
-  static java.nio.charset.Charset toCharset(java.nio.charset.Charset);
-  static java.nio.charset.Charset toCharset(java.lang.String);
-  static java.lang.String toCharsetName(java.lang.String);
-}

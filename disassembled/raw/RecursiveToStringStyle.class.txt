@@ -1,8 +1,0 @@
-Compiled from "RecursiveToStringStyle.java"
-public class org.apache.commons.lang3.builder.RecursiveToStringStyle extends org.apache.commons.lang3.builder.ToStringStyle {
-  private static final long serialVersionUID;
-  public org.apache.commons.lang3.builder.RecursiveToStringStyle();
-  protected boolean accept(java.lang.Class<?>);
-  protected void appendDetail(java.lang.StringBuffer, java.lang.String, java.util.Collection<?>);
-  public void appendDetail(java.lang.StringBuffer, java.lang.String, java.lang.Object);
-}

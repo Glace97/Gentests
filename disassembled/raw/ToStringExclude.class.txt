@@ -1,3 +1,0 @@
-Compiled from "ToStringExclude.java"
-public interface org.apache.commons.lang3.builder.ToStringExclude extends java.lang.annotation.Annotation {
-}

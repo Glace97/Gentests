@@ -1,8 +1,0 @@
-Compiled from "FailableSupplier.java"
-public interface org.apache.commons.lang3.function.FailableSupplier<T, E extends java.lang.Throwable> {
-  public static final org.apache.commons.lang3.function.FailableSupplier NUL;
-  public static <T, E extends java.lang.Exception> org.apache.commons.lang3.function.FailableSupplier<T, E> nul();
-  public abstract T get() throws E;
-  private static java.lang.Object lambda$static$0() throws java.lang.Throwable;
-  static {};
-}

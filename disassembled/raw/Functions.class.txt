@@ -1,5 +1,0 @@
-Compiled from "Functions.java"
-public final class org.apache.commons.lang3.function.Functions {
-  public static <T, R> java.util.function.Function<T, R> function(java.util.function.Function<T, R>);
-  private org.apache.commons.lang3.function.Functions();
-}

@@ -1,7 +1,0 @@
-Compiled from "DoubleRange.java"
-public final class org.apache.commons.lang3.DoubleRange extends org.apache.commons.lang3.NumberRange<java.lang.Double> {
-  private static final long serialVersionUID;
-  public static org.apache.commons.lang3.DoubleRange of(double, double);
-  public static org.apache.commons.lang3.DoubleRange of(java.lang.Double, java.lang.Double);
-  private org.apache.commons.lang3.DoubleRange(java.lang.Double, java.lang.Double);
-}

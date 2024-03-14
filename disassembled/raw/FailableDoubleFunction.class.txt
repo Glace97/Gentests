@@ -1,8 +1,0 @@
-Compiled from "FailableDoubleFunction.java"
-public interface org.apache.commons.lang3.function.FailableDoubleFunction<R, E extends java.lang.Throwable> {
-  public static final org.apache.commons.lang3.function.FailableDoubleFunction NOP;
-  public static <R, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableDoubleFunction<R, E> nop();
-  public abstract R apply(double) throws E;
-  private static java.lang.Object lambda$static$0(double) throws java.lang.Throwable;
-  static {};
-}

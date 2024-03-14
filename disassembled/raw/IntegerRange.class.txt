@@ -1,7 +1,0 @@
-Compiled from "IntegerRange.java"
-public final class org.apache.commons.lang3.IntegerRange extends org.apache.commons.lang3.NumberRange<java.lang.Integer> {
-  private static final long serialVersionUID;
-  public static org.apache.commons.lang3.IntegerRange of(int, int);
-  public static org.apache.commons.lang3.IntegerRange of(java.lang.Integer, java.lang.Integer);
-  private org.apache.commons.lang3.IntegerRange(java.lang.Integer, java.lang.Integer);
-}

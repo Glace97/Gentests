@@ -1,5 +1,0 @@
-Compiled from "InheritanceUtils.java"
-public class org.apache.commons.lang3.reflect.InheritanceUtils {
-  public static int distance(java.lang.Class<?>, java.lang.Class<?>);
-  public org.apache.commons.lang3.reflect.InheritanceUtils();
-}

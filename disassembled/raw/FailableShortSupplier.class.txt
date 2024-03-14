@@ -1,4 +1,0 @@
-Compiled from "FailableShortSupplier.java"
-public interface org.apache.commons.lang3.function.FailableShortSupplier<E extends java.lang.Throwable> {
-  public abstract short getAsShort() throws E;
-}

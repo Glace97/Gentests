@@ -1,9 +1,0 @@
-Compiled from "JavaUnicodeEscaper.java"
-public class org.apache.commons.lang3.text.translate.JavaUnicodeEscaper extends org.apache.commons.lang3.text.translate.UnicodeEscaper {
-  public static org.apache.commons.lang3.text.translate.JavaUnicodeEscaper above(int);
-  public static org.apache.commons.lang3.text.translate.JavaUnicodeEscaper below(int);
-  public static org.apache.commons.lang3.text.translate.JavaUnicodeEscaper between(int, int);
-  public static org.apache.commons.lang3.text.translate.JavaUnicodeEscaper outsideOf(int, int);
-  public org.apache.commons.lang3.text.translate.JavaUnicodeEscaper(int, int, boolean);
-  protected java.lang.String toUtf16Escape(int);
-}

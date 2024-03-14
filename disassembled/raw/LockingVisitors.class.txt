@@ -1,7 +1,0 @@
-Compiled from "LockingVisitors.java"
-public class org.apache.commons.lang3.concurrent.locks.LockingVisitors {
-  public static <O> org.apache.commons.lang3.concurrent.locks.LockingVisitors$ReadWriteLockVisitor<O> create(O, java.util.concurrent.locks.ReadWriteLock);
-  public static <O> org.apache.commons.lang3.concurrent.locks.LockingVisitors$ReadWriteLockVisitor<O> reentrantReadWriteLockVisitor(O);
-  public static <O> org.apache.commons.lang3.concurrent.locks.LockingVisitors$StampedLockVisitor<O> stampedLockVisitor(O);
-  public org.apache.commons.lang3.concurrent.locks.LockingVisitors();
-}

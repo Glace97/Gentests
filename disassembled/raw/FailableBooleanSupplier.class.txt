@@ -1,4 +1,0 @@
-Compiled from "FailableBooleanSupplier.java"
-public interface org.apache.commons.lang3.function.FailableBooleanSupplier<E extends java.lang.Throwable> {
-  public abstract boolean getAsBoolean() throws E;
-}

@@ -1,8 +1,0 @@
-Compiled from "FailableToLongBiFunction.java"
-public interface org.apache.commons.lang3.function.FailableToLongBiFunction<T, U, E extends java.lang.Throwable> {
-  public static final org.apache.commons.lang3.function.FailableToLongBiFunction NOP;
-  public static <T, U, E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableToLongBiFunction<T, U, E> nop();
-  public abstract long applyAsLong(T, U) throws E;
-  private static long lambda$static$0(java.lang.Object, java.lang.Object) throws java.lang.Throwable;
-  static {};
-}

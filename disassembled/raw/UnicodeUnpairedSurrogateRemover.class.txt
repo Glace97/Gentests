@@ -1,5 +1,0 @@
-Compiled from "UnicodeUnpairedSurrogateRemover.java"
-public class org.apache.commons.lang3.text.translate.UnicodeUnpairedSurrogateRemover extends org.apache.commons.lang3.text.translate.CodePointTranslator {
-  public org.apache.commons.lang3.text.translate.UnicodeUnpairedSurrogateRemover();
-  public boolean translate(int, java.io.Writer) throws java.io.IOException;
-}

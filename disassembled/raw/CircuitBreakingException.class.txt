@@ -1,8 +1,0 @@
-Compiled from "CircuitBreakingException.java"
-public class org.apache.commons.lang3.concurrent.CircuitBreakingException extends java.lang.RuntimeException {
-  private static final long serialVersionUID;
-  public org.apache.commons.lang3.concurrent.CircuitBreakingException();
-  public org.apache.commons.lang3.concurrent.CircuitBreakingException(java.lang.String);
-  public org.apache.commons.lang3.concurrent.CircuitBreakingException(java.lang.String, java.lang.Throwable);
-  public org.apache.commons.lang3.concurrent.CircuitBreakingException(java.lang.Throwable);
-}

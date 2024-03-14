@@ -1,8 +1,0 @@
-Compiled from "FailableDoubleToLongFunction.java"
-public interface org.apache.commons.lang3.function.FailableDoubleToLongFunction<E extends java.lang.Throwable> {
-  public static final org.apache.commons.lang3.function.FailableDoubleToLongFunction NOP;
-  public static <E extends java.lang.Throwable> org.apache.commons.lang3.function.FailableDoubleToLongFunction<E> nop();
-  public abstract int applyAsLong(double) throws E;
-  private static int lambda$static$0(double) throws java.lang.Throwable;
-  static {};
-}

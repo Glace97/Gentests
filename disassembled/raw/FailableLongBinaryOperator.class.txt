@@ -1,4 +1,0 @@
-Compiled from "FailableLongBinaryOperator.java"
-public interface org.apache.commons.lang3.function.FailableLongBinaryOperator<E extends java.lang.Throwable> {
-  public abstract long applyAsLong(long, long) throws E;
-}

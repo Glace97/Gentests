@@ -1,3 +1,0 @@
-Compiled from "ConcurrentInitializer.java"
-public interface org.apache.commons.lang3.concurrent.ConcurrentInitializer<T> extends org.apache.commons.lang3.function.FailableSupplier<T, org.apache.commons.lang3.concurrent.ConcurrentException> {
-}

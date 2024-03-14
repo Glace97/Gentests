@@ -1,4 +1,0 @@
-Compiled from "FailableCallable.java"
-public interface org.apache.commons.lang3.function.FailableCallable<R, E extends java.lang.Throwable> {
-  public abstract R call() throws E;
-}

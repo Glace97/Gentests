@@ -1,8 +1,0 @@
-Compiled from "ObjectToStringComparator.java"
-public final class org.apache.commons.lang3.compare.ObjectToStringComparator implements java.util.Comparator<java.lang.Object>, java.io.Serializable {
-  public static final org.apache.commons.lang3.compare.ObjectToStringComparator INSTANCE;
-  private static final long serialVersionUID;
-  public org.apache.commons.lang3.compare.ObjectToStringComparator();
-  public int compare(java.lang.Object, java.lang.Object);
-  static {};
-}
