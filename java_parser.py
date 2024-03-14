@@ -73,6 +73,7 @@ def remove_private_funcs(file):
 
 
 def parse_metadata(): 
+    #TODO: add pattern to the variable names
     doc_string_fun = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+\w+\s+\w+\s*\((?:.*?)\)'
     docstring_static_pattern = r'/\*\*(?:(?!\*/).)*?\*/\s*public\s+static\s+([\w\[\]]+)\s+(\w+)\s*\((.*?)\)\s*\{'
 
