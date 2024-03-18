@@ -17,34 +17,24 @@ def read_function_block(java_code, start_pos):
 
 def parse_metadata(path): 
     # Pattern matches any type of function
-    #function_pattern = r'(/\*\*[\s\S]*?\*/\s*)?.*?(public|private|protected|static|final|abstract)?\s*\b[\w<>]+\s+\w+\s*\(.*?\)\s*{'
-    #function_pattern = r'(/\*\*[\s\S]*?\*/\s*)?.*?(public|private|protected|static|final|abstract).*\([\s\S]*?\)\s*{' 
-    function_pattern = r'(/\*\*[\s\S]*?\*/\s*)?.*?public.*\([\s\S]*?\)\s*{'
+    # TODO: add other types of functions we want to match against
+    function_pattern = r'(?:/\*\*[^{;]*?\*/\s*)?.*(public|private).*?\([\s\S]*?\)\s*{'
     
     with open(path, "r") as input_file:
         java_code = input_file.read()
+    matches = find_matches(java_code, function_pattern)
+    
+    # Everything before the first method is considered metadata context
+    if matches:
+        _, start_pos, _ = matches[0]        
+    if start_pos:
+        # Extract content up to the matched position
+        file_name = f'metadata_{get_class_name(path)}.txt'
+        with open(file_name, 'w') as output_file:
+            output_file.write(java_code[:start_pos-1])
 
-    class_declaration_pos = find_class_declaration_pos(java_code)
-    if class_declaration_pos:
-        # In case of there being javadoc comments prior to class, avoid accidentally pattern matching against it        
-        remaining_code = java_code[class_declaration_pos:]
-        
-        matches = find_matches(remaining_code, function_pattern)
-        # Everything before the first method is considered metadata context
-        if matches:
-            firtst_match, start_pos, end_pos = matches[0]        
-            #print("entire match ", firtst_match)
-        if start_pos:
-            # Extract content up to the matched position
-            content_before_match = remaining_code[:start_pos]
-            partial_metadata = java_code[:class_declaration_pos-1]
-
-            file_name = f'metadata_{get_class_name(path)}.txt'
-            with open(file_name, 'w') as output_file:
-                output_file.write(partial_metadata)
-                output_file.write(content_before_match)
-
-
+# ------------------------------------------------ HELPER/DEBUG METHODS -----------------------------------------------------------
+            
 # Find all testable public methods and subsequent javadoc comments prior to method.
 def find_public_methods(path):
     # Pattern matches public functions with or without docstrings
@@ -57,14 +47,6 @@ def find_public_methods(path):
     # _print_matches(public_functions)
     return public_functions
     
-def find_class_declaration_pos(content):
-    class_declaration_pattern = r"(public\s+)?(\w+\s+)?class\s+(.*?)?\{"  
-
-    class_declaration = re.search(class_declaration_pattern, content)
-    if class_declaration:
-     return class_declaration.start()
-
-# HELPER/DEBUG METHODS
 def _print_matches(matches):
     for match_text, start_index, end_index in matches:
         print(f"Match: {match_text}, Start Index: {start_index}, End Index: {end_index}")
@@ -76,20 +58,16 @@ def get_class_name(path):
     class_name = file.split('.')[0]
     return class_name
 
+# General method to find any match
 def find_matches(content, pattern):
     matches = re.finditer(pattern, content)
     result = []
     for match in matches:
         match_text = match.group()
-        if 'class' in match_text:
-            # Pattern might match to javadoc comments prior to class declarations
-            # Do not include 
-            continue
         start_index = match.start()
         end_index = match.end()
         result.append((match_text, start_index, end_index))
     return result
-
 
 
 def main():
