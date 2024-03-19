@@ -88,7 +88,7 @@ def get_last_class_variable(class_path):
     try:
         output = subprocess.check_output(['javap', '-private', class_path], stderr=subprocess.STDOUT, universal_newlines=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error: {e.output}")
+        print(f"{e.output}")
         return None
 
     # Find the last class variable
@@ -97,6 +97,7 @@ def get_last_class_variable(class_path):
 
     if class_variables:
         last_class_variable = class_variables[-1][1]
+        print(f'found class variable {last_class_variable}')
         return last_class_variable
     else:
         print("No class variables found.")
@@ -108,11 +109,11 @@ def main():
 
     for line in lines:
         pair = line.split(' ')
-        java_file_path = pair[0]
-        class_path = pair[1]
+        java_file_path = pair[0].strip()
+        class_path = pair[1].strip()
+        #print("Java file path: ", java_file_path)
+        #print("Class path: ", class_path)
         parse_metadata(java_file_path, class_path)
-
-    #remove_private_funcs('metadata.txt')
 
 if __name__ == "__main__":
     main()
