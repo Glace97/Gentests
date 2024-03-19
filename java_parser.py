@@ -20,8 +20,15 @@ def read_function_block(java_code, start_pos):
     return -1  # If the end of the function is not found
 
 def parse_metadata(src_path, class_path):     
+    # TODO; add private classes if these are within a public class
     last_class_var = get_last_class_variable(class_path)
-    lines, metadata_break_point = find_variable_end_line(src_path, last_class_var)
+    
+    if last_class_var:
+        lines, metadata_break_point = find_variable_end_line(src_path, last_class_var)
+    else:
+      # TODO: Check if we have an inner nested class
+        lines, metadata_break_point = find_beginning_of_class(src_path)
+
     metadata = lines[:metadata_break_point]
     #print(metadata)
 
@@ -69,6 +76,9 @@ def find_matches(content, pattern):
         result.append((match_text, start_index, end_index))
     return result
 
+
+
+# TODO: REFACTOR find_variable_end_line() and find_beginning_of_class()
 # Return the given line, of the last variable
 def find_variable_end_line(java_file, variable_name):
     with open(java_file, 'r') as file:
@@ -82,6 +92,21 @@ def find_variable_end_line(java_file, variable_name):
         else:
             return None
 
+def find_beginning_of_class(java_file):
+    with open(java_file, 'r') as file:
+        lines = file.readlines()
+        content = ''.join(lines)
+        class_pattern = r"(public\s+)?(\w+\s+)?class\s+(.*?)?\{" 
+        match = re.search(class_pattern, content, re.DOTALL)
+        if match:
+            end_line = content.count('\n', 0, match.end()) + 1
+            return lines, end_line
+        else:
+            print("CANNOT FIND CLASS")
+            return None
+
+
+ 
 # Using javap, find the last class variable
 def get_last_class_variable(class_path):
     # Run javap command
@@ -100,7 +125,6 @@ def get_last_class_variable(class_path):
         print(f'found class variable {last_class_variable}')
         return last_class_variable
     else:
-        print("No class variables found.")
         return None
 
 def main():
