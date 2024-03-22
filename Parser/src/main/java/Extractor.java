@@ -28,6 +28,13 @@ public class Extractor extends JavaParserBaseListener {
         this.outputDir.mkdirs();
     }
 
+    @Override public void enterImportDeclaration(JavaParser.ImportDeclarationContext ctx) {
+        int a = ctx.start.getStartIndex();
+        int b = ctx.stop.getStopIndex();
+        Interval interval = new Interval(a,b);
+        intervals.add(interval);
+    }
+    
     @Override public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
         JavaParser.IdentifierContext identifier = ctx.identifier();
         if (identifier!=null) {
@@ -53,6 +60,7 @@ public class Extractor extends JavaParserBaseListener {
             }
         }
     }
+
 
     private void parseFile(File child) {
         try {
