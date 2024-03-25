@@ -46,7 +46,7 @@ public class ContextExtractor extends JavaParserBaseListener {
     // Class declaration consists of a classBody Context
     // The classBody context consists of a class Body
     // The classBody consists of members
-    // Members has methodDeclarations.
+    // Members has methodDeclarations, fieldDeclarations, inner classDeclarations, constructors etc.
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         if(ctx != null) {
@@ -64,16 +64,9 @@ public class ContextExtractor extends JavaParserBaseListener {
                                 if (declarationChild instanceof JavaParser.MemberDeclarationContext) {
                                     JavaParser.MemberDeclarationContext memberDeclaration = (JavaParser.MemberDeclarationContext) declarationChild;
                                     ParseTree memberDeclarationChild = memberDeclaration.getChild(0);
-                                    if (!(memberDeclarationChild instanceof JavaParser.MethodDeclarationContext)) {
+                                    if (!(memberDeclarationChild instanceof JavaParser.MethodDeclarationContext) &&
+                                            !(memberDeclarationChild instanceof JavaParser.GenericMethodDeclarationContext)) {
                                         // Not a method
-//                                        if(!(memberDeclaration.getParent().getParent().getParent() == ctx)
-//                                                &&
-//                                                (memberDeclarationChild instanceof JavaParser.FieldDeclarationContext
-//                                                        || memberDeclarationChild instanceof JavaParser.ConstructorDeclarationContext)) {
-//                                            continue;
-//                                            // Parent is not the outer class, do not write duplicates of classvariables/constructors
-//                                        }
-
                                         ParserRuleContext ruleCtx = (ParserRuleContext) declarationChild;
                                         int startIndex = ruleCtx.getStart().getStartIndex();
                                         int stopIndex = ruleCtx.getStop().getStopIndex();
@@ -102,7 +95,6 @@ public class ContextExtractor extends JavaParserBaseListener {
             }
         }
     }
-
 
     public void walkDirectory( File dir ) {
         for( File child : Objects.requireNonNull(dir.listFiles())) {
@@ -160,10 +152,11 @@ public class ContextExtractor extends JavaParserBaseListener {
     }
 
     public static void main(String[] args) throws IOException {
-        File luhnCalculator = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
-        String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
+        //File testDir = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
+        File testDir = new File ("/Users/glacierali/repos/MEX/commons-lang/src/main/java");
+        String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/complex";
         ContextExtractor extractor = new ContextExtractor(outputDir);
-        extractor.walkDirectory(luhnCalculator);
+        extractor.walkDirectory(testDir);
     }
 
 }
