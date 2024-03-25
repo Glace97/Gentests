@@ -2,11 +2,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
@@ -21,9 +23,12 @@ public class ContextExtractor extends JavaParserBaseListener {
     ArrayList<String> metaData;
     CharStream input;
 
+    HashSet<String>  entries;
+
     public ContextExtractor(String outputDir) {
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
+        this.entries = new HashSet<>();
     }
 
 
@@ -37,16 +42,66 @@ public class ContextExtractor extends JavaParserBaseListener {
         }
     }
 
-     //Parse one term by one
-      @Override public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
+
+    // Class declaration consists of a classBody Context
+    // The classBody context consists of a class Body
+    // The classBody consists of members
+    // Members has methodDeclarations.
+    @Override
+    public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         if(ctx != null) {
-            int a = ctx.start.getStartIndex();
-            int b = ctx.stop.getStopIndex();
-            Interval interval = new Interval(a, b);
-            String importString = input.getText(interval);
-            metaData.add(importString);
+            for (int i = 0; i < ctx.getChildCount(); i++) {
+                ParseTree child = ctx.getChild(i);
+                if (child instanceof JavaParser.ClassBodyContext) {
+                    // Get full class body
+                    JavaParser.ClassBodyContext classBody = (JavaParser.ClassBodyContext) child;
+                    for (int j = 0; j < classBody.getChildCount(); j++) {
+                        ParseTree classBodyChild = classBody.getChild(j);
+                        if (classBodyChild instanceof JavaParser.ClassBodyDeclarationContext) {
+                            JavaParser.ClassBodyDeclarationContext declaration = (JavaParser.ClassBodyDeclarationContext) classBodyChild;
+                            for (int k = 0; k < declaration.getChildCount(); k++) {
+                                ParseTree declarationChild = declaration.getChild(k);
+                                if (declarationChild instanceof JavaParser.MemberDeclarationContext) {
+                                    JavaParser.MemberDeclarationContext memberDeclaration = (JavaParser.MemberDeclarationContext) declarationChild;
+                                    ParseTree memberDeclarationChild = memberDeclaration.getChild(0);
+                                    if (!(memberDeclarationChild instanceof JavaParser.MethodDeclarationContext)) {
+                                        // Not a method
+//                                        if(!(memberDeclaration.getParent().getParent().getParent() == ctx)
+//                                                &&
+//                                                (memberDeclarationChild instanceof JavaParser.FieldDeclarationContext
+//                                                        || memberDeclarationChild instanceof JavaParser.ConstructorDeclarationContext)) {
+//                                            continue;
+//                                            // Parent is not the outer class, do not write duplicates of classvariables/constructors
+//                                        }
+
+                                        ParserRuleContext ruleCtx = (ParserRuleContext) declarationChild;
+                                        int startIndex = ruleCtx.getStart().getStartIndex();
+                                        int stopIndex = ruleCtx.getStop().getStopIndex();
+                                        Interval interval = new Interval(startIndex, stopIndex);
+                                        String content = input.getText(interval);
+                                        boolean duplicate = false;
+                                        for(String entry: entries) {
+                                            if(entry.contains(content)) {
+                                                duplicate = true;
+                                                break;
+                                            }
+                                        }
+                                        if(!duplicate) {
+                                        // To avoid duplicates, like field variables, written twice
+                                        metaData.add(content);
+                                        entries.add(content);
+                                        }
+
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-       }
+    }
 
 
     public void walkDirectory( File dir ) {
@@ -60,7 +115,6 @@ public class ContextExtractor extends JavaParserBaseListener {
             }
         }
     }
-
 
     private void parseFile(File child) {
         try {

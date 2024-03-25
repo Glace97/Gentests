@@ -1,0 +1,4 @@
+class innerClass {
+        int y;
+        int x;
+    }
