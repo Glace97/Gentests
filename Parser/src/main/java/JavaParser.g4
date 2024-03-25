@@ -94,6 +94,7 @@ classDeclaration
     classBody
     ;
 
+
 typeParameters
     : '<' typeParameter (',' typeParameter)* '>'
     ;

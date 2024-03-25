@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.List;
 import java.io.BufferedInputStream;
 
-public class LuhnCalculator {
+abstract public class LuhnCalculator implements Iterable<Character>, Serializable{
     /**
     * Testing parsing inner class
     */
