@@ -1,6 +1,9 @@
+package parser;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,7 +21,6 @@ public class MethodExtractor extends JavaParserBaseListener {
     File currentJavaFile;
     File outputDir;
     List<Interval> intervals;
-    ArrayList<String> metaData;
     CharStream input;
 
     public MethodExtractor(String[] methodNames, String outputDir) {
@@ -93,11 +95,32 @@ public class MethodExtractor extends JavaParserBaseListener {
     }
 
     public static void main(String[] args) throws IOException {
-        String[] methodNames = {"calcLuhn", "validateLuhn", "someMethod", "someOtherMethod"};
-        File luhnCalculator = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
-        String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
-        MethodExtractor extractor = new MethodExtractor(methodNames, outputDir);
-        extractor.walkDirectory(luhnCalculator);
+        if(args.length < 1) {
+            System.out.println("Please provide a path to the project directory");
+            System.exit(-1);
+        }
+
+        try {
+            String pathToProject = args[0];
+            int numMethods = args.length - 1; // Do not include path to project in count
+
+            String[] methods = new String[args.length - 1];
+            System.arraycopy(args, 1, methods, 0, numMethods);
+
+            // DEBUG
+            //String[] methodNames = {"calcLuhn", "validateLuhn", "someMethod", "someOtherMethod"};
+            //String[] methodNames = {"getClassVar"};
+
+            File input_dir = new File(pathToProject);
+            String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/parser/output";
+            MethodExtractor extractor = new MethodExtractor(methods, outputDir);
+            extractor.walkDirectory(input_dir);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+
+
     }
 
 }

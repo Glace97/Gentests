@@ -1,4 +1,4 @@
-// Generated from Parser/src/main/java/JavaParser.g4 by ANTLR 4.13.1
+package parser;// Generated from Parser/src/main/java/JavaParser.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
