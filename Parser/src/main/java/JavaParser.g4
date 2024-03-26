@@ -88,7 +88,7 @@ variableModifier
     ;
 
 classDeclaration
-    : CLASS identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
+    : javadoc? CLASS identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
         PERMITS typeList
     )? // Java17
     classBody
@@ -160,7 +160,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
-    : typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    : javadoc? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 methodBody
@@ -798,4 +798,8 @@ explicitGenericInvocationSuffix
 
 arguments
     : '(' expressionList? ')'
+    ;
+
+javadoc
+    : JAVADOC_COMMENT
     ;
