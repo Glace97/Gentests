@@ -1,5 +1,3 @@
-package parser;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -42,6 +40,7 @@ public class MethodExtractor extends JavaParserBaseListener {
             }
         }
     }
+
 
     public void walkDirectory( File dir ) {
         for( File child : Objects.requireNonNull(dir.listFiles())) {
@@ -112,7 +111,7 @@ public class MethodExtractor extends JavaParserBaseListener {
             //String[] methodNames = {"getClassVar"};
 
             File input_dir = new File(pathToProject);
-            String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/parser/output";
+            String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
             MethodExtractor extractor = new MethodExtractor(methods, outputDir);
             extractor.walkDirectory(input_dir);
         } catch (Exception ex) {

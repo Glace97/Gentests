@@ -34,6 +34,7 @@
 // $antlr-format alignColons trailing, singleLineOverrulesHangingColon true, alignLexerCommands true, alignLabels true, alignTrailers true
 
 lexer grammar JavaLexer;
+
 // Keywords
 
 ABSTRACT     : 'abstract';
@@ -199,7 +200,7 @@ ELLIPSIS : '...';
 
 // Whitespace and comments
 
-JAVADOC_COMMENT : '/**' .*? '*/'[\n];
+//JAVADOC_COMMENT : '/**' .*? '*/'[\n] -> channel(0);
 WS           : [ \t\r\n\u000C]+ -> channel(HIDDEN);
 COMMENT      : '/*' .*? '*/'     -> channel(HIDDEN);
 LINE_COMMENT : '//' ~[\r\n]*    -> channel(HIDDEN);

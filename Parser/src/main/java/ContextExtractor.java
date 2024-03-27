@@ -1,9 +1,10 @@
-package parser;import java.io.File;
+package parser;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 
 import org.antlr.v4.runtime.*;

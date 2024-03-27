@@ -1,9 +1,14 @@
-package testclasses;
+package parser.testclasses;
 
 public class EasyClass {
     public int classVar;
 
+    /**
+     * A java doc comment.
+     * With some lines.
+     * */
     public int getClassVar() {
+        // Lets see if this comment is hidden
         return classVar;
     }
 
