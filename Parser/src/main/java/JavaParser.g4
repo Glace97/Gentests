@@ -108,7 +108,7 @@ typeBound
     ;
 
 enumDeclaration
-    : ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
+    : javadoc? modifier? ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
     ;
 
 enumConstants
@@ -160,7 +160,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
-    :  javadoc? PUBLIC? STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    :  javadoc? modifier? STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 methodBody
@@ -343,7 +343,7 @@ altAnnotationQualifiedName
     ;
 
 annotation
-    : ('@' qualifiedName | altAnnotationQualifiedName) (
+    : javadoc? ('@' qualifiedName | altAnnotationQualifiedName) (
         '(' ( elementValuePairs | elementValue)? ')'
     )?
     ;
