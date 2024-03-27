@@ -1,4 +1,4 @@
-// Generated from Parser/src/main/java/parser/JavaParser.g4 by ANTLR 4.13.1
+// Generated from Parser/src/main/java/JavaParser.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -1266,4 +1266,24 @@ public interface JavaParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArguments(JavaParser.ArgumentsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaParser#javadoc}.
+	 * @param ctx the parse tree
+	 */
+	void enterJavadoc(JavaParser.JavadocContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaParser#javadoc}.
+	 * @param ctx the parse tree
+	 */
+	void exitJavadoc(JavaParser.JavadocContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link JavaParser#static}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatic(JavaParser.StaticContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link JavaParser#static}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatic(JavaParser.StaticContext ctx);
 }

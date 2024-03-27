@@ -160,7 +160,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
-    :  typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    :  javadoc? PUBLIC? STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 methodBody
@@ -799,3 +799,11 @@ explicitGenericInvocationSuffix
 arguments
     : '(' expressionList? ')'
     ;
+
+javadoc
+  : JAVADOC_COMMENT
+;
+
+static
+  : STATIC
+;
