@@ -88,7 +88,7 @@ variableModifier
     ;
 
 classDeclaration
-    :  CLASS identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
+    :   javadoc? classOrInterfaceModifier? static? identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
         PERMITS typeList
     )? // Java17
     classBody
@@ -190,7 +190,7 @@ compactConstructorDeclaration
     ;
 
 fieldDeclaration
-    : typeType variableDeclarators ';'
+    : javadoc? modifier? typeType variableDeclarators ';'
     ;
 
 interfaceBodyDeclaration

@@ -61,11 +61,13 @@ public class ContextExtractor extends JavaParserBaseListener {
                             for (int k = 0; k < declaration.getChildCount(); k++) {
                                 ParseTree declarationChild = declaration.getChild(k);
                                 if (declarationChild instanceof JavaParser.MemberDeclarationContext) {
+                                    // Check all members of class
                                     JavaParser.MemberDeclarationContext memberDeclaration = (JavaParser.MemberDeclarationContext) declarationChild;
                                     ParseTree memberDeclarationChild = memberDeclaration.getChild(0);
                                     if (!(memberDeclarationChild instanceof JavaParser.MethodDeclarationContext) &&
-                                            !(memberDeclarationChild instanceof JavaParser.GenericMethodDeclarationContext)) {
-                                        // Not a method
+                                            !(memberDeclarationChild instanceof JavaParser.GenericMethodDeclarationContext) && (memberDeclarationChild != null)) {
+                                        // Not a method, but can be anything else within the class (variables, inner classes, enums).
+                                        // Add it as context to the method.
                                         ParserRuleContext ruleCtx = (ParserRuleContext) declarationChild;
                                         int startIndex = ruleCtx.getStart().getStartIndex();
                                         int stopIndex = ruleCtx.getStop().getStopIndex();
@@ -79,12 +81,10 @@ public class ContextExtractor extends JavaParserBaseListener {
                                             }
                                         }
                                         if(!duplicate) {
-                                        // To avoid duplicates, like field variables, written twice
-                                        metaData.add(content);
-                                        entries.add(content);
+                                            // To avoid duplicates, like field variables, written twice
+                                            metaData.add(content);
+                                            entries.add(content);
                                         }
-
-
                                     }
                                 }
                             }
@@ -151,8 +151,8 @@ public class ContextExtractor extends JavaParserBaseListener {
     }
 
     public static void main(String[] args) throws IOException {
-        //File testDir = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
-        File testDir = new File ("/Users/glacierali/repos/MEX/commons-lang/src/main/java");
+        File testDir = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
+        //File testDir = new File ("/Users/glacierali/repos/MEX/commons-lang/src/main/java");
         String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/complex";
         ContextExtractor extractor = new ContextExtractor(outputDir);
         extractor.walkDirectory(testDir);
