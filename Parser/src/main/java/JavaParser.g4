@@ -108,7 +108,7 @@ typeBound
     ;
 
 enumDeclaration
-    : javadoc? modifier? ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
+    : javadoc? annotation? modifier? ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
     ;
 
 enumConstants
@@ -174,7 +174,7 @@ typeTypeOrVoid
     ;
 
 genericMethodDeclaration
-    : typeParameters methodDeclaration
+    : javadoc? annotation? modifier? STATIC? typeParameters typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 genericConstructorDeclaration
