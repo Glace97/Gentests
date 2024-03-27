@@ -160,7 +160,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
-    :  javadoc? modifier? STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    :  javadoc? annotation? modifier? STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 methodBody
@@ -343,7 +343,7 @@ altAnnotationQualifiedName
     ;
 
 annotation
-    : javadoc? ('@' qualifiedName | altAnnotationQualifiedName) (
+    : ('@' qualifiedName | altAnnotationQualifiedName) (
         '(' ( elementValuePairs | elementValue)? ')'
     )?
     ;
