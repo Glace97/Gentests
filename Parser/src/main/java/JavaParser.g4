@@ -174,7 +174,7 @@ typeTypeOrVoid
     ;
 
 genericMethodDeclaration
-    : javadoc? annotation? modifier? STATIC? typeParameters typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    : javadoc? annotation? modifier? STATIC? typeParameters? typeParameters typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 genericConstructorDeclaration

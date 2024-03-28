@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,11 +22,16 @@ public class MethodExtractor extends JavaParserBaseListener {
     List<Interval> intervals;
     CharStream input;
 
+    HashSet<String> entries;
+
     public MethodExtractor(String[] methodNames, String outputDir) {
         this.methodNamesToMatch = methodNames;
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
+        this.entries = new HashSet<>();
     }
+
+    //TODO: refactor duplicate code to separate helper function.
 
     @Override public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
         JavaParser.IdentifierContext identifier = ctx.identifier();
@@ -35,12 +41,45 @@ public class MethodExtractor extends JavaParserBaseListener {
                     int a = ctx.start.getStartIndex();
                     int b = ctx.stop.getStopIndex();
                     Interval interval = new Interval(a,b);
-                    intervals.add(interval);
+                    String method = input.getText(interval);
+                    boolean duplicate = false;
+                    for(String entry: entries) {
+                        if(entry.contains(method)) {
+                            duplicate = true;
+                            break;
+                        }
+                    }
+                    if(!duplicate) {
+                        intervals.add(interval);
+                    }
                 }
             }
         }
     }
 
+    @Override public void enterGenericMethodDeclaration(JavaParser.GenericMethodDeclarationContext ctx) {
+        JavaParser.IdentifierContext identifier = ctx.identifier();
+        if (identifier!=null) {
+            for (String name:methodNamesToMatch) {
+                if (identifier.getText().equals(name)) {
+                    int a = ctx.start.getStartIndex();
+                    int b = ctx.stop.getStopIndex();
+                    Interval interval = new Interval(a,b);
+                    String method = input.getText(interval);
+                    boolean duplicate = false;
+                    for(String entry: entries) {
+                        if(entry.contains(method)) {
+                            duplicate = true;
+                            break;
+                        }
+                    }
+                    if(!duplicate) {
+                        intervals.add(interval);
+                    }
+                }
+            }
+        }
+    }
 
     public void walkDirectory( File dir ) {
         for( File child : Objects.requireNonNull(dir.listFiles())) {
