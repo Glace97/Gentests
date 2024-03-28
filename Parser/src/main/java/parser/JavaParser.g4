@@ -160,6 +160,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
+    // Tripple modifiers examlpe: protected final Synchronized
     :  javadoc? annotation? modifier? STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 

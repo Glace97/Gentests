@@ -1,4 +1,4 @@
-// Generated from JavaParser.g4 by ANTLR 4.13.1
+package parser;// Generated from JavaParser.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
