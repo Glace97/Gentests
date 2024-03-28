@@ -31,49 +31,29 @@ public class MethodExtractor extends JavaParserBaseListener {
         this.entries = new HashSet<>();
     }
 
-    //TODO: refactor duplicate code to separate helper function.
-
-    @Override public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
-        JavaParser.IdentifierContext identifier = ctx.identifier();
-        if (identifier!=null) {
-            for (String name:methodNamesToMatch) {
-                if (identifier.getText().equals(name)) {
-                    int a = ctx.start.getStartIndex();
-                    int b = ctx.stop.getStopIndex();
-                    Interval interval = new Interval(a,b);
-                    String method = input.getText(interval);
-                    boolean duplicate = false;
-                    for(String entry: entries) {
-                        if(entry.contains(method)) {
-                            duplicate = true;
-                            break;
-                        }
-                    }
-                    if(!duplicate) {
-                        intervals.add(interval);
-                    }
-                }
-            }
-        }
+    public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
+        findMatchingMethods(ctx.identifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
     }
 
-    @Override public void enterGenericMethodDeclaration(JavaParser.GenericMethodDeclarationContext ctx) {
-        JavaParser.IdentifierContext identifier = ctx.identifier();
-        if (identifier!=null) {
-            for (String name:methodNamesToMatch) {
+    @Override
+    public void enterGenericMethodDeclaration(JavaParser.GenericMethodDeclarationContext ctx) {
+        findMatchingMethods(ctx.identifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+    }
+
+    private void findMatchingMethods(JavaParser.IdentifierContext identifier, int startIndex, int stopIndex) {
+        if (identifier != null) {
+            for (String name : methodNamesToMatch) {
                 if (identifier.getText().equals(name)) {
-                    int a = ctx.start.getStartIndex();
-                    int b = ctx.stop.getStopIndex();
-                    Interval interval = new Interval(a,b);
+                    Interval interval = new Interval(startIndex, stopIndex);
                     String method = input.getText(interval);
                     boolean duplicate = false;
-                    for(String entry: entries) {
-                        if(entry.contains(method)) {
+                    for (String entry : entries) {
+                        if (entry.contains(method)) {
                             duplicate = true;
                             break;
                         }
                     }
-                    if(!duplicate) {
+                    if (!duplicate) {
                         intervals.add(interval);
                     }
                 }
