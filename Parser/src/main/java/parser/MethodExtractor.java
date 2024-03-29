@@ -93,6 +93,11 @@ public class MethodExtractor extends JavaParserBaseListener {
             JavaLexer lexer = new JavaLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             JavaParser parser = new JavaParser(tokens);
+
+            // To not overwhelm the application
+            lexer.removeErrorListeners();
+            parser.removeErrorListeners();
+
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(this, tree);
