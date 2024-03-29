@@ -62,13 +62,19 @@ public class MethodExtractor extends JavaParserBaseListener {
         }
     }
 
-    public void walkDirectory( File dir ) {
-        for( File child : Objects.requireNonNull(dir.listFiles())) {
-            if( child.isDirectory() ) {
-                walkDirectory( child );
-            } else {
-                if (child.getName().endsWith(".java")) {
-                    parseFile(child);
+    public void walkDirectory( File dirOrFile ) {
+        if(dirOrFile.getName().endsWith(".java")) {
+            // A file was directly provided instead of a directory
+            parseFile(dirOrFile);
+        } else {
+            // Recursively check all .java files in the given directory
+            for( File child : Objects.requireNonNull(dirOrFile.listFiles())) {
+                if( child.isDirectory() ) {
+                    walkDirectory( child );
+                } else {
+                    if (child.getName().endsWith(".java")) {
+                        parseFile(child);
+                    }
                 }
             }
         }
@@ -115,7 +121,7 @@ public class MethodExtractor extends JavaParserBaseListener {
 
     public static void main(String[] args) throws IOException {
         if(args.length < 1) {
-            System.out.println("Please provide a path to the project directory");
+            System.out.println("Please provide a path to the project directory or file");
             System.exit(-1);
         }
 
