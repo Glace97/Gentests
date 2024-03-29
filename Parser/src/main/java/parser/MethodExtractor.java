@@ -3,10 +3,9 @@ package parser;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
@@ -25,11 +24,16 @@ public class MethodExtractor extends JavaParserBaseListener {
 
     HashSet<String> entries;
 
+    static Logger logger;
+
     public MethodExtractor(String[] methodNames, String outputDir) {
         this.methodNamesToMatch = methodNames;
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
         this.entries = new HashSet<>();
+        logger = Logger.getLogger(MethodExtractor.class.getName());
+        // logging.properties overides programmatical setting
+        //logger.setLevel(Level.INFO);
     }
 
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
@@ -65,6 +69,7 @@ public class MethodExtractor extends JavaParserBaseListener {
     public void walkDirectory( File dirOrFile ) {
         if(dirOrFile.getName().endsWith(".java")) {
             // A file was directly provided instead of a directory
+            logger.info("Parsing a single file instead of directory");
             parseFile(dirOrFile);
         } else {
             // Recursively check all .java files in the given directory
@@ -92,6 +97,7 @@ public class MethodExtractor extends JavaParserBaseListener {
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(this, tree);
             if (!intervals.isEmpty()) {
+                logger.info("Collected parser intervals.");
                 writeOutputFile();
             }
         } catch (IOException e) {
@@ -108,7 +114,11 @@ public class MethodExtractor extends JavaParserBaseListener {
             // Write methods to test
             FileWriter fw = new FileWriter(outFile);
             for (Interval interval:this.intervals) {
-                fw.write(input.getText(interval));
+                String parsedContent = input.getText(interval);
+                fw.write(parsedContent);
+                if(!parsedContent.isEmpty()) {
+                    logger.info("Methodbody parsed and added");
+                }
                 fw.write("\n\n");
             }
             fw.close();
@@ -132,6 +142,7 @@ public class MethodExtractor extends JavaParserBaseListener {
             String[] methods = new String[args.length - 1];
             System.arraycopy(args, 1, methods, 0, numMethods);
 
+
             // DEBUG
             //String[] methodNames = {"calcLuhn", "validateLuhn", "someMethod", "someOtherMethod"};
             //String[] methodNames = {"getClassVar"};
@@ -139,6 +150,10 @@ public class MethodExtractor extends JavaParserBaseListener {
             File input_dir = new File(pathToProject);
             String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
             MethodExtractor extractor = new MethodExtractor(methods, outputDir);
+
+            logger.info("Directory to parse: " + pathToProject);
+            logger.info("Methods to look for: " + Arrays.toString(methods));
+
             extractor.walkDirectory(input_dir);
         } catch (Exception ex) {
             ex.printStackTrace();
