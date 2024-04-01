@@ -2,11 +2,14 @@ import subprocess
 import os
 import re
 
-
+'''
+Input: Java File (class)
+Output: List of all the public methods of that class
+'''
 def get_all_public_methods(java_file_path):
     # 1. Find classpath
     
-    java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
+    #java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
     directory, java_filename = os.path.split(java_file_path)
     #print(directory)
     #print(java_filename)
@@ -43,33 +46,47 @@ def get_all_public_methods(java_file_path):
 
     return public_methods
     
-
-def parse_javadoc_comment(file):
-  
+'''
+Calls the javaparser program, which extracts the given methods and the method body from the java file.
+Input: List of methods (names), path to java file
+Output: Void
+'''
+def parse_method_bodies(java_file_path, methods):
   # CLI command: 
   # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.MethodExtractor
   
   cmd = ["java", 
          "-cp", 
          "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
-         "parser.MethodExtractor"]
+         "-Djava.util.logging.config.file=logging.properties", #Debug
+         "parser.MethodExtractor", java_file_path]
+
+  cmd.extend(methods)
   
-  # Add arguments to command, methods to test¨
-  # javap command on given file.
-  # We can find the path to classfile in java_class_pairs.txt file
-  # Extract name of all public methods methods which we are interested in
-
-
+  print("command: ", cmd)
+  
   # Invoke method extractor program
   process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  stdout, stderr = process.communicate()  
+  stdout, stderr = process.communicate()
 
+  if process.returncode == 0:
+    print("Method extraction completed successfully.")
+    # Your additional code here
+  else:
+    print("Error occurred while extracting methods:", stderr.decode())
+    # Handle the error condition appropriately
+
+  print("")
   
 
 def main():
-    methods = get_all_public_methods("test")
+    java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
     
-    print(methods)
+    # Use case: only javafile provided (test all public methods)
+    all_methods = get_all_public_methods(java_file_path)
+    parse_method_bodies(java_file_path, all_methods)
+
+
 
 if __name__ == "__main__":
     
