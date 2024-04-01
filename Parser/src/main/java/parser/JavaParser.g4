@@ -112,11 +112,11 @@ enumDeclaration
     ;
 
 enumConstants
-    : enumConstant (',' enumConstant)*
+    : javadoc? enumConstant (',' enumConstant)*
     ;
 
 enumConstant
-    : annotation* identifier arguments? classBody?
+    : javadoc? annotation* identifier arguments? classBody?
     ;
 
 enumBodyDeclarations

@@ -1,5 +1,3 @@
-package parser;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -153,8 +151,8 @@ public class ContextExtractor extends JavaParserBaseListener {
     }
 
     public static void main(String[] args) throws IOException {
-        //File testDir = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
-        File testDir = new File ("/Users/glacierali/repos/MEX/commons-lang/src/main/java");
+        File testDir = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
+        //File testDir = new File ("/Users/glacierali/repos/MEX/commons-lang/src/main/java");
         String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/complex";
         ContextExtractor extractor = new ContextExtractor(outputDir);
         extractor.walkDirectory(testDir);

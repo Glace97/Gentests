@@ -1,5 +1,3 @@
-package parser;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -48,7 +46,8 @@ public class MethodExtractor extends JavaParserBaseListener {
     private void findMatchingMethods(JavaParser.IdentifierContext identifier, int startIndex, int stopIndex) {
         if (identifier != null) {
             for (String name : methodNamesToMatch) {
-                if (identifier.getText().equals(name)) {
+                String foundName = identifier.getText();
+                if (foundName.equals(name)) {
                     Interval interval = new Interval(startIndex, stopIndex);
                     String method = input.getText(interval);
                     boolean duplicate = false;
@@ -100,6 +99,8 @@ public class MethodExtractor extends JavaParserBaseListener {
 
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
+            logger.info("Current file: " + child);
+            logger.info(tree.toStringTree(parser));
             walker.walk(this, tree);
             if (!intervals.isEmpty()) {
                 logger.info("Collected parser intervals.");
@@ -142,11 +143,13 @@ public class MethodExtractor extends JavaParserBaseListener {
 
         try {
             String pathToProject = args[0];
+            // DEBUG
+            pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
+
             int numMethods = args.length - 1; // Do not include path to project in count
 
             String[] methods = new String[args.length - 1];
             System.arraycopy(args, 1, methods, 0, numMethods);
-
 
             // DEBUG
             //String[] methodNames = {"calcLuhn", "validateLuhn", "someMethod", "someOtherMethod"};
