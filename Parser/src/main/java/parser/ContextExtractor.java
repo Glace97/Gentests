@@ -1,3 +1,5 @@
+package parser;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,7 +42,6 @@ public class ContextExtractor extends JavaParserBaseListener {
             metaData.add(importString);
         }
     }
-
 
     // Class declaration consists of a classBody Context
     // The classBody context consists of a class Body
@@ -95,13 +96,19 @@ public class ContextExtractor extends JavaParserBaseListener {
         }
     }
 
-    public void walkDirectory( File dir ) {
-        for( File child : Objects.requireNonNull(dir.listFiles())) {
-            if( child.isDirectory() ) {
-                walkDirectory( child );
-            } else {
-                if (child.getName().endsWith(".java")) {
-                    parseFile(child);
+    public void walkDirectory( File dirOrFile ) {
+        if(dirOrFile.getName().endsWith(".java")) {
+            // A file was directly provided instead of a directory
+            parseFile(dirOrFile);
+        } else {
+            // Recursively check all .java files in the given directory
+            for( File child : Objects.requireNonNull(dirOrFile.listFiles())) {
+                if( child.isDirectory() ) {
+                    walkDirectory( child );
+                } else {
+                    if (child.getName().endsWith(".java")) {
+                        parseFile(child);
+                    }
                 }
             }
         }
@@ -151,11 +158,27 @@ public class ContextExtractor extends JavaParserBaseListener {
     }
 
     public static void main(String[] args) throws IOException {
-        File testDir = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
-        //File testDir = new File ("/Users/glacierali/repos/MEX/commons-lang/src/main/java");
-        String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/complex";
-        ContextExtractor extractor = new ContextExtractor(outputDir);
-        extractor.walkDirectory(testDir);
+        if(args.length < 1) {
+            System.out.println("Please provide a path to the project directory or file");
+            System.exit(-1);
+        }
+
+        try {
+            String pathToProject = args[0];
+
+            // DEBUG
+            File input = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
+            //File input = new File(pathToProject);
+
+            // TODO: change to a tmp folder in home folder
+            String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
+            ContextExtractor extractor = new ContextExtractor(outputDir);
+            extractor.walkDirectory(input);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+
     }
 
 }
