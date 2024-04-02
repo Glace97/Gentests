@@ -1,0 +1,187 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.lang3;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.IntFunction;
+import java.util.function.Supplier;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.stream.Streams;
+
+/**
+ * Operations on arrays, primitive arrays (like {@code int[]}) and
+ * primitive wrapper arrays (like {@code Integer[]}).
+ * <p>
+ * This class tries to handle {@code null} input gracefully.
+ * An exception will not be thrown for a {@code null}
+ * array input. However, an Object array that contains a {@code null}
+ * element may throw an exception. Each method documents its behavior.
+ * </p>
+ * <p>
+ * #ThreadSafe#
+ * </p>
+ * @since 2.0
+ */
+public class ArrayUtils {
+
+    /**
+     * An empty immutable {@code boolean} array.
+     */
+    public static final boolean[] EMPTY_BOOLEAN_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Boolean} array.
+     */
+    public static final Boolean[] EMPTY_BOOLEAN_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@code byte} array.
+     */
+    public static final byte[] EMPTY_BYTE_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Byte} array.
+     */
+    public static final Byte[] EMPTY_BYTE_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@code char} array.
+     */
+    public static final char[] EMPTY_CHAR_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Character} array.
+     */
+    public static final Character[] EMPTY_CHARACTER_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Class} array.
+     */
+    public static final Class<?>[] EMPTY_CLASS_ARRAY = {};
+
+    /**
+     * An empty immutable {@code double} array.
+     */
+    public static final double[] EMPTY_DOUBLE_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Double} array.
+     */
+    public static final Double[] EMPTY_DOUBLE_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Field} array.
+     *
+     * @since 3.10
+     */
+    public static final Field[] EMPTY_FIELD_ARRAY = {};
+
+    /**
+     * An empty immutable {@code float} array.
+     */
+    public static final float[] EMPTY_FLOAT_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Float} array.
+     */
+    public static final Float[] EMPTY_FLOAT_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@code int} array.
+     */
+    public static final int[] EMPTY_INT_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Integer} array.
+     */
+    public static final Integer[] EMPTY_INTEGER_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@code long} array.
+     */
+    public static final long[] EMPTY_LONG_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Long} array.
+     */
+    public static final Long[] EMPTY_LONG_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Method} array.
+     *
+     * @since 3.10
+     */
+    public static final Method[] EMPTY_METHOD_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Object} array.
+     */
+    public static final Object[] EMPTY_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@code short} array.
+     */
+    public static final short[] EMPTY_SHORT_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Short} array.
+     */
+    public static final Short[] EMPTY_SHORT_OBJECT_ARRAY = {};
+
+    /**
+     * An empty immutable {@link String} array.
+     */
+    public static final String[] EMPTY_STRING_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Throwable} array.
+     *
+     * @since 3.10
+     */
+    public static final Throwable[] EMPTY_THROWABLE_ARRAY = {};
+
+    /**
+     * An empty immutable {@link Type} array.
+     *
+     * @since 3.10
+     */
+    public static final Type[] EMPTY_TYPE_ARRAY = {};
+
+    /**
+     * The index value when an element is not found in a list or array: {@code -1}.
+     * This value is returned by methods in this class and can also be used in comparisons with values returned by
+     * various method from {@link java.util.List}.
+     */
+    public static final int INDEX_NOT_FOUND = -1;

@@ -1,0 +1,294 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.commons.lang3;
+
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import org.apache.commons.lang3.Streams.FailableStream;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.function.Failable;
+import org.apache.commons.lang3.function.FailableBooleanSupplier;
+
+/**
+ * This class provides utility functions, and classes for working with the {@code java.util.function} package, or more
+ * generally, with Java 8 lambdas. More specifically, it attempts to address the fact that lambdas are supposed not to
+ * throw Exceptions, at least not checked Exceptions, AKA instances of {@link Exception}. This enforces the use of
+ * constructs like:
+ *
+ * <pre>
+ * {@code
+ *     Consumer<java.lang.reflect.Method> consumer = m -> {
+ *         try {
+ *             m.invoke(o, args);
+ *         } catch (Throwable t) {
+ *             throw Functions.rethrow(t);
+ *         }
+ *     };
+ * }</pre>
+ *
+ * <p>
+ * By replacing a {@link java.util.function.Consumer Consumer&lt;O&gt;} with a {@link FailableConsumer
+ * FailableConsumer&lt;O,? extends Throwable&gt;}, this can be written like follows:
+ * </p>
+ *
+ * <pre>
+ * {@code
+ *   Functions.accept((m) -> m.invoke(o,args));
+ * }</pre>
+ *
+ * <p>
+ * Obviously, the second version is much more concise and the spirit of Lambda expressions is met better than the second
+ * version.
+ * </p>
+ * @since 3.9
+ * @deprecated Use {@link org.apache.commons.lang3.function.Failable}.
+ */
+@Deprecated
+public class Functions {
+
+    /**
+     * A functional interface like {@link BiConsumer} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <O1> Consumed type 1.
+     * @param <O2> Consumed type 2.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableBiConsumer}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableBiConsumer<O1, O2, T extends Throwable> {
+
+        /**
+         * Accepts the consumer.
+         *
+         * @param object1 the first parameter for the consumable to accept
+         * @param object2 the second parameter for the consumable to accept
+         * @throws T Thrown when the consumer fails.
+         */
+        void accept(O1 object1, O2 object2) throws T;
+    }
+
+    /**
+     * A functional interface like {@link BiFunction} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <O1> Input type 1.
+     * @param <O2> Input type 2.
+     * @param <R> Return type.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableBiFunction}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableBiFunction<O1, O2, R, T extends Throwable> {
+
+        /**
+         * Applies this function.
+         *
+         * @param input1 the first input for the function
+         * @param input2 the second input for the function
+         * @return the result of the function
+         * @throws T Thrown when the function fails.
+         */
+        R apply(O1 input1, O2 input2) throws T;
+    }
+
+    /**
+     * A functional interface like {@link BiPredicate} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <O1> Predicate type 1.
+     * @param <O2> Predicate type 2.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableBiPredicate}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableBiPredicate<O1, O2, T extends Throwable> {
+
+        /**
+         * Tests the predicate.
+         *
+         * @param object1 the first object to test the predicate on
+         * @param object2 the second object to test the predicate on
+         * @return the predicate's evaluation
+         * @throws T if the predicate fails
+         */
+        boolean test(O1 object1, O2 object2) throws T;
+    }
+
+    /**
+     * A functional interface like {@link java.util.concurrent.Callable} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <R> Return type.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableCallable}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableCallable<R, T extends Throwable> {
+
+        /**
+         * Calls the callable.
+         *
+         * @return The value returned from the callable
+         * @throws T if the callable fails
+         */
+        R call() throws T;
+    }
+
+    /**
+     * A functional interface like {@link Consumer} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <O> Consumed type 1.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableConsumer}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableConsumer<O, T extends Throwable> {
+
+        /**
+         * Accepts the consumer.
+         *
+         * @param object the parameter for the consumable to accept
+         * @throws T Thrown when the consumer fails.
+         */
+        void accept(O object) throws T;
+    }
+
+    /**
+     * A functional interface like {@link Function} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <I> Input type 1.
+     * @param <R> Return type.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableFunction}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableFunction<I, R, T extends Throwable> {
+
+        /**
+         * Applies this function.
+         *
+         * @param input the input for the function
+         * @return the result of the function
+         * @throws T Thrown when the function fails.
+         */
+        R apply(I input) throws T;
+    }
+
+    /**
+     * A functional interface like {@link Predicate} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <I> Predicate type 1.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailablePredicate}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailablePredicate<I, T extends Throwable> {
+
+        /**
+         * Tests the predicate.
+         *
+         * @param object the object to test the predicate on
+         * @return the predicate's evaluation
+         * @throws T if the predicate fails
+         */
+        boolean test(I object) throws T;
+    }
+
+    /**
+     * A functional interface like {@link Runnable} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableRunnable}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableRunnable<T extends Throwable> {
+
+        /**
+         * Runs the function.
+         *
+         * @throws T Thrown when the function fails.
+         */
+        void run() throws T;
+    }
+
+    /**
+     * A functional interface like {@link Supplier} that declares a {@link Throwable}.
+     *
+     * <p>TODO for 4.0: Move to org.apache.commons.lang3.function.</p>
+     *
+     * @param <R> Return type.
+     * @param <T> Thrown exception.
+     * @deprecated Use {@link org.apache.commons.lang3.function.FailableSupplier}.
+     */
+    @Deprecated
+    @FunctionalInterface
+    public interface FailableSupplier<R, T extends Throwable> {
+
+        /**
+         * Supplies an object
+         *
+         * @return a result
+         * @throws T if the supplier fails
+         */
+        R get() throws T;
+    }
+
+    /**
+     * Consumes a consumer and rethrows any exception as a {@link RuntimeException}.
+     *
+     * @param consumer the consumer to consume
+     * @param object1 the first object to consume by {@code consumer}
+     * @param object2 the second object to consume by {@code consumer}
+     * @param <O1> the type of the first argument the consumer accepts
+     * @param <O2> the type of the second argument the consumer accepts
+     * @param <T> the type of checked exception the consumer may throw
+     */
