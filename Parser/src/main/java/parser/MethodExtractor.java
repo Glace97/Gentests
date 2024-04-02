@@ -1,3 +1,5 @@
+package parser;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -144,7 +146,7 @@ public class MethodExtractor extends JavaParserBaseListener {
         try {
             String pathToProject = args[0];
             // DEBUG
-            pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
+            //pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
 
             int numMethods = args.length - 1; // Do not include path to project in count
 
@@ -156,6 +158,8 @@ public class MethodExtractor extends JavaParserBaseListener {
             //String[] methodNames = {"getClassVar"};
 
             File input_dir = new File(pathToProject);
+
+            // TODO: change to a tmp folder in home folder
             String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
             MethodExtractor extractor = new MethodExtractor(methods, outputDir);
 
