@@ -53,17 +53,16 @@ Output: Void
 '''
 def parse_method_bodies(java_file_path, methods):
   # CLI command: 
-  # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.MethodExtractor
+  # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.MethodExtractor <args>
   
   cmd = ["java", 
          "-cp", 
          "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
-         "-Djava.util.logging.config.file=logging.properties", #Debug
          "parser.MethodExtractor", java_file_path]
 
   cmd.extend(methods)
   
-  print("command: ", cmd)
+  # print("command: ", cmd)
   
   # Invoke method extractor program
   process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -76,16 +75,50 @@ def parse_method_bodies(java_file_path, methods):
     print("Error occurred while extracting methods:", stderr.decode())
     # Handle the error condition appropriately
 
-  print("")
   
 
+'''
+Calls the javaparser program, which extracts class variables, fields, enums, inner classes, etc.
+Input: Path to javafile
+Output: Void
+'''
+
+def parse_context(java_file_path):
+   # CLI command
+   # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.ContextExtractor <args>
+
+  cmd = ["java", 
+      "-cp", 
+      "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
+      "parser.ContextExtractor", java_file_path]
+
+  # Invoke context extractor program
+  process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+  stdout, stderr = process.communicate()
+
+  if process.returncode == 0:
+    print("Context extracted succesfully.")
+    # Your additional code here
+  else:
+    print("Error occurred while extracting context:", stderr.decode())
+    # Handle the error condition appropriately
+
+
+
 def main():
+    # Test file
     java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
+    
+    # Generate a context for the given file:
+    parse_context(java_file_path)
     
     # Use case: only javafile provided (test all public methods)
     all_methods = get_all_public_methods(java_file_path)
+    
+    # Get method bodies
     parse_method_bodies(java_file_path, all_methods)
 
+    
 
 
 if __name__ == "__main__":
