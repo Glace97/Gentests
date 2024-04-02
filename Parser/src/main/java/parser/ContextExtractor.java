@@ -172,8 +172,8 @@ public class ContextExtractor extends JavaParserBaseListener {
             String pathToProject = args[0];
 
             // DEBUG
-            File input = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses");
-            //File input = new File(pathToProject);
+            //File input = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses")
+            File input = new File(pathToProject);
 
             // TODO: change to a tmp folder in home folder
             String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
