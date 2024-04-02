@@ -61,28 +61,15 @@ def parse_method_bodies(java_file_path, methods):
          "parser.MethodExtractor", java_file_path]
 
   cmd.extend(methods)
-  
-  # print("command: ", cmd)
-  
-  # Invoke method extractor program
-  process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-  stdout, stderr = process.communicate()
 
-  if process.returncode == 0:
-    print("Method extraction completed successfully.")
-    # Your additional code here
-  else:
-    print("Error occurred while extracting methods:", stderr.decode())
-    # Handle the error condition appropriately
+  invoke_java_program(cmd)
 
-  
 
 '''
 Calls the javaparser program, which extracts class variables, fields, enums, inner classes, etc.
 Input: Path to javafile
 Output: Void
 '''
-
 def parse_context(java_file_path):
    # CLI command
    # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.ContextExtractor <args>
@@ -92,16 +79,23 @@ def parse_context(java_file_path):
       "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
       "parser.ContextExtractor", java_file_path]
 
-  # Invoke context extractor program
+  invoke_java_program(cmd)
+
+
+################################################  HELPER METHODS ################################################## 
+
+def invoke_java_program(cmd):
+    # Invoke context extractor program
   process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   stdout, stderr = process.communicate()
 
+  program = cmd[3]
+
   if process.returncode == 0:
-    print("Context extracted succesfully.")
-    # Your additional code here
+    print(f"Sucessfully invoked program {program}.")
   else:
-    print("Error occurred while extracting context:", stderr.decode())
-    # Handle the error condition appropriately
+    print(f"Error occurred while invoking program {program}: ", stderr.decode())
+
 
 
 
