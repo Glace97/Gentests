@@ -17,8 +17,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
  * Extracts information from Javafiles.
  * Imports, packages,  class variables, enums.
  */
+//TODO: add logging
 public class ContextExtractor extends JavaParserBaseListener {
-    String[] methodNamesToMatch;
     File currentJavaFile;
     File outputDir;
     ArrayList<String> metaData;
@@ -122,6 +122,11 @@ public class ContextExtractor extends JavaParserBaseListener {
             JavaLexer lexer = new JavaLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             JavaParser parser = new JavaParser(tokens);
+
+            // To not overwhelm the application
+            lexer.removeErrorListeners();
+            parser.removeErrorListeners();
+
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(this, tree);
