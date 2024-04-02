@@ -82,6 +82,66 @@ def parse_context(java_file_path):
   invoke_java_program(cmd)
 
 
+'''
+Creates the prompt for generating unittests.
+Format:
+
+You are a coding assistant. 
+Generate a junit5 test suite for the following method <Method Name> in the class <Class Name>. The test suite should achieve high coverage and cover all edge cases. 
+Input: Name of method to test, path to the parsed methods from the source code, path to the generated context
+'''
+def construct_prompt(method_name, path_parsed_methods, path_context):
+
+  # 1. Get the parsed method body  
+  with open(path_parsed_methods, 'r') as file:
+    parsed_methods = file.readlines()
+
+    method_matches = []
+    for index, line in enumerate(parsed_methods):
+       if method_name in line:
+          # Found a method, add content 
+          print("We found the methods")
+          start = index
+          while start > 0:
+             if parsed_methods[start].strip() == '':
+                break
+             start -= 1 
+
+          end = index
+          while end < len(parsed_methods):
+            if parsed_methods[end].strip() == '':
+              break
+            end += 1 
+
+          method_body = parsed_methods[start:end]
+
+          print("Found method body: ", method_body)
+          method_matches.append(method_body)
+    
+
+    # Handle if there are several methods with the same name
+    if(len(method_matches) > 1):
+       print("TODO: handle this case when we have several methods with the same name")
+    elif (len(method_matches) == 1):
+       # Get methods body, we have exactly one
+       full_method = method_matches[0]
+       full_method = ''.join(full_method)
+
+
+    else:
+       print(f"WARNING: No parsed method body found for {method_name}. Will not generate a prompt.")
+       return
+    
+  # 2. Add method to context
+  with open(path_context, 'r') as file:
+    context = file.read()
+
+  prompt = context + '\n\n' + full_method
+
+  # 3. Save the prompt to a defined output
+  with open('./output', 'w') as output:
+    output.write(prompt)
+
 ################################################  HELPER METHODS ################################################## 
 
 def invoke_java_program(cmd):
@@ -98,20 +158,28 @@ def invoke_java_program(cmd):
 
 
 
-
 def main():
-    # Test file
+    # TESTING: Test file
     java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
-    
-    # Generate a context for the given file:
-    parse_context(java_file_path)
-    
+
     # Use case: only javafile provided (test all public methods)
     all_methods = get_all_public_methods(java_file_path)
     
-    # Get method bodies
-    parse_method_bodies(java_file_path, all_methods)
+    # Create the prompt
+    if(len(all_methods) > 0):
+      # Generate a context for the given file:
+      parse_context(java_file_path)
+      # Get method bodies
+      parse_method_bodies(java_file_path, all_methods)
+    
+    else:
+       print('No testable methods found in: java_file_path')
 
+    # TESTING: Test one method
+    test_method = all_methods[0]
+    path_context = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/Processor_context'
+    path_methods = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/Processor_methods'
+    construct_prompt(test_method, path_methods, path_context)
     
 
 

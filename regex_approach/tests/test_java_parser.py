@@ -230,8 +230,46 @@ public class ArrayUtils {
 
 }
 '''
-print("PUBLIC CLASS VAR")
+#print("PUBLIC CLASS VAR")
 #match = re.search(function_pattern, public_class_var)
 #all = re.findall(function_pattern, public_class_var)
-print("all: ", all[0])
+#print("all: ", all[0])
+
+
+method_bodies = '''
+/**
+     * Tests if {@link Processor} is 32 bit.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Arch#BIT_32}, else {@code false}.
+     */
+    public boolean is32Bit() {
+        return Arch.BIT_32 == arch;
+    }
+
+/**
+     * Tests if {@link Processor} is 64 bit.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Arch#BIT_64}, else {@code false}.
+     */
+     @Deprecated
+    public boolean is64Bit() {
+        return Arch.BIT_64 == arch;
+    }
+
+    public boolean isAarch64() {
+        return Type.AARCH_64 == type;
+    }
+'''
+
+
+methodName = 'isAarch64'
+
+
+
+find_method_bodies = r"(" + methodName + r").*\([\s\S]*?\)\s*{"
+
+
+matches = re.search(find_method_bodies, method_bodies)
+
+print(matches)
 
