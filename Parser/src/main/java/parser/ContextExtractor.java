@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -21,9 +22,10 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class ContextExtractor extends JavaParserBaseListener {
     File currentJavaFile;
     File outputDir;
-    ArrayList<String> metaData;
+    ArrayList<String> context;
     CharStream input;
 
+    ArrayList<String> imports;
     HashSet<String>  entries;
 
     public ContextExtractor(String outputDir) {
@@ -32,14 +34,13 @@ public class ContextExtractor extends JavaParserBaseListener {
         this.entries = new HashSet<>();
     }
 
-
     @Override public void enterImportDeclaration(JavaParser.ImportDeclarationContext ctx) {
         if(ctx != null) {
             int a = ctx.start.getStartIndex();
             int b = ctx.stop.getStopIndex();
             Interval interval = new Interval(a, b);
             String importString = input.getText(interval);
-            metaData.add(importString);
+            imports.add(importString);
         }
     }
 
@@ -83,7 +84,7 @@ public class ContextExtractor extends JavaParserBaseListener {
                                         }
                                         if(!duplicate) {
                                             // To avoid duplicates, like field variables, written twice
-                                            metaData.add(content);
+                                            context.add(content);
                                             entries.add(content);
                                         }
                                     }
@@ -117,7 +118,8 @@ public class ContextExtractor extends JavaParserBaseListener {
     private void parseFile(File child) {
         try {
             currentJavaFile = child;
-            metaData = new ArrayList<>();
+            context = new ArrayList<>();
+            imports = new ArrayList<>();
             input = new ANTLRFileStream(child.getPath());
             JavaLexer lexer = new JavaLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -130,7 +132,7 @@ public class ContextExtractor extends JavaParserBaseListener {
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(this, tree);
-            if (!metaData.isEmpty()) {
+            if (!context.isEmpty() || !imports.isEmpty()) {
                 writeOutputFile();
             }
         } catch (IOException e) {
@@ -141,23 +143,34 @@ public class ContextExtractor extends JavaParserBaseListener {
 
     private void writeOutputFile() {
         String nameWithExtension =  this.currentJavaFile.getName();
-        String context = nameWithExtension.split("\\.")[0] + "_context";
-        File outFile = new File(this.outputDir, context);
+        String className = nameWithExtension.split("\\.")[0];
+        String context = className + "_context";
+
+        File outputFolder = new File(this.outputDir, context);
+        outputFolder.mkdirs();
+
+        File outFileImports = new File(outputFolder, "imports");
+        File outFileContext = new File(outputFolder, context);
+
         try {
-            // Write methods to test
-            FileWriter fw = new FileWriter(outFile);
+            FileWriter fw = new FileWriter(outFileImports);
+
+            for(String importString : imports) {
+                // Write imports to seperate file
+                fw.write(importString);
+            }
             fw.close();
-            fw = new FileWriter(outFile);
-            // Write metadata
-            outFile = new File(this.outputDir, context);
-            for(String line:this.metaData) {
+
+            fw = new FileWriter(outFileContext);
+            // Write metadata to separate file
+            for(String line:this.context) {
                 fw.write(line);
                 fw.write("\n");
             }
             fw.close();
 
         } catch (Exception e) {
-            System.err.println("Could not write output file " + outFile);
+            System.err.println("Could not write output file");
             e.printStackTrace();
         }
     }
