@@ -1,6 +1,11 @@
 import subprocess
 import os
 import re
+import autopep8
+
+from pygments import highlight  
+from pygments.lexers import JavaLexer  
+from pygments.formatters import HtmlFormatter
 
 '''
 Input: Java File (class)
@@ -88,74 +93,56 @@ Format:
 
 You are a coding assistant. 
 Generate a junit5 test suite for the following method <Method Name> in the class <Class Name>. The test suite should achieve high coverage and cover all edge cases. 
-Input: Name of method to test, path to the parsed methods from the source code, path to the generated context
+Input: Name of method to test, path to the parsed methods from the source code (maybe one or several), path to the generated context
 '''
-def construct_prompt(method_name, path_parsed_methods, path_context):
+def construct_prompt(method_name, class_name, path_parsed_methods, path_context_folder):
 
   # 1. Get the parsed method body  
   with open(path_parsed_methods, 'r') as file:
-    parsed_methods = file.readlines()
-
-    method_matches = []
-    for index, line in enumerate(parsed_methods):
-       if method_name in line:
-          # Found a method, add content 
-          print("We found the methods")
-          start = index
-          while start > 0:
-             if parsed_methods[start].strip() == '':
-                break
-             start -= 1 
-
-          end = index
-          while end < len(parsed_methods):
-            if parsed_methods[end].strip() == '':
-              break
-            end += 1 
-
-          method_body = parsed_methods[start:end]
-
-          print("Found method body: ", method_body)
-          method_matches.append(method_body)
-    
-
-    # Handle if there are several methods with the same name
-    if(len(method_matches) > 1):
-       print("TODO: handle this case when we have several methods with the same name")
-    elif (len(method_matches) == 1):
-       # Get methods body, we have exactly one
-       full_method = method_matches[0]
-       full_method = ''.join(full_method)
-
-
-    else:
-       print(f"WARNING: No parsed method body found for {method_name}. Will not generate a prompt.")
-       return
-    
+    parsed_methods = file.read()
+  
+  # Imports and context are separate to facilitate further parsing
+  path_imports = path_context_folder + "/imports"
+  path_context = path_context_folder + "/context"
   # 2. Add method to context
+  with open(path_imports, 'r') as file:
+    imports = file.read()
+
   with open(path_context, 'r') as file:
     context = file.read()
+  
+  # TODO: Beautify?
+  code = imports + f'\n class {class_name}' + ' {\n' + context + parsed_methods + '\n }'
+  query = f'You are a coding assistant. Generate a junit5 test suite for the method {method_name}. The test suite should achieve high coverage and cover all edge cases. \n\n'
+  
+  # TODO: Check wether I can add more details AFTER the code to make the output more desireable.
+  final_prompt = query + code
 
-  prompt = context + '\n\n' + full_method
+  # 3. Create final prompt and save to file
+      # Ensure directory exists
+  class_folder = f'./prompts/{class_name}'
+  os.makedirs(class_folder, exist_ok=True)
 
-  # 3. Save the prompt to a defined output
-  with open('./output', 'w') as output:
-    output.write(prompt)
+  with open(os.path.join(class_folder, method_name), 'w') as output:
+    output.write(final_prompt)
+
+
+
 
 ################################################  HELPER METHODS ################################################## 
 
 def invoke_java_program(cmd):
-    # Invoke context extractor program
+  # Invoke context extractor program
   process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   stdout, stderr = process.communicate()
 
+  # Format: java -cp <classpath> <program> <args....>
   program = cmd[3]
 
   if process.returncode == 0:
     print(f"Sucessfully invoked program {program}.")
   else:
     print(f"Error occurred while invoking program {program}: ", stderr.decode())
-
 
 
 def main():
@@ -177,9 +164,10 @@ def main():
 
     # TESTING: Test one method
     test_method = all_methods[0]
-    path_context = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/Processor_context'
-    path_methods = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/Processor_methods'
-    construct_prompt(test_method, path_methods, path_context)
+    path_context = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/EasyClass_context'
+    path_methods = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/Processor_methods/isAarch64'
+    class_name = 'Processor'
+    construct_prompt( test_method, class_name, path_methods, path_context)
     
 
 
