@@ -131,20 +131,6 @@ public class MethodExtractor extends JavaParserBaseListener {
 
         File outputFolder = new File(this.outputDir, className);
         outputFolder.mkdirs();
-
-
-            // Write methods to test
-//            FileWriter fw = new FileWriter(outFile);
-//            for (Interval interval:this.intervals) {
-//                String parsedContent = input.getText(interval);
-//                fw.write(parsedContent);
-//                if(!parsedContent.isEmpty()) {
-//                    logger.info("Methodbody parsed and added");
-//                }
-//                fw.write("\n\n");
-//            }
-//            fw.close();
-
             for(String methodToTest : methodNamesToMatch) {
                 // Parsed methods are stored under <Provided output path>/classname/method_name.txt
                 ArrayList<String> associatedMethods = classMethodMapping.get(this.currentJavaFile.getName());
