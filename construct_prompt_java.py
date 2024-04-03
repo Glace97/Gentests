@@ -1,11 +1,7 @@
 import subprocess
 import os
 import re
-import autopep8
-
-from pygments import highlight  
-from pygments.lexers import JavaLexer  
-from pygments.formatters import HtmlFormatter
+import argparse
 
 '''
 Input: Java File (class)
@@ -67,8 +63,7 @@ def parse_method_bodies(java_file_path, methods):
 
   cmd.extend(methods)
 
-  invoke_java_program(cmd)
-
+  invoke_java_parsers(cmd)
 
 '''
 Calls the javaparser program, which extracts class variables, fields, enums, inner classes, etc.
@@ -84,8 +79,7 @@ def parse_context(java_file_path):
       "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
       "parser.ContextExtractor", java_file_path]
 
-  invoke_java_program(cmd)
-
+  invoke_java_parsers(cmd)
 
 '''
 Creates the prompt for generating unittests.
@@ -95,43 +89,40 @@ You are a coding assistant.
 Generate a junit5 test suite for the following method <Method Name> in the class <Class Name>. The test suite should achieve high coverage and cover all edge cases. 
 Input: Name of method to test, path to the parsed methods from the source code (maybe one or several), path to the generated context
 '''
-def construct_prompt(method_name, class_name, path_parsed_methods, path_context_folder):
+def construct_prompt(methods, class_name, path_parsed_methods, path_context_folder):
+  for method_name in methods: 
+    # 1. Get the parsed method body  
+    with open(os.path.join(path_parsed_methods, method_name), 'r') as file:
+      parsed_methods = file.read()
+    
+    # Imports and context are separate to facilitate further parsing
+    path_imports = path_context_folder + "/imports"
+    path_context = path_context_folder + "/context"
+    # 2. Add method to context
+    with open(path_imports, 'r') as file:
+      imports = file.read()
 
-  # 1. Get the parsed method body  
-  with open(path_parsed_methods, 'r') as file:
-    parsed_methods = file.read()
-  
-  # Imports and context are separate to facilitate further parsing
-  path_imports = path_context_folder + "/imports"
-  path_context = path_context_folder + "/context"
-  # 2. Add method to context
-  with open(path_imports, 'r') as file:
-    imports = file.read()
+    with open(path_context, 'r') as file:
+      context = file.read()
+    
+    # TODO: Beautify?
+    code = imports + f'\n class {class_name}' + ' {\n' + context + parsed_methods + '\n }'
+    query = f'You are a coding assistant. Generate a junit5 test suite for the method {method_name}. The test suite should achieve high coverage and cover all edge cases. \n\n'
+    
+    # TODO: Check wether I can add more details AFTER the code to make the output more desireable.
+    final_prompt = query + code
 
-  with open(path_context, 'r') as file:
-    context = file.read()
-  
-  # TODO: Beautify?
-  code = imports + f'\n class {class_name}' + ' {\n' + context + parsed_methods + '\n }'
-  query = f'You are a coding assistant. Generate a junit5 test suite for the method {method_name}. The test suite should achieve high coverage and cover all edge cases. \n\n'
-  
-  # TODO: Check wether I can add more details AFTER the code to make the output more desireable.
-  final_prompt = query + code
+    # 3. Create final prompt and save to file
+        # Ensure directory exists
+    class_folder = f'./prompts/{class_name}'
+    os.makedirs(class_folder, exist_ok=True)
 
-  # 3. Create final prompt and save to file
-      # Ensure directory exists
-  class_folder = f'./prompts/{class_name}'
-  os.makedirs(class_folder, exist_ok=True)
-
-  with open(os.path.join(class_folder, method_name), 'w') as output:
-    output.write(final_prompt)
-
-
-
+    with open(os.path.join(class_folder, method_name), 'w') as output:
+      output.write(final_prompt)
 
 ################################################  HELPER METHODS ################################################## 
 
-def invoke_java_program(cmd):
+def invoke_java_parsers(cmd):
   # Invoke context extractor program
   process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   stdout, stderr = process.communicate()
@@ -144,35 +135,52 @@ def invoke_java_program(cmd):
   else:
     print(f"Error occurred while invoking program {program}: ", stderr.decode())
 
+def get_class_name(java_file_path):
+
+
+    return classname
+
 
 def main():
     # TESTING: Test file
-    java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
-
-    # Use case: only javafile provided (test all public methods)
-    all_methods = get_all_public_methods(java_file_path)
+    #java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
     
+    # TODO: move this to the gentests program later
+    gentests = argparse.ArgumentParser(description="Generate unit tests for a given javafile.")
+    gentests.add_argument("javafile", type=str, help="Path to the Java file")
+    gentests.add_argument("-m", "--methods", nargs="*", help="Sequence of methodnames separated by whitespace")
+
+    args = gentests.parse_args()
+
+    java_file_path = args.javafile
+
+    if args.methods:
+      # Use case 1: javafile and specific methods provided.
+      # -m methodName1 methodName2
+      all_methods = args.methods
+    else:
+      # Use case 2: only javafile provided (test all public methods)
+      all_methods = get_all_public_methods(java_file_path) # List of all methods.
+      
     # Create the prompt
     if(len(all_methods) > 0):
       # Generate a context for the given file:
       parse_context(java_file_path)
       # Get method bodies
       parse_method_bodies(java_file_path, all_methods)
+
+      # TESTING: Test one method
+      # TODO: change to tmp/ folder in relative location
+      _, java_filename = os.path.split(java_file_path)
+      class_name = os.path.splitext(java_filename)[0]
+      path_context = f'/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/{class_name}_context'
+      path_methods = f'/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/{class_name}_methods'
+      construct_prompt(all_methods, class_name, path_methods, path_context)
     
     else:
        print('No testable methods found in: java_file_path')
 
-    # TESTING: Test one method
-    test_method = all_methods[0]
-    path_context = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/EasyClass_context'
-    path_methods = '/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/Processor_methods/isAarch64'
-    class_name = 'Processor'
-    construct_prompt( test_method, class_name, path_methods, path_context)
+
     
-
-
 if __name__ == "__main__":
-    
-    #If provided only file --> get_all_methods()
-
     main()
