@@ -20,9 +20,10 @@ public class MethodExtractor extends JavaParserBaseListener {
     File currentJavaFile;
     File outputDir;
     List<Interval> intervals;
-    CharStream input;
+    HashMap<String, ArrayList<String>> methodBodies;
+    HashMap<String, ArrayList<String>> classMethodMapping;
 
-    HashSet<String> entries;
+    CharStream input;
 
     static Logger logger;
 
@@ -30,12 +31,14 @@ public class MethodExtractor extends JavaParserBaseListener {
         this.methodNamesToMatch = methodNames;
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
-        this.entries = new HashSet<>();
+        this.methodBodies = new HashMap<>();
+        this.classMethodMapping = new HashMap<>();
         logger = Logger.getLogger(MethodExtractor.class.getName());
         // logging.properties overides programmatical setting
         //logger.setLevel(Level.INFO);
     }
 
+    @Override
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
         findMatchingMethods(ctx.identifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
     }
@@ -51,21 +54,28 @@ public class MethodExtractor extends JavaParserBaseListener {
                 String foundName = identifier.getText();
                 if (foundName.equals(name)) {
                     Interval interval = new Interval(startIndex, stopIndex);
-                    String method = input.getText(interval);
-                    boolean duplicate = false;
-                    for (String entry : entries) {
-                        if (entry.contains(method)) {
-                            duplicate = true;
-                            break;
-                        }
+                    String methodBody = input.getText(interval);
+                    if(methodBodies.containsKey(name)) {
+                        // There are several methods with the same name.
+                        ArrayList<String> bodies = methodBodies.get(name);
+                        bodies.add(methodBody);
+                        methodBodies.replace(name, bodies);
+                    } else {
+                        ArrayList<String> bodies = new ArrayList<>();
+                        bodies.add(methodBody);
+                        methodBodies.put(name, bodies);
                     }
-                    if (!duplicate) {
-                        intervals.add(interval);
-                    }
+
+                    // Keep track of what methods belong to which class
+                    // In order to organize output files
+                    ArrayList<String> associatedMethods = classMethodMapping.get(currentJavaFile.getName());
+                    associatedMethods.add(name);
+                    classMethodMapping.put(currentJavaFile.getName(), associatedMethods);
                 }
             }
         }
     }
+
 
     public void walkDirectory( File dirOrFile ) {
         if(dirOrFile.getName().endsWith(".java")) {
@@ -89,6 +99,7 @@ public class MethodExtractor extends JavaParserBaseListener {
     private void parseFile(File child) {
         try {
             currentJavaFile = child;
+            classMethodMapping.put(currentJavaFile.getName(), new ArrayList<>());
             intervals = new ArrayList<>();
             input = new ANTLRFileStream(child.getPath());
             JavaLexer lexer = new JavaLexer(input);
@@ -104,7 +115,7 @@ public class MethodExtractor extends JavaParserBaseListener {
             logger.info("Current file: " + child);
             logger.info(tree.toStringTree(parser));
             walker.walk(this, tree);
-            if (!intervals.isEmpty()) {
+            if (!methodBodies.isEmpty()) {
                 logger.info("Collected parser intervals.");
                 writeOutputFile();
             }
@@ -116,25 +127,48 @@ public class MethodExtractor extends JavaParserBaseListener {
 
     private void writeOutputFile() {
         String nameWithExtension =  this.currentJavaFile.getName();
-        String methodsToTest = nameWithExtension.split("\\.")[0] + "_methods";
-        File outFile = new File(this.outputDir, methodsToTest);
-        try {
-            // Write methods to test
-            FileWriter fw = new FileWriter(outFile);
-            for (Interval interval:this.intervals) {
-                String parsedContent = input.getText(interval);
-                fw.write(parsedContent);
-                if(!parsedContent.isEmpty()) {
-                    logger.info("Methodbody parsed and added");
-                }
-                fw.write("\n\n");
-            }
-            fw.close();
+        String className = nameWithExtension.split("\\.")[0];
 
-        } catch (Exception e) {
-            System.err.println("Could not write output file " + outFile);
-            e.printStackTrace();
-        }
+        File outputFolder = new File(this.outputDir, className);
+        outputFolder.mkdirs();
+
+
+            // Write methods to test
+//            FileWriter fw = new FileWriter(outFile);
+//            for (Interval interval:this.intervals) {
+//                String parsedContent = input.getText(interval);
+//                fw.write(parsedContent);
+//                if(!parsedContent.isEmpty()) {
+//                    logger.info("Methodbody parsed and added");
+//                }
+//                fw.write("\n\n");
+//            }
+//            fw.close();
+
+            for(String methodToTest : methodNamesToMatch) {
+                // Parsed methods are stored under <Provided output path>/classname/method_name.txt
+                ArrayList<String> associatedMethods = classMethodMapping.get(this.currentJavaFile.getName());
+                if(associatedMethods.contains(methodToTest)) {
+                    File outFile = new File(outputFolder, methodToTest);
+                    try {
+                        FileWriter fw = new FileWriter(outFile);
+
+                        ArrayList<String> methods = methodBodies.get(methodToTest);
+                        for(String method : methods) {
+                            fw.write(method);
+                            fw.write("\n\n");
+                        }
+                        fw.close();
+                    } catch (Exception e) {
+                        System.err.println("Could not write output file " + outFile);
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+
+
     }
 
     public static void main(String[] args) throws IOException {
@@ -174,5 +208,4 @@ public class MethodExtractor extends JavaParserBaseListener {
 
 
     }
-
 }
