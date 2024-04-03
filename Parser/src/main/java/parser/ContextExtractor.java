@@ -150,7 +150,7 @@ public class ContextExtractor extends JavaParserBaseListener {
         outputFolder.mkdirs();
 
         File outFileImports = new File(outputFolder, "imports");
-        File outFileContext = new File(outputFolder, context);
+        File outFileContext = new File(outputFolder, "context");
 
         try {
             FileWriter fw = new FileWriter(outFileImports);
