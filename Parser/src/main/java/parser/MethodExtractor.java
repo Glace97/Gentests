@@ -129,7 +129,7 @@ public class MethodExtractor extends JavaParserBaseListener {
         String nameWithExtension =  this.currentJavaFile.getName();
         String className = nameWithExtension.split("\\.")[0];
 
-        File outputFolder = new File(this.outputDir, className);
+        File outputFolder = new File(this.outputDir, className + "_methods");
         outputFolder.mkdirs();
             for(String methodToTest : methodNamesToMatch) {
                 // Parsed methods are stored under <Provided output path>/classname/method_name.txt
