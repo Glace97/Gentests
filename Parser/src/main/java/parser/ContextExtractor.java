@@ -158,6 +158,7 @@ public class ContextExtractor extends JavaParserBaseListener {
             for(String importString : imports) {
                 // Write imports to seperate file
                 fw.write(importString);
+                fw.write("\n");
             }
             fw.close();
 
