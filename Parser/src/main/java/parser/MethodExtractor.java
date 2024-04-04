@@ -48,8 +48,6 @@ public class MethodExtractor extends JavaParserBaseListener {
     @Override
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
         parseMethods(ctx.identifier(), ctx.modifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
-
-
     }
 
     @Override
@@ -205,7 +203,7 @@ public class MethodExtractor extends JavaParserBaseListener {
             //pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
             File input_dir = new File(pathToProject);
             // TODO: change to a tmp folder in home folder
-            String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
+            String outputDir = "/Users/glacierali/repos/MEX/poc/parser_output";
 
             int numMethods = args.length - 1; // Do not include path to project in count
             if (numMethods == 0) {

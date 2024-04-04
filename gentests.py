@@ -1,61 +1,17 @@
 import subprocess
 import os
 import re
-
+import shutil
 import argparse
 from langchain_openai import ChatOpenAI
 from langchain_openai import AzureChatOpenAI
 import dotenv
 
-
 # Initialize model
 dotenv.load_dotenv()
 llm = AzureChatOpenAI(deployment_name="gpt-35-turbo-16k-SSNA",model_name="gpt-35-turbo-16k")
 
-'''
-Input: Java File (class)
-Output: List of all the public methods of that class
-'''
-def get_all_public_methods(java_file_path):
-    # 1. Find classpath
-    
-    #java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
-    directory, java_filename = os.path.split(java_file_path)
-    #print(directory)
-    #print(java_filename)
-    root = directory.split("src/main/java")[0]
-    #print("Root: ", root) 
-    package = directory.split("src/main/java")[1]
-    #print("Package: ", package)
-    classname = os.path.splitext(java_filename)[0]
 
-    # DEBUG: Expected:/Users/glacierali/repos/MEX/commons-lang/target/classes/org/apache/commons/lang3/arch/Processor.class
-    # Constructing the class path
-
-    class_path = root + "target/classes" + package + "/" + f"{classname}.class"
-    #print("Full path: ", class_path)
-
-    # 2. Get all public methods.
-    result = subprocess.run(['javap', '-public', class_path], capture_output=True, text=True)
-
-    if result.returncode != 0:
-        print("Error running javap command:")
-        print(result.stderr)
-        return None
-    
-    public_methods = []
-    lines = result.stdout.splitlines()
-    for line in lines:
-        # Public method lines usually start with "public" keyword
-        if line.strip().startswith("public"):
-            # Extract method name using regex
-            method_name_match = re.match(r'^\s*public\s+\w+\s+(\w+)\(.*', line)
-            if method_name_match:
-                method_name = method_name_match.group(1)
-                public_methods.append(method_name)
-
-    return public_methods
-    
 '''
 Calls the javaparser program, which extracts the given methods and the method body from the java file.
 Input: List of methods (names), path to java file
@@ -70,7 +26,9 @@ def parse_method_bodies(java_file_path, methods):
          "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
          "parser.MethodExtractor", java_file_path]
 
-  cmd.extend(methods)
+  # May or may not contain arguments
+  if(methods):
+    cmd.extend(methods)
 
   invoke_java_parsers(cmd)
 
@@ -99,14 +57,16 @@ Generate a junit5 test suite for the following method <Method Name> in the class
 Input: Name of method to test, path to the parsed methods from the source code (maybe one or several), path to the generated context
 Returns: location of constructed prompts
 '''
-def construct_prompt(methods, class_name, path_parsed_methods, path_context_folder):
+def construct_prompt(class_name, path_parsed_methods, path_context_folder):
 
   # 1. Create output folder for all prompts (1 prompt/method of the same name)
   location_prompts = f'./prompts/{class_name}'
   os.makedirs(location_prompts, exist_ok=True)
 
-  for method_name in methods: 
+  for method_filename in os.listdir(path_parsed_methods): 
     # 2. Get the parsed method body  
+    method_name = os.path.splitext(method_filename)[0]
+    
     with open(os.path.join(path_parsed_methods, method_name), 'r') as file:
       parsed_methods = file.read()
     
@@ -155,20 +115,20 @@ def prompt_model(location_prompts, class_name):
         
         # 3. Trim the response
         full_content = ai_response.content
-        print("Full content \n")
-        print(full_content)
-        print('\n\n')
+        #print("Full content \n")
+        #print(full_content)
+        #print('\n\n')
 
         # Model may respond with explanations aside from code, extract codeblock
         pattern = r"```java.*?```"
         match = re.search(pattern, full_content, re.DOTALL)
 
         if(match):
-          print("match found")
+          #print("match found")
           # Remove code block backticks
           generated_tests = match.group(0).replace('```java', '').replace('```', '') 
         else:
-          print("no match found")
+          #print("no match found")
           # We might have recieved only code with no backticks.
           generated_tests = full_content
 
@@ -176,6 +136,19 @@ def prompt_model(location_prompts, class_name):
         with open(os.path.join(location_ai_response, prompt_file), 'w') as output:
           output.write(generated_tests)
 
+'''
+Remove generated methods and context folders for the given class under test.
+'''
+def cleanup(class_name):
+   path_context = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_context'
+   path_methods = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_methods'
+
+   try:
+     shutil.rmtree(path_methods)
+     shutil.rmtree(path_context)
+     print(f"Folders: \n '{path_context}, \n{path_methods} \n' successfully removed.")
+   except OSError as e:
+     print(f"Error: : {e.strerror}")
 
 
 ################################################  HELPER METHODS ################################################## 
@@ -187,6 +160,9 @@ def invoke_java_parsers(cmd):
 
   # Format: java -cp <classpath> <program> <args....>
   program = cmd[3]
+  
+  #print("\n\nrunning command: ", cmd)
+  #print("\n\n")
 
   if process.returncode == 0:
     print(f"Sucessfully invoked program {program}.")
@@ -216,36 +192,29 @@ def main():
     gentests.add_argument("-m", "--methods", nargs="*", help="Sequence of methodnames separated by whitespace")
 
     args = gentests.parse_args()
-
     java_file_path = args.javafile
 
     if args.methods:
       # Use case 1: javafile and specific methods provided.
       # -m methodName1 methodName2
       all_methods = args.methods
-    else:
-      # Use case 2: only javafile provided (test all public methods)
-      all_methods = get_all_public_methods(java_file_path) # List of all methods.
-      
+
     # Create the prompt
-    if(len(all_methods) > 0):
-      # Generate a context for the given file:
-      parse_context(java_file_path)
-      # Get method bodies
-      parse_method_bodies(java_file_path, all_methods)
+    # Generate a context for the given file:
+    parse_context(java_file_path)
+    
+    # Get method bodies
+    parse_method_bodies(java_file_path, all_methods)
 
-      # TODO: change to tmp/ folder once fixed in parser
-      _, java_filename = os.path.split(java_file_path)
-      class_name = os.path.splitext(java_filename)[0]
-      path_context = f'/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/{class_name}_context'
-      path_methods = f'/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output/{class_name}_methods'
-      location_prompts = construct_prompt(all_methods, class_name, path_methods, path_context)
+    # TODO: change to tmp/ folder once fixed in parser
+    _, java_filename = os.path.split(java_file_path)
+    class_name = os.path.splitext(java_filename)[0]
+    path_context = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_context'
+    path_methods = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_methods'
+    location_prompts = construct_prompt(class_name, path_methods, path_context)
+    prompt_model(location_prompts, class_name)
 
-      prompt_model(location_prompts, class_name)
-
-    else:
-       print('No testable methods found in: java_file_path')
-
+    #cleanup(class_name)
 
     
 if __name__ == "__main__":
