@@ -17,7 +17,7 @@ Calls the javaparser program, which extracts the given methods and the method bo
 Input: List of methods (names), path to java file
 Output: Void
 '''
-def parse_method_bodies(java_file_path, methods):
+def parse_method_bodies(java_file_path, selected_methods):
   # CLI command: 
   # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.MethodExtractor <args>
   
@@ -27,8 +27,9 @@ def parse_method_bodies(java_file_path, methods):
          "parser.MethodExtractor", java_file_path]
 
   # May or may not contain arguments
-  if(methods):
-    cmd.extend(methods)
+  # If selected methods is empty, we test all methods by default
+  if(len(selected_methods) > 0):
+    cmd.extend(selected_methods)
 
   invoke_java_parsers(cmd)
 
@@ -186,7 +187,9 @@ def main():
 
     
     # TODO: run gentests as application and not with python
-    # Example: python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit
+    # Examples: 
+    # python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit
+    # python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/AnnotationUtils.java
     gentests = argparse.ArgumentParser(description="Generate unit tests for a given javafile.")
     gentests.add_argument("javafile", type=str, help="Path to the Java file")
     gentests.add_argument("-m", "--methods", nargs="*", help="Sequence of methodnames separated by whitespace")
@@ -197,14 +200,15 @@ def main():
     if args.methods:
       # Use case 1: javafile and specific methods provided.
       # -m methodName1 methodName2
-      all_methods = args.methods
-
+      selected_methods = args.methods
+    else:
+      selected_methods = []  
     # Create the prompt
     # Generate a context for the given file:
     parse_context(java_file_path)
     
     # Get method bodies
-    parse_method_bodies(java_file_path, all_methods)
+    parse_method_bodies(java_file_path, selected_methods)
 
     # TODO: change to tmp/ folder once fixed in parser
     _, java_filename = os.path.split(java_file_path)
