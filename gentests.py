@@ -166,7 +166,7 @@ def prompt_model(location_prompts, class_name):
         if(match):
           print("match found")
           # Remove code block backticks
-          generated_tests = match.group(0).replace('```java', '').rerplace('```', '') 
+          generated_tests = match.group(0).replace('```java', '').replace('```', '') 
         else:
           print("no match found")
           # We might have recieved only code with no backticks.
@@ -193,6 +193,17 @@ def invoke_java_parsers(cmd):
   else:
     print(f"Error occurred while invoking program {program}: ", stderr.decode())
 
+
+
+'''
+Example use case 1:
+    python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit
+Path to file is provided, -m flag to denote that specific methods are chosen.
+
+Example use case 2:
+    python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java
+Only path to file provided as arg. Will generate tests for all public methods.
+'''
 def main():
     # TESTING: Test file
     #java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
