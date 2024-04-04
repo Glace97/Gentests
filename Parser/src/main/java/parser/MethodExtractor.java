@@ -37,14 +37,24 @@ public class MethodExtractor extends JavaParserBaseListener {
         //logger.setLevel(Level.INFO);
     }
 
-    
+    public MethodExtractor(String outputDir) {
+        this.outputDir = new File(outputDir);
+        this.outputDir.mkdirs();
+        this.methodBodies = new HashMap<>();
+        this.classMethodMapping = new HashMap<>();
+        logger = Logger.getLogger(MethodExtractor.class.getName());
+    }
+
     @Override
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
         parseMethods(ctx.identifier(), ctx.modifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
+
+
     }
 
     @Override
     public void enterGenericMethodDeclaration(JavaParser.GenericMethodDeclarationContext ctx) {
+
         parseMethods(ctx.identifier(), ctx.modifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
     }
 
@@ -53,10 +63,13 @@ public class MethodExtractor extends JavaParserBaseListener {
             String foundName = identifier.getText();
             if (allMethods) {
                 // We want to add all public method names
+                if(modifier != null) {
                 String accesModifer = modifier.getText();
-                if (accesModifer.equals("public") || accesModifer.equals("default")) {
-                    allMethodsNames.add(foundName);
-                    extractMethodBody(foundName, startIndex, stopIndex);
+                    if ((accesModifer.isEmpty()) || accesModifer.equals("public") || accesModifer.equals("default")) {
+                        // Testable method
+                        allMethodsNames.add(foundName);
+                        extractMethodBody(foundName, startIndex, stopIndex);
+                    }
                 }
             } else {
                 for (String name : methodNamesToMatch) {
@@ -90,129 +103,137 @@ public class MethodExtractor extends JavaParserBaseListener {
     }
 
 
+    public void walkDirectory(File dirOrFile) {
+        if (dirOrFile.getName().endsWith(".java")) {
+            // A file was directly provided instead of a directory
+            logger.info("Parsing a single file instead of directory");
+            parseFile(dirOrFile);
+        } else {
+            // Recursively check all .java files in the given directory
+            for (File child : Objects.requireNonNull(dirOrFile.listFiles())) {
+                if (child.isDirectory()) {
+                    walkDirectory(child);
+                } else {
+                    if (child.getName().endsWith(".java")) {
+                        parseFile(child);
+                    }
+                }
+            }
+        }
+    }
 
-public void walkDirectory(File dirOrFile) {
-    if (dirOrFile.getName().endsWith(".java")) {
-        // A file was directly provided instead of a directory
-        logger.info("Parsing a single file instead of directory");
-        parseFile(dirOrFile);
-    } else {
-        // Recursively check all .java files in the given directory
-        for (File child : Objects.requireNonNull(dirOrFile.listFiles())) {
-            if (child.isDirectory()) {
-                walkDirectory(child);
+    private void parseFile(File child) {
+        try {
+            currentJavaFile = child;
+            classMethodMapping.put(currentJavaFile.getName(), new ArrayList<>());
+            intervals = new ArrayList<>();
+            input = new ANTLRFileStream(child.getPath());
+            allMethodsNames = new ArrayList<>();
+            JavaLexer lexer = new JavaLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            JavaParser parser = new JavaParser(tokens);
+
+            // To not overwhelm the application
+            lexer.removeErrorListeners();
+            parser.removeErrorListeners();
+
+            ParserRuleContext tree = parser.compilationUnit();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            logger.info("Current file: " + child);
+            logger.info(tree.toStringTree(parser));
+            walker.walk(this, tree);
+            if (!methodBodies.isEmpty()) {
+                logger.info("Collected parser intervals.");
+                writeOutputFile();
+            }
+        } catch (IOException e) {
+            System.err.println("Could not parse " + child.getPath());
+            e.printStackTrace();
+        }
+    }
+
+    private void writeOutputFile() {
+        String nameWithExtension = this.currentJavaFile.getName();
+        String className = nameWithExtension.split("\\.")[0];
+
+        File outputFolder = new File(this.outputDir, className + "_methods");
+        outputFolder.mkdirs();
+
+        // We may want to print all methods, or just the methodnames to match
+        String[] methodsToPrint;
+
+        if(allMethods) {
+            methodsToPrint = new String[allMethodsNames.size()];
+            methodsToPrint = allMethodsNames.toArray(methodsToPrint);
+        } else {
+            methodsToPrint = methodNamesToMatch;
+        }
+
+        for (String methodToTest : methodsToPrint) {
+            // Parsed methods are stored under <Provided output path>/classname/method_name.txt
+            ArrayList<String> associatedMethods = classMethodMapping.get(this.currentJavaFile.getName());
+            if (associatedMethods.contains(methodToTest)) {
+                File outFile = new File(outputFolder, methodToTest);
+                try {
+                    FileWriter fw = new FileWriter(outFile);
+                    ArrayList<String> methods = methodBodies.get(methodToTest);
+                    for (String method : methods) {
+                        fw.write(method);
+                        fw.write("\n\n");
+                    }
+                    fw.close();
+                } catch (Exception e) {
+                    System.err.println("Could not write output file " + outFile);
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        if (args.length < 1) {
+            System.out.println("Please provide a path to the project directory or file");
+            System.exit(-1);
+        }
+
+        try {
+            String pathToProject = args[0];
+            // DEBUG
+            //pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
+            File input_dir = new File(pathToProject);
+            // TODO: change to a tmp folder in home folder
+            String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
+
+            int numMethods = args.length - 1; // Do not include path to project in count
+            if (numMethods == 0) {
+                // Only path to file was provided, get all public methods
+                allMethods = true;
+                MethodExtractor extractor = new MethodExtractor(outputDir);
+                logger.info("Directory to parse: " + pathToProject);
+                logger.info("Will parse methods.");
+                extractor.walkDirectory(input_dir);
             } else {
-                if (child.getName().endsWith(".java")) {
-                    parseFile(child);
-                }
+                // DEBUG
+                //String[] methodNames = {"calcLuhn", "validateLuhn", "someMethod", "someOtherMethod"};
+                //String[] methodNames = {"getClassVar"};
+
+                String[] methods = new String[numMethods];
+                System.arraycopy(args, 1, methods, 0, numMethods);
+                MethodExtractor extractor = new MethodExtractor(methods, outputDir);
+
+                logger.info("Directory to parse: " + pathToProject);
+                logger.info("Methods to look for: " + Arrays.toString(methods));
+
+                extractor.walkDirectory(input_dir);
             }
-        }
-    }
-}
-
-private void parseFile(File child) {
-    try {
-        currentJavaFile = child;
-        classMethodMapping.put(currentJavaFile.getName(), new ArrayList<>());
-        intervals = new ArrayList<>();
-        input = new ANTLRFileStream(child.getPath());
-        allMethodsNames = new ArrayList<>();
-        JavaLexer lexer = new JavaLexer(input);
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        JavaParser parser = new JavaParser(tokens);
-
-        // To not overwhelm the application
-        lexer.removeErrorListeners();
-        parser.removeErrorListeners();
-
-        ParserRuleContext tree = parser.compilationUnit();
-        ParseTreeWalker walker = new ParseTreeWalker();
-        logger.info("Current file: " + child);
-        logger.info(tree.toStringTree(parser));
-        walker.walk(this, tree);
-        if (!methodBodies.isEmpty()) {
-            logger.info("Collected parser intervals.");
-            writeOutputFile();
-        }
-    } catch (IOException e) {
-        System.err.println("Could not parse " + child.getPath());
-        e.printStackTrace();
-    }
-}
-
-private void writeOutputFile() {
-    String nameWithExtension = this.currentJavaFile.getName();
-    String className = nameWithExtension.split("\\.")[0];
-
-    File outputFolder = new File(this.outputDir, className + "_methods");
-    outputFolder.mkdirs();
-    for (String methodToTest : methodNamesToMatch) {
-        // Parsed methods are stored under <Provided output path>/classname/method_name.txt
-        ArrayList<String> associatedMethods = classMethodMapping.get(this.currentJavaFile.getName());
-        if (associatedMethods.contains(methodToTest)) {
-            File outFile = new File(outputFolder, methodToTest);
-            try {
-                FileWriter fw = new FileWriter(outFile);
-                ArrayList<String> methods = methodBodies.get(methodToTest);
-                for (String method : methods) {
-                    fw.write(method);
-                    fw.write("\n\n");
-                }
-                fw.close();
-            } catch (Exception e) {
-                System.err.println("Could not write output file " + outFile);
-                e.printStackTrace();
-            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            System.exit(1);
         }
 
     }
-
-}
-
-
-
-public static void main(String[] args) throws IOException {
-    if (args.length < 1) {
-        System.out.println("Please provide a path to the project directory or file");
-        System.exit(-1);
-    }
-
-    try {
-        String pathToProject = args[0];
-        // DEBUG
-        //pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
-        File input_dir = new File(pathToProject);
-        // TODO: change to a tmp folder in home folder
-        String outputDir = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/output";
-
-        int numMethods = args.length - 1; // Do not include path to project in count
-        if(numMethods == 0) {
-            // Only path to file was provided, get all public methods
-            allMethods = true;
-        }
-
-        // TODO: vad händeer om den är 0?
-        String[] methods = new String[numMethods];
-        System.arraycopy(args, 1, methods, 0, numMethods);
-
-        // DEBUG
-        //String[] methodNames = {"calcLuhn", "validateLuhn", "someMethod", "someOtherMethod"};
-        //String[] methodNames = {"getClassVar"};
-
-
-
-
-        MethodExtractor extractor = new MethodExtractor(methods, outputDir);
-
-        logger.info("Directory to parse: " + pathToProject);
-        logger.info("Methods to look for: " + Arrays.toString(methods));
-
-        extractor.walkDirectory(input_dir);
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        System.exit(1);
-    }
-
-}
 }
 
