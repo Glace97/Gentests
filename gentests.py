@@ -12,6 +12,10 @@ dotenv.load_dotenv()
 llm = AzureChatOpenAI(deployment_name="gpt-35-turbo-16k-SSNA",model_name="gpt-35-turbo-16k")
 
 
+#TODO add support for c#
+#TODO invoke javaparser for parsing output. One file/class
+#TODO change path so that it maps to the homefolder (currently hardcoded to my local absolute path)
+
 '''
 Calls the javaparser program, which extracts the given methods and the method body from the java file.
 Input: List of methods (names), path to java file
@@ -58,7 +62,7 @@ Generate a junit5 test suite for the following method <Method Name> in the class
 Input: Name of method to test, path to the parsed methods from the source code (maybe one or several), path to the generated context
 Returns: location of constructed prompts
 '''
-def construct_prompt(class_name, path_parsed_methods, path_context_folder):
+def construct_prompt(class_name, path_parsed_methods, path_context_folder ):
 
   # 1. Create output folder for all prompts (1 prompt/method of the same name)
   location_prompts = f'./prompts/{class_name}'
@@ -99,10 +103,14 @@ def construct_prompt(class_name, path_parsed_methods, path_context_folder):
 Sends the prompt to the openAI chatGPT model.
 Input: Location to prompts, where each prompt is one textfile containing a query, context and function(s) to be tested. All prompts belong to the same class.
 '''
-def prompt_model(location_prompts, class_name):
+def prompt_model(location_prompts, class_name, desired_output_location):
   # 1. Location of responses
   location_ai_response = f'./model_responses/{class_name}'
   os.makedirs(location_ai_response, exist_ok=True)
+  
+  #NOTE temporary solution for easier organizing
+  desired_output_location = desired_output_location + f'/{class_name}'
+  os.makedirs(desired_output_location, exist_ok=True)
 
   for prompt_file in os.listdir(location_prompts):
      # 2. For each promptfile, send it to the model
@@ -133,8 +141,15 @@ def prompt_model(location_prompts, class_name):
           # We might have recieved only code with no backticks.
           generated_tests = full_content
 
+        #TODO: remove for the final cleanup. Testfiles should only be placed in one location
         # 4. Save the reponse for creation of testfile
         with open(os.path.join(location_ai_response, prompt_file), 'w') as output:
+          output.write(generated_tests)
+        
+        #TODO: add procedure inbetween to parse the testfiles. one file/testclass.
+
+        # Write testfiles to the provided output location. For example: src/test/java/com/org/project
+        with open(os.path.join(desired_output_location, prompt_file), 'w') as output:
           output.write(generated_tests)
 
 '''
@@ -182,17 +197,19 @@ Example use case 2:
 Only path to file provided as arg. Will generate tests for all public methods.
 '''
 def main():
+    
     # TESTING: Test file
     #java_file_path = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java"
 
     
     # TODO: run gentests as application and not with python
     # Examples: 
-    # python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit
+    # python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit -o ~/tmp
     # python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/AnnotationUtils.java
     gentests = argparse.ArgumentParser(description="Generate unit tests for a given javafile.")
     gentests.add_argument("javafile", type=str, help="Path to the Java file")
     gentests.add_argument("-m", "--methods", nargs="*", help="Sequence of methodnames separated by whitespace")
+    gentests.add_argument("-o", "--path_output", type=str, help="Generated testfiles ara placed in the given path.")
 
     args = gentests.parse_args()
     java_file_path = args.javafile
@@ -203,6 +220,14 @@ def main():
       selected_methods = args.methods
     else:
       selected_methods = []  
+    
+    # Must define output path
+    if args.path_output is None:
+      print("Please provide a path for the output.")
+      return
+    
+    output_path = args.path_output
+
     # Create the prompt
     # Generate a context for the given file:
     parse_context(java_file_path)
@@ -216,7 +241,7 @@ def main():
     path_context = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_context'
     path_methods = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_methods'
     location_prompts = construct_prompt(class_name, path_methods, path_context)
-    prompt_model(location_prompts, class_name)
+    prompt_model(location_prompts, class_name, output_path)
 
     #cleanup(class_name)
 
