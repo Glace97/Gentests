@@ -145,8 +145,8 @@ def prompt_model(location_prompts, class_name, desired_output_location):
         output_with_extension = prompt_file + '.java'
         #TODO: remove for the final cleanup. Testfiles should only be placed in one location
         # 4. Save the reponse for creation of testfile
-        with open(os.path.join(location_ai_response, prompt_file), 'w') as output:
-          output.write(generated_tests)
+        #with open(os.path.join(location_ai_response, prompt_file), 'w') as output:
+        #  output.write(generated_tests)
         
         #TODO: add procedure inbetween to parse the testfiles. one file/testclass.
 
@@ -245,7 +245,7 @@ def main():
     location_prompts = construct_prompt(class_name, path_methods, path_context)
     prompt_model(location_prompts, class_name, output_path)
 
-    #cleanup(class_name)
+    cleanup(class_name)
 
     
 if __name__ == "__main__":
