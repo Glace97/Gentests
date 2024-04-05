@@ -7,6 +7,24 @@ import argparse
 Takes an entire project; and will generate tests for the source code.
 '''
 
+
+'''
+Skip abstract classes, annotation classes, interfaces and package-info files.
+A very simple and not robust solution.
+'''
+def check_if_valid_class(file, path):
+    with open(path, 'r') as input:
+        content = input.read()
+
+    if ('abstract class' in content or 
+        'interface' in content or 
+        '@interface' in content or 
+        file == 'package-info.java'):
+        return False
+    else:
+        return True
+
+
 def run_gentests_for_java_files(directory, path_output):
     # Walk through the directory
     for root, dirs, files in os.walk(directory):
@@ -14,12 +32,15 @@ def run_gentests_for_java_files(directory, path_output):
             # Check if the file is a Java file
             if file.endswith(".java"):
                 java_file_path = os.path.join(root, file)
-                # Call gentests.py with the path to the Java file
-                subprocess.run(["python", "gentests.py", java_file_path, "-o", path_output])
+                valid = check_if_valid_class(file, java_file_path)
+                if valid:
+                    # Call gentests.py with the path to the Java file
+                    subprocess.run(["python", "gentests.py", java_file_path, "-o", path_output])
 
 
-# Test case example:
+# Test case example (small one):
 # python gentests_project.py /Users/glacierali/Downloads/Calculator-master/src/main/java/com/houarizegai/calculator -o /Users/glacierali/Downloads/Calculator-master/src/test/java/com/houarizegai/calculator
+# Example for evaluation: 
 def main():
     parser = argparse.ArgumentParser(description="Check and run tests for Java files.")
     parser.add_argument("directory", type=str, help="Path to the project directory")
