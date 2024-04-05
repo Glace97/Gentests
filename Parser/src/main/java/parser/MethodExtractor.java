@@ -63,11 +63,15 @@ public class MethodExtractor extends JavaParserBaseListener {
                 // We want to add all public method names
                 if(modifier != null) {
                 String accesModifer = modifier.getText();
-                    if ((accesModifer.isEmpty()) || accesModifer.equals("public") || accesModifer.equals("default")) {
+                    if (!accesModifer.equals("private")) {
                         // Testable method
                         allMethodsNames.add(foundName);
                         extractMethodBody(foundName, startIndex, stopIndex);
                     }
+                } else {
+                    // Doesn't contain modifier, therefore default/available to package
+                    allMethodsNames.add(foundName);
+                    extractMethodBody(foundName, startIndex, stopIndex);
                 }
             } else {
                 for (String name : methodNamesToMatch) {
@@ -138,11 +142,13 @@ public class MethodExtractor extends JavaParserBaseListener {
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
             logger.info("Current file: " + child);
-            logger.info(tree.toStringTree(parser));
+            //logger.info(tree.toStringTree(parser));
             walker.walk(this, tree);
             if (!methodBodies.isEmpty()) {
                 logger.info("Collected parser intervals.");
                 writeOutputFile();
+            } else {
+                logger.info("No methodbodies recovered");
             }
         } catch (IOException e) {
             System.err.println("Could not parse " + child.getPath());
@@ -202,7 +208,6 @@ public class MethodExtractor extends JavaParserBaseListener {
             // DEBUG
             //pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
             File input_dir = new File(pathToProject);
-            // TODO: change to a tmp folder in home folder
             String outputDir = "/Users/glacierali/repos/MEX/poc/parser_output";
 
             int numMethods = args.length - 1; // Do not include path to project in count
