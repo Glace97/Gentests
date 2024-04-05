@@ -112,6 +112,7 @@ def prompt_model(location_prompts, class_name, desired_output_location):
   desired_output_location = desired_output_location + f'/{class_name}'
   os.makedirs(desired_output_location, exist_ok=True)
 
+  # The name of the promptfile corresponds to the name of the method
   for prompt_file in os.listdir(location_prompts):
      # 2. For each promptfile, send it to the model
      path_to_prompt = os.path.join(location_prompts, prompt_file)
@@ -141,6 +142,7 @@ def prompt_model(location_prompts, class_name, desired_output_location):
           # We might have recieved only code with no backticks.
           generated_tests = full_content
 
+        output_with_extension = prompt_file + '.java'
         #TODO: remove for the final cleanup. Testfiles should only be placed in one location
         # 4. Save the reponse for creation of testfile
         with open(os.path.join(location_ai_response, prompt_file), 'w') as output:
@@ -149,7 +151,7 @@ def prompt_model(location_prompts, class_name, desired_output_location):
         #TODO: add procedure inbetween to parse the testfiles. one file/testclass.
 
         # Write testfiles to the provided output location. For example: src/test/java/com/org/project
-        with open(os.path.join(desired_output_location, prompt_file), 'w') as output:
+        with open(os.path.join(desired_output_location, output_with_extension), 'w') as output:
           output.write(generated_tests)
 
 '''
@@ -176,8 +178,8 @@ def invoke_java_parsers(cmd):
 
   # Format: java -cp <classpath> <program> <args....>
   program = cmd[3]
-  
-  #print("\n\nrunning command: ", cmd)
+
+  print("\n\nrunning command: ", cmd)
   #print("\n\n")
 
   if process.returncode == 0:
