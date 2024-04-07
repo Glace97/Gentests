@@ -91,7 +91,7 @@ def construct_prompt(class_name, path_parsed_methods, path_context_folder ):
     query = f'You are a coding assistant. Generate a junit5 test suite for the method {method_name}. The test suite should achieve high coverage and cover all edge cases. \n\n'
     
     # TODO: Check wether I can add more details AFTER the code to make the output more desireable.
-    final_prompt = query + code
+    final_prompt = query + code + f'\nName the test class {method_name}Test.'
     
     with open(os.path.join(location_prompts, method_name), 'w') as output:
       output.write(final_prompt)
@@ -179,7 +179,7 @@ def invoke_java_parsers(cmd):
   # Format: java -cp <classpath> <program> <args....>
   program = cmd[3]
 
-  print("\n\nrunning command: ", cmd)
+  #print("\n\nrunning command: ", cmd)
   #print("\n\n")
 
   if process.returncode == 0:
@@ -230,6 +230,7 @@ def main():
     
     output_path = args.path_output
 
+    print("Generating tests for: ", java_file_path)
     # Create the prompt
     # Generate a context for the given file:
     parse_context(java_file_path)
@@ -246,7 +247,7 @@ def main():
     prompt_model(location_prompts, class_name, output_path)
 
     cleanup(class_name)
-
+    print("Done generating tests for: ", java_file_path)
     
 if __name__ == "__main__":
     main()
