@@ -28,20 +28,31 @@ public class ContextExtractor extends JavaParserBaseListener {
     ArrayList<String> imports;
     HashSet<String>  entries;
 
+    String packageName = "";
+
     public ContextExtractor(String outputDir) {
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
         this.entries = new HashSet<>();
     }
 
+    @Override public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) {
+        packageName = getTextFromContext(ctx);
+    }
+
     @Override public void enterImportDeclaration(JavaParser.ImportDeclarationContext ctx) {
-        if(ctx != null) {
-            int a = ctx.start.getStartIndex();
-            int b = ctx.stop.getStopIndex();
-            Interval interval = new Interval(a, b);
-            String importString = input.getText(interval);
-            imports.add(importString);
+        String importString = getTextFromContext(ctx);
+        imports.add(importString);
+    }
+
+    private String getTextFromContext(ParserRuleContext ctx) {
+        if (ctx != null) {
+            int startIndex = ctx.start.getStartIndex();
+            int stopIndex = ctx.stop.getStopIndex();
+            Interval interval = new Interval(startIndex, stopIndex);
+            return input.getText(interval);
         }
+        return "";
     }
 
     // Class declaration consists of a classBody Context
@@ -149,14 +160,20 @@ public class ContextExtractor extends JavaParserBaseListener {
         File outputFolder = new File(this.outputDir, context);
         outputFolder.mkdirs();
 
+        File outFilePackage = new File(outputFolder, "package");
         File outFileImports = new File(outputFolder, "imports");
         File outFileContext = new File(outputFolder, "context");
 
         try {
-            FileWriter fw = new FileWriter(outFileImports);
+            // Write package name (if there is one) to separate file
+            FileWriter fw = new FileWriter(outFilePackage);
+            fw.write(packageName);
+            fw.write("\n\n");
+            fw.close();
 
+            fw = new FileWriter(outFileImports);
             for(String importString : imports) {
-                // Write imports to seperate file
+                // Write imports to separate file
                 fw.write(importString);
                 fw.write("\n");
             }
