@@ -152,6 +152,7 @@ memberDeclaration
     | annotationTypeDeclaration
     | classDeclaration
     | enumDeclaration
+    | staticInitializer
     ;
 
 /* We use rule this even for void methods which cannot have [] after parameters.
@@ -162,6 +163,10 @@ memberDeclaration
 methodDeclaration
     // Tripple modifiers examlpe: protected final Synchronized
     :  javadoc? annotation? modifier STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    ;
+
+staticInitializer
+    : STATIC block
     ;
 
 methodBody
