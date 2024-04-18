@@ -78,9 +78,36 @@ public class LuhnCalculator {
         helperMethod();
     }
 
-    public static List<String> someOtherMethod()
+    /**
+     * Adding a method with the same name.
+     * But different arguments.
+     * */
+    public void someMethod(int verylongargumentname) {
+        // Bogus method
+        helperMethod();
+    }
+
+    public static List<String> someOtherMethod ()
     {
         // Bogus method
+        int x = 4;
+
+        for(int i = 0; i < 10; i++) {
+            int y = x;
+
+            int z = y;
+        }
         return null;
+    }
+
+    int returnAnInt(){
+        return 1;
+    }
+
+    /**
+     * Put a javadoc prior to an method without modifier
+     * */
+    int returnAnIntWithJavaDoc(){
+        return 1;
     }
 }

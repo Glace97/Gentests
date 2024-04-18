@@ -22,6 +22,13 @@ public class EasyClass {
     @Deprecated
     public enum DAY{
         MONDAY;
+
+        /**
+         * Some dmmy funciton within enums
+         * */
+        public boolean getTrue() {
+            return true;
+        }
     };
     /**
      * Applies the Luhn algorithm (Swedish personnummer) to the input
@@ -62,5 +69,68 @@ public class EasyClass {
     private static class innerClass {
         int y;
         int x;
+    }
+
+
+    /**
+     * The {@link Processor.Type} enum defines types of a microprocessor.
+     * The following types are defined:
+     * <ul>
+     *     <li>AArch64</li>
+     *     <li>x86</li>
+     *     <li>ia64</li>
+     *     <li>PPC</li>
+     *     <li>RISCV</li>
+     *     <li>Unknown</li>
+     * </ul>
+     */
+    public enum Type {
+
+        /**
+         * ARM 64-bit.
+         *
+         * @since 3.13.0
+         */
+        AARCH_64("string"),
+        /**
+         * Unknown architecture.
+         */
+        UNKNOWN("Unknown");
+        private final String label;
+
+        Type(final String label) {
+            this.label = label;
+        }
+
+        /**
+         * Gets the label suitable for display.
+         *
+         * @return the label.
+         * @since 3.13.0
+         */
+        public String getLabel() {
+            return label;
+        }
+
+    }
+
+    /**
+     * Tests if {@link Processor} is type of Aarch64.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Processor.Type#AARCH_64}, else {@code false}.
+     *
+     * @since 3.13.0
+     */
+    public boolean isAarch64() {
+        return Processor.Type.AARCH_64 == null;
+    }
+
+    /**
+     * Tests if {@link Processor} is 32 bit.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Processor.Arch#BIT_32}, else {@code false}.
+     */
+    public boolean is32Bit() {
+        return true;
     }
 }
