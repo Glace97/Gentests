@@ -88,7 +88,7 @@ variableModifier
     ;
 
 classDeclaration
-    :   javadoc? classOrInterfaceModifier? static? identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
+    :   javadoc? classOrInterfaceModifier static? identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
         PERMITS typeList
     )? // Java17
     classBody
@@ -108,7 +108,7 @@ typeBound
     ;
 
 enumDeclaration
-    : javadoc? annotation? modifier? ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
+    : javadoc? annotation? modifier ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
     ;
 
 enumConstants
@@ -124,7 +124,7 @@ enumBodyDeclarations
     ;
 
 interfaceDeclaration
-    : INTERFACE identifier typeParameters? (EXTENDS typeList)? (PERMITS typeList)? interfaceBody
+    : modifier INTERFACE identifier typeParameters? (EXTENDS typeList)? (PERMITS typeList)? interfaceBody
     ;
 
 classBody
@@ -184,11 +184,11 @@ genericMethodDeclaration
     ;
 
 genericConstructorDeclaration
-    : typeParameters constructorDeclaration
+    : modifier typeParameters constructorDeclaration
     ;
 
 constructorDeclaration
-    : identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
+    : modifier identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
     ;
 
 compactConstructorDeclaration
@@ -196,7 +196,7 @@ compactConstructorDeclaration
     ;
 
 fieldDeclaration
-    : javadoc? modifier? typeType variableDeclarators ';'
+    : javadoc? modifier STATIC? FINAL? typeType variableDeclarators ';'
     ;
 
 interfaceBodyDeclaration
@@ -373,7 +373,7 @@ elementValueArrayInitializer
     ;
 
 annotationTypeDeclaration
-    : '@' INTERFACE identifier annotationTypeBody
+    : modifier '@' INTERFACE identifier annotationTypeBody
     ;
 
 annotationTypeBody
@@ -437,7 +437,7 @@ requiresModifier
 // RECORDS - Java 17
 
 recordDeclaration
-    : RECORD identifier typeParameters? recordHeader (IMPLEMENTS typeList)? recordBody
+    : modifier RECORD identifier typeParameters? recordHeader (IMPLEMENTS typeList)? recordBody
     ;
 
 recordHeader

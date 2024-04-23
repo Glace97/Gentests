@@ -1,5 +1,3 @@
-package parser;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -80,7 +78,6 @@ public class ContextExtractor extends JavaParserBaseListener {
                                     if (!(memberDeclarationChild instanceof JavaParser.MethodDeclarationContext) &&
                                             !(memberDeclarationChild instanceof JavaParser.GenericMethodDeclarationContext) && (memberDeclarationChild != null)) {
                                         // Not a method, but can be anything else within the class (variables, inner classes, enums).
-                                        // Add it as context to the method.
                                         ParserRuleContext ruleCtx = (ParserRuleContext) declarationChild;
                                         int startIndex = ruleCtx.getStart().getStartIndex();
                                         int stopIndex = ruleCtx.getStop().getStopIndex();
@@ -93,7 +90,7 @@ public class ContextExtractor extends JavaParserBaseListener {
                                                 break;
                                             }
                                         }
-                                        if(!duplicate) {
+                                        if(!duplicate & content.contains("public")) {
                                             // To avoid duplicates, like field variables, written twice
                                             context.add(content);
                                             entries.add(content);
