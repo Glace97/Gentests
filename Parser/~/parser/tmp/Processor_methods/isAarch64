@@ -1,0 +1,22 @@
+/**
+     * Tests if {@link Processor} is type of Aarch64.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Processor.Type#AARCH_64}, else {@code false}.
+     *
+     * @since 3.13.0
+     */
+    public boolean isAarch64() {
+        return Processor.Type.AARCH_64 == null;
+    }
+
+/**
+     * Tests if {@link Processor} is type of Aarch64.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Type#AARCH_64}, else {@code false}.
+     *
+     * @since 3.13.0
+     */
+    public boolean isAarch64() {
+        return Type.AARCH_64 == type;
+    }
+

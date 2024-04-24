@@ -1,0 +1,9 @@
+/**
+     * Tests if {@link Processor} is type of Intel Itanium.
+     *
+     * @return {@code true}. if {@link Processor} is {@link Type#IA_64}, else {@code false}.
+     */
+    public boolean isIA64() {
+        return Type.IA_64 == type;
+    }
+

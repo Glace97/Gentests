@@ -1,0 +1,18 @@
+/**
+     * Tests if {@link Processor} is 32 bit.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Processor.Arch#BIT_32}, else {@code false}.
+     */
+    public boolean is32Bit() {
+        return true;
+    }
+
+/**
+     * Tests if {@link Processor} is 32 bit.
+     *
+     * @return {@code true}, if {@link Processor} is {@link Arch#BIT_32}, else {@code false}.
+     */
+    public boolean is32Bit() {
+        return Arch.BIT_32 == arch;
+    }
+

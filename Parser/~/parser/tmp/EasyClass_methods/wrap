@@ -1,0 +1,8 @@
+/**
+     * A generic method
+     * wihch happens to be static
+     */
+    public <T> List<T> wrap(final List type) {
+        return null;
+    }
+

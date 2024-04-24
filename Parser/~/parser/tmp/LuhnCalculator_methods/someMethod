@@ -1,0 +1,9 @@
+/**
+     * Adding a method with the same name.
+     * But different arguments.
+     * */
+    public void someMethod(int verylongargumentname) {
+        // Bogus method
+        helperMethod();
+    }
+

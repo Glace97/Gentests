@@ -1,0 +1,12 @@
+/**
+     * Applies the Luhn algorithm (Swedish personnummer) to the input
+     * to calculate the checksum digit to append to the number.
+     * @param  i string containing the input. All characters except numeric letters will be stripped from the input
+     * @return The Luhn checksum for the supplied input
+     */
+    @Deprecated
+    public static int getClassVar(int i) {
+        // Lets see if this comment is hidden
+        return 1;
+    }
+

@@ -1,0 +1,11 @@
+/**
+     * Gets the processor architecture as an {@link Arch} enum.
+     * The processor architecture defines, if the processor has
+     * a 32 or 64 bit architecture.
+     *
+     * @return A {@link Arch} enum.
+     */
+    public Arch getArch() {
+        return arch;
+    }
+

@@ -1,0 +1,11 @@
+/**
+     * Gets the processor type as {@link Type} enum.
+     * The processor type defines, if the processor is for example
+     * an x86 or PPA.
+     *
+     * @return A {@link Type} enum.
+     */
+    public Type getType() {
+        return type;
+    }
+

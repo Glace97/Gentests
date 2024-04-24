@@ -1,0 +1,9 @@
+/**
+     * Tests if {@link Processor} is type of Power PC.
+     *
+     * @return {@code true}. if {@link Processor} is {@link Type#PPC}, else {@code false}.
+     */
+    public boolean isPPC() {
+        return Type.PPC == type;
+    }
+

@@ -1,0 +1,7 @@
+/**
+         * Some dmmy funciton within enums
+         * */
+        public boolean getTrue() {
+            return true;
+        }
+

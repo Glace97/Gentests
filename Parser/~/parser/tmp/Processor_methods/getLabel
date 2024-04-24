@@ -1,0 +1,29 @@
+/**
+         * Gets the label suitable for display.
+         *
+         * @return the label.
+         * @since 3.13.0
+         */
+        public String getLabel() {
+            return label;
+        }
+
+/**
+         * Gets the label suitable for display.
+         *
+         * @return the label.
+         */
+        public String getLabel() {
+            return label;
+        }
+
+/**
+         * Gets the label suitable for display.
+         *
+         * @return the label.
+         * @since 3.13.0
+         */
+        public String getLabel() {
+            return label;
+        }
+
