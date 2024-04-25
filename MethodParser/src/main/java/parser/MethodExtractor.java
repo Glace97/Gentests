@@ -1,14 +1,14 @@
 package parser;
 
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
-
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
  * Extracts information from Javafiles.
