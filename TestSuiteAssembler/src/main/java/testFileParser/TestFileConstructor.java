@@ -1,4 +1,4 @@
-package testfileParser;
+package testFileParser;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CharStream;
@@ -129,7 +129,7 @@ public class TestFileConstructor extends JavaParserBaseListener {
         File outputFolder = new File(this.outputDir, reconstructedTestClasses);
         outputFolder.mkdirs();
 
-        File outputFile = new File(outputFolder, generatedTestFileName);
+        File outputFile = new File(outputFolder, className);
         try {
            FileWriter fw = new FileWriter(outputFile);
            if(packageName == null) {
