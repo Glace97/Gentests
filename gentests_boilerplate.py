@@ -25,7 +25,7 @@ def parse_method_bodies(java_file_path, selected_methods):
   
   cmd = ["java", 
          "-cp", 
-         "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
+         "/Users/glacierali/repos/MEX/poc/MethodParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
          "parser.MethodExtractor", java_file_path]
 
   # May or may not contain arguments
@@ -42,11 +42,11 @@ Output: Void
 '''
 def parse_context(java_file_path):
    # CLI command
-   # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.ContextExtractor <args>
+   # java -classpath /Users/glacierali/repos/MEX/poc/ContextParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.ContextExtractor <args>
 
   cmd = ["java", 
       "-cp", 
-      "/Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
+      "/Users/glacierali/repos/MEX/poc/ContextParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
       "parser.ContextExtractor", java_file_path]
 
   invoke_java_parsers(cmd)
@@ -162,7 +162,7 @@ def prompt_model(location_prompts, class_name):
           generated_test_class = full_content
 
         #4. Model typically responds with entire testclass, extract the @Test methods
-        print("Making the second invokation for ", file)
+        """print("Making the second invokation for ", file)
         second_prompt = f'{generated_test_class}\n\nFilter out only the @Test test functions. Java code: // Your Java code here'
         ai_response = llm.invoke(second_prompt)
         generated_tests = ai_response.content
@@ -172,20 +172,21 @@ def prompt_model(location_prompts, class_name):
         indentation = "    "  # Four spaces for indentation
         lines = generated_tests.split('\n')
         indented_code = [indentation + line for line in lines]
-        generated_tests_indented = '\n'.join(indented_code)
+        generated_tests_indented = '\n'.join(indented_code) """
         print("Writing final output; the generated tests for file: ", file)
-        with open(os.path.join(location_ai_response, prompt_file), 'w') as output:
-          output.write(generated_tests_indented)
+        outputfile = prompt_file + ".java"
+        with open(os.path.join(location_ai_response, outputfile), 'w') as output:
+          #output.write(generated_tests_indented)
+          output.write(generated_test_class)
   print("Done prompting the model.")
 
 '''
 Creats a test class by combining the generated testsuites (1 file /method) for a given class.
-Applies basic heuristics.
 Input: path to generated tests, name of CUT, location of where the testclass should be placed.
 Output: A full testclass with the test suite inserted in the given test directory.
 '''  
 def construct_testfile(class_name, test_directory):
-  #1. Create output directory
+  #1. Create output directory if it does not exist
   with open(f'./parser_output/{class_name}_context/package', 'r') as input:
     original_pkg = input.read()
 
@@ -201,29 +202,40 @@ def construct_testfile(class_name, test_directory):
     os.makedirs(test_directory, exist_ok=True)
   
   #2. Add package and basic imports.
-  with open('./junit_imports', 'r') as input:
-    imports = input.read()
-    imports = imports + '\n\n'
+  #with open('./junit_imports', 'r') as input:
+    #imports = input.read()
+    #imports = imports + '\n\n'
   output_file = os.path.join(output_dir, f'{class_name}Test.java')
-  class_declaration = f'public class {class_name}Test ' + '{\n'
+  tests = os.listdir(f'./model_responses/{class_name}')
+
+  for method_specific_tests in tests:
+    print("Will add tests for method: ", method_specific_tests)
+    path_method_specific_test_class = os.path.join(f'./model_responses/{class_name}', method_specific_tests)
+
+    if os.path.exists(output_file):
+        # File exists, parse the content of the new testclass and merge it in to the existing test suite
+        #CLI command:
+        # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar testfileParser.TestFileConstructor <Path to test file> <path to generated testclass>
+        cmd = ["java", 
+         "-cp", 
+         "/Users/glacierali/repos/MEX/poc/TestFileParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
+         "testfileParser.TestFileConstructor", output_file, path_method_specific_test_class]
+        invoke_java_parsers(cmd)
+
+        # The test class now including tests generated for the givene method
+        test_class = f'./parser_output/{class_name}_merged_testclass/{class_name}Test.java'
+        #TODO: write package in testClassParser and remove logic from script
+
+    else:
+        # Write entire generated testclass  
+        with open(output_file, 'w') as output:
+            if len(original_pkg) > 0:
+                output.write(original_pkg) 
+                with open(path_method_specific_test_class, 'r') as input:
+                    test_class = input.read()
+                    output.write('\n')
+                    output.write(test_class)
   
-  with open(output_file, 'w') as output:
-    if len(original_pkg) > 0:
-      output.write(original_pkg) 
-    output.write(imports)
-    output.write(class_declaration)
-    
-    tests = os.listdir(f'./model_responses/{class_name}')
-    # Add the generated the unit tests
-    for method_specific_tests in tests:
-      path_method_specific_test = os.path.join(f'./model_responses/{class_name}', method_specific_tests)
-      with open(path_method_specific_test, 'r') as input:
-        tests = input.read()
-        output.write(tests)
-        output.write('\n')
-    
-    # Closing bracket
-    output.write('\n}')
 
   
 
@@ -264,18 +276,17 @@ def invoke_java_parsers(cmd):
     print(f"Error occurred while invoking program {program}: ", stderr.decode())
 
 
-
 '''
 Example use case 1:
-    python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit
+    python gentests_boilerplate.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit
 Path to file is provided, -m flag to denote that specific methods are chosen.
 
 Example use case 2:
-    python gentests.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java
+    python gentests_boilerplate.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java
 Only path to file provided as arg. Will generate tests for all public methods.
 
 Example for report:
-python gentests.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/LongRange.java -o /Users/glacierali/repos/MEX/commons-lang/src/test/java
+python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/LongRange.java -o /Users/glacierali/repos/MEX/commons-lang/src/test/java
 '''
 
 def main(): 
@@ -312,7 +323,7 @@ def main():
     parse_context(java_file_path)
     
     # Get method bodies
-    parse_method_bodies(java_file_path, selected_methods)
+    #parse_method_bodies(java_file_path, selected_methods)
 
     # TODO: change to tmp/ folder once fixed in parser
     _, java_filename = os.path.split(java_file_path)
@@ -320,12 +331,12 @@ def main():
     path_context = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_context'
     path_methods = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_methods'
     location_prompts = construct_prompt(class_name, path_methods, path_context)
-    #prompt_model(location_prompts, class_name)
+    prompt_model(location_prompts, class_name)
 
-    #construct_testfile(class_name, output_path)
+    construct_testfile(class_name, output_path)
 
 #   cleanup(class_name)
-    print("Done generating tests for: ", java_file_path)
+  #  print("Done generating tests for: ", java_file_path)
     
 if __name__ == "__main__":
     main()
