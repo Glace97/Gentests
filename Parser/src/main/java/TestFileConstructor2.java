@@ -1,5 +1,3 @@
-package parser;
-
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,18 +9,16 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class TestFileConstructor extends JavaParserBaseListener {
+public class TestFileConstructor2 extends JavaParserBaseListener {
     File outputDir;
 
     CharStream input;
 
     HashSet<String> imports;
-    ArrayList<String> classContents;
+    HashSet<String> classContents;
      String testFilePath;
 
     String packageName;
@@ -31,7 +27,7 @@ public class TestFileConstructor extends JavaParserBaseListener {
 
      String generatedTestFilePath;
 
-    public TestFileConstructor(String outputDir, String testFilePath, String generatedTestFilePath) {
+    public TestFileConstructor2(String outputDir, String testFilePath, String generatedTestFilePath) {
 //      existingTestFileImports = new ArrayList<>();
 //      generatedTestFileImports = new ArrayList<>();
         this.outputDir = new File(outputDir);
@@ -40,7 +36,7 @@ public class TestFileConstructor extends JavaParserBaseListener {
         this.testFilePath = testFilePath;
         this.generatedTestFilePath = generatedTestFilePath;
         entries = new HashSet<>();
-        classContents = new ArrayList<>();
+        classContents = new HashSet<>();
     }
 
 
@@ -70,18 +66,30 @@ public class TestFileConstructor extends JavaParserBaseListener {
         }
     }
 
+    private boolean isNestedClass(ParserRuleContext context) {
+        ParserRuleContext parent = context.getParent();
+        while (parent != null) {
+            if (parent instanceof JavaParser.ClassBodyContext) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
+    }
+
     @Override
     public void enterClassBody(JavaParser.ClassBodyContext ctx) {
-        if(ctx != null) {
+        if(ctx != null && !isNestedClass(ctx)) {
             int startIndex = ctx.start.getStartIndex();
             int stopIndex = ctx.stop.getStopIndex();
             Interval interval = new Interval(startIndex, stopIndex);
             String classContent = input.getText(interval);
-            //TODO: remove duplicates
+            // Remove the first '{' and the last '}'
+            classContent = classContent.substring(classContent.indexOf('{') + 1, classContent.lastIndexOf('}'));
             classContents.add(classContent);
-
         }
     }
+
 
     public void walkDirectory( ArrayList<String> paths ) {
         for(String filePath : paths ) {
@@ -103,8 +111,6 @@ public class TestFileConstructor extends JavaParserBaseListener {
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(this, tree);
-
-
         } catch (IOException e) {
             System.err.println("Could not parse file " + filePath);
             e.printStackTrace();
@@ -137,7 +143,10 @@ public class TestFileConstructor extends JavaParserBaseListener {
                 fw.write("\n");
             }
 
+            fw.write("\n");
             fw.write(String.format("public class %s {\n", className));
+            fw.write("\n");
+
             for(String classBodyContent : classContents) {
                 fw.write(classBodyContent);
                 fw.write("\n");
@@ -172,9 +181,9 @@ public class TestFileConstructor extends JavaParserBaseListener {
         }
         try {
             // DEBUG
-            //String testFilePath = args[0];
+            String testFilePath = args[0];
             String generatedTestFilePath = args[1];
-            String testFilePath = "/Users/glacierali/repos/MEX/poc/ClassUtils.java";
+            //String testFilePath = "/Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/DoubleRange.java";
 
             String outputDir = "/Users/glacierali/repos/MEX/poc/parser_output";
 
@@ -182,7 +191,7 @@ public class TestFileConstructor extends JavaParserBaseListener {
             inputs.add(testFilePath);
             inputs.add(generatedTestFilePath);
 
-            TestFileConstructor testFileConstructor = new TestFileConstructor(outputDir, testFilePath, generatedTestFilePath);
+            TestFileConstructor2 testFileConstructor = new TestFileConstructor2(outputDir, testFilePath, generatedTestFilePath);
             testFileConstructor.walkDirectory(inputs);
             testFileConstructor.writeOutputFile();
         } catch (Exception ex) {

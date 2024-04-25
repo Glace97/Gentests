@@ -88,12 +88,11 @@ variableModifier
     ;
 
 classDeclaration
-    :   javadoc? classOrInterfaceModifier static? identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
+    : CLASS identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
         PERMITS typeList
     )? // Java17
     classBody
     ;
-
 
 typeParameters
     : '<' typeParameter (',' typeParameter)* '>'
@@ -108,15 +107,15 @@ typeBound
     ;
 
 enumDeclaration
-    : javadoc? annotation? modifier ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
+    : ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
     ;
 
 enumConstants
-    : javadoc? enumConstant (',' enumConstant)*
+    : enumConstant (',' enumConstant)*
     ;
 
 enumConstant
-    : javadoc? annotation* identifier arguments? classBody?
+    : annotation* identifier arguments? classBody?
     ;
 
 enumBodyDeclarations
@@ -124,7 +123,7 @@ enumBodyDeclarations
     ;
 
 interfaceDeclaration
-    : modifier INTERFACE identifier typeParameters? (EXTENDS typeList)? (PERMITS typeList)? interfaceBody
+    : INTERFACE identifier typeParameters? (EXTENDS typeList)? (PERMITS typeList)? interfaceBody
     ;
 
 classBody
@@ -152,7 +151,6 @@ memberDeclaration
     | annotationTypeDeclaration
     | classDeclaration
     | enumDeclaration
-    | staticInitializer
     ;
 
 /* We use rule this even for void methods which cannot have [] after parameters.
@@ -161,12 +159,7 @@ memberDeclaration
    for invalid return type after parsing.
  */
 methodDeclaration
-    // Tripple modifiers examlpe: protected final Synchronized
-    :  javadoc? annotation? modifier STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
-    ;
-
-staticInitializer
-    : STATIC block
+    : typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 methodBody
@@ -180,15 +173,15 @@ typeTypeOrVoid
     ;
 
 genericMethodDeclaration
-    : javadoc? annotation? modifier STATIC? typeParameters? typeParameters typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    : typeParameters methodDeclaration
     ;
 
 genericConstructorDeclaration
-    : modifier typeParameters constructorDeclaration
+    : typeParameters constructorDeclaration
     ;
 
 constructorDeclaration
-    : modifier identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
+    : identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
     ;
 
 compactConstructorDeclaration
@@ -196,7 +189,7 @@ compactConstructorDeclaration
     ;
 
 fieldDeclaration
-    : javadoc? modifier STATIC? FINAL? typeType variableDeclarators ';'
+    : typeType variableDeclarators ';'
     ;
 
 interfaceBodyDeclaration
@@ -373,7 +366,7 @@ elementValueArrayInitializer
     ;
 
 annotationTypeDeclaration
-    : modifier '@' INTERFACE identifier annotationTypeBody
+    : '@' INTERFACE identifier annotationTypeBody
     ;
 
 annotationTypeBody
@@ -437,7 +430,7 @@ requiresModifier
 // RECORDS - Java 17
 
 recordDeclaration
-    : modifier RECORD identifier typeParameters? recordHeader (IMPLEMENTS typeList)? recordBody
+    : RECORD identifier typeParameters? recordHeader (IMPLEMENTS typeList)? recordBody
     ;
 
 recordHeader
@@ -805,11 +798,3 @@ explicitGenericInvocationSuffix
 arguments
     : '(' expressionList? ')'
     ;
-
-javadoc
-  : JAVADOC_COMMENT
-;
-
-static
-  : STATIC
-;
