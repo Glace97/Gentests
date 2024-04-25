@@ -52,7 +52,7 @@ public class ContextExtractor extends JavaParserBaseListener {
             Interval interval = new Interval(startIndex, stopIndex);
             return input.getText(interval);
         }
-        return "";
+        return " ";
     }
 
     // Class declaration consists of a classBody Context
@@ -142,9 +142,7 @@ public class ContextExtractor extends JavaParserBaseListener {
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
             walker.walk(this, tree);
-            if (!context.isEmpty() || !imports.isEmpty()) {
-                writeOutputFile();
-            }
+            writeOutputFile();
         } catch (IOException e) {
             System.err.println("Could not parse " + child.getPath());
             e.printStackTrace();
