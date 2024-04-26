@@ -127,10 +127,9 @@ public class TestFileParser extends JavaParserBaseListener {
         String reconstructedTestClasses = className + "_reconstructed";
 
         File outputFolder = new File(this.outputDir, reconstructedTestClasses);
-        System.out.println("outputfolder: " + outputFolder.toString());
         outputFolder.mkdirs();
 
-        File outputFile = new File(outputFolder, className);
+        File outputFile = new File(outputFolder, String.format("%s.java", className));
         try {
            FileWriter fw = new FileWriter(outputFile);
            if(packageName == null) {

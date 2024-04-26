@@ -21,16 +21,18 @@ Output: Void
 '''
 def parse_method_bodies(java_file_path, selected_methods):
   # CLI command: 
-  # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.MethodExtractor <args>
-  
+  # java -classpath /Users/glacierali/repos/MEX/poc/MethodParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.MethodExtractor <Path to file>
+
   cmd = ["java", 
          "-cp", 
          "/Users/glacierali/repos/MEX/poc/MethodParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
          "parser.MethodExtractor", java_file_path]
 
+  # print("making invokation for method parser")
   # May or may not contain arguments
   # If selected methods is empty, we test all methods by default
   if(len(selected_methods) > 0):
+    # print("Selected methods: ", selected_methods)
     cmd.extend(selected_methods)
 
   invoke_java_parsers(cmd)
@@ -86,7 +88,7 @@ def construct_prompt(class_name, path_parsed_methods, path_context_folder,):
     
     # Template for the prompt
     final_prompt = f"""
-I need to generate unit tests for ${method_name} in ${class_name} using JUnit5 and Mockito. The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
+I need to generate unit tests for {method_name}() in class {class_name} using JUnit5 and Mockito. The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
     
     import static org.junit.jupiter.api.Assertions.*;
     import static org.mockito.Mockito.*;
@@ -112,6 +114,7 @@ Rules to Follow:
 3. Use Mockito for mocking dependencies and JUnit for assertions.
 4. The test suite should aim to achieve high code and branch coverage, also identifying and testing edge cases.
 5. Deliver the test suite in a single, cohesive code block.
+6. ONLY deliver the test suite. Do not include any additional code or comments.
 """
     
     with open(os.path.join(location_prompts, method_name), 'w') as output:
@@ -186,6 +189,8 @@ Input: path to generated tests, name of CUT, location of where the testclass sho
 Output: A full testclass with the test suite inserted in the given test directory.
 '''  
 def construct_testfile(class_name, test_directory):
+  
+  print("Starting to construct testfile.")
   #1. Create output directory if it does not exist
   with open(f'./parser_output/{class_name}_context/package', 'r') as input:
     original_pkg = input.read()
@@ -201,41 +206,43 @@ def construct_testfile(class_name, test_directory):
     output_dir = test_directory
     os.makedirs(test_directory, exist_ok=True)
   
-  #2. Add package and basic imports.
-  #with open('./junit_imports', 'r') as input:
-    #imports = input.read()
-    #imports = imports + '\n\n'
+
   output_file = os.path.join(output_dir, f'{class_name}Test.java')
-  tests = os.listdir(f'./model_responses/{class_name}')
+  generated_tests_path = f'/Users/glacierali/repos/MEX/poc/model_responses/{class_name}'
+  tests = os.listdir(generated_tests_path)
+  
 
-  for method_specific_tests in tests:
-    print("Will add tests for method: ", method_specific_tests)
-    path_method_specific_test_class = os.path.join(f'./model_responses/{class_name}', method_specific_tests)
-
+  for i, method_named_test_suite_file in enumerate(tests):
+    print("Will add tests for method: ", method_named_test_suite_file)
+    method_specific_test_suite_path = os.path.join(generated_tests_path, method_named_test_suite_file)
+    print("checking if testfile exists: ", output_file)
     if os.path.exists(output_file):
+        print("Output file exists")
         # File exists, parse the content of the new testclass and merge it in to the existing test suite
-        #CLI command:
-        # java -classpath /Users/glacierali/repos/MEX/poc/Parser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar testfileParser.TestFileConstructor <Path to test file> <path to generated testclass>
         cmd = ["java", 
          "-cp", 
          "/Users/glacierali/repos/MEX/poc/TestFileParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar", 
-         "testfileParser.TestFileConstructor", output_file, path_method_specific_test_class]
+         "parser.TestFileParser", output_file, method_specific_test_suite_path]
+        
+        print("Sending the following arguments: ", output_file, method_specific_test_suite_path)
         invoke_java_parsers(cmd)
 
         # The test class now including tests generated for the givene method
-        test_class = f'./parser_output/{class_name}_merged_testclass/{class_name}Test.java'
-        #TODO: write package in testClassParser and remove logic from script
+        reconstructed_test_class_path = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}Test_reconstructed/{class_name}Test'
+        print("reconstructed_test_class", reconstructed_test_class_path)
+        shutil.copy(reconstructed_test_class_path, output_file)
+        # 1. Save the merged testclass
+        local_save_for_debug = f'/Users/glacierali/repos/MEX/poc/reconstructed_testclasses/{class_name}'
+        os.makedirs(local_save_for_debug, exist_ok=True)
+        save_for_debug = os.path.join(local_save_for_debug, f'iteration_{i}.java')
+        shutil.copy(reconstructed_test_class_path, save_for_debug)
 
     else:
-        # Write entire generated testclass  
-        with open(output_file, 'w') as output:
-            if len(original_pkg) > 0:
-                output.write(original_pkg) 
-                with open(path_method_specific_test_class, 'r') as input:
-                    test_class = input.read()
-                    output.write('\n')
-                    output.write(test_class)
-  
+        # File does not exist, create a new test class
+        print("Create testfile from scratch")
+        shutil.copy(method_specific_test_suite_path, output_file)
+        print("Created new testfile for method: ", method_named_test_suite_file)
+
 
   
 
@@ -320,7 +327,7 @@ def main():
     print("Generating tests for: ", java_file_path)
     # Create the prompt
     # Generate a context for the given file:
-    parse_context(java_file_path)
+   # parse_context(java_file_path)
     
     # Get method bodies
     #parse_method_bodies(java_file_path, selected_methods)
@@ -330,8 +337,8 @@ def main():
     class_name = os.path.splitext(java_filename)[0]
     path_context = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_context'
     path_methods = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_methods'
-    location_prompts = construct_prompt(class_name, path_methods, path_context)
-    prompt_model(location_prompts, class_name)
+   # location_prompts = construct_prompt(class_name, path_methods, path_context)
+    #prompt_model(location_prompts, class_name)
 
     construct_testfile(class_name, output_path)
 
