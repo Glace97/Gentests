@@ -2,14 +2,14 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaLexer.interp" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaLexer.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaLexer.tokens" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaParser.interp" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaParser.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaParser.tokens" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaParserBaseListener.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/parser/JavaParserListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaLexer.interp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaLexer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaLexer.tokens" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaParser.interp" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaParser.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaParser.tokens" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaParserBaseListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/JavaParserListener.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/testclasses/Processor.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/java/testclasses/ToStringBuilder.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/main/java/testclasses/ToStringStyle.java" charset="ISO-8859-1" />

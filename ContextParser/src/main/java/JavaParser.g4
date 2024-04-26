@@ -88,7 +88,7 @@ variableModifier
     ;
 
 classDeclaration
-    :   javadoc? classOrInterfaceModifier static? identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
+    :   javadoc? classOrInterfaceModifier? static? identifier typeParameters? (EXTENDS typeType)? (IMPLEMENTS typeList)? (
         PERMITS typeList
     )? // Java17
     classBody
@@ -108,7 +108,7 @@ typeBound
     ;
 
 enumDeclaration
-    : javadoc? annotation? modifier ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
+    : javadoc? annotation? modifier? ENUM identifier (IMPLEMENTS typeList)? '{' enumConstants? ','? enumBodyDeclarations? '}'
     ;
 
 enumConstants
@@ -124,7 +124,7 @@ enumBodyDeclarations
     ;
 
 interfaceDeclaration
-    : modifier INTERFACE identifier typeParameters? (EXTENDS typeList)? (PERMITS typeList)? interfaceBody
+    : INTERFACE identifier typeParameters? (EXTENDS typeList)? (PERMITS typeList)? interfaceBody
     ;
 
 classBody
@@ -184,11 +184,11 @@ genericMethodDeclaration
     ;
 
 genericConstructorDeclaration
-    : modifier typeParameters constructorDeclaration
+    : typeParameters constructorDeclaration
     ;
 
 constructorDeclaration
-    : modifier identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
+    : identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
     ;
 
 compactConstructorDeclaration
@@ -373,7 +373,7 @@ elementValueArrayInitializer
     ;
 
 annotationTypeDeclaration
-    : modifier '@' INTERFACE identifier annotationTypeBody
+    : '@' INTERFACE identifier annotationTypeBody
     ;
 
 annotationTypeBody
@@ -437,7 +437,7 @@ requiresModifier
 // RECORDS - Java 17
 
 recordDeclaration
-    : modifier RECORD identifier typeParameters? recordHeader (IMPLEMENTS typeList)? recordBody
+    : RECORD identifier typeParameters? recordHeader (IMPLEMENTS typeList)? recordBody
     ;
 
 recordHeader
