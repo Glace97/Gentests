@@ -1,3 +1,5 @@
+package parser;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -180,6 +182,7 @@ public class ContextExtractor extends JavaParserBaseListener {
                 fw.write(line);
                 fw.write("\n");
             }
+            if(context.isEmpty()) { fw.write(" ");}
             fw.close();
 
         } catch (Exception e) {
