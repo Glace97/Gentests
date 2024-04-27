@@ -63,7 +63,7 @@ public class MethodExtractor extends JavaParserBaseListener {
                 // We want to add all public method names
                 if(modifier != null) {
                 String accesModifer = modifier.getText();
-                    if (!accesModifer.equals("private")) {
+                    if (accesModifer.equals("public")) {
                         // Testable method
                         allMethodsNames.add(foundName);
                         extractMethodBody(foundName, startIndex, stopIndex);
@@ -177,18 +177,22 @@ public class MethodExtractor extends JavaParserBaseListener {
             // Parsed methods are stored under <Provided output path>/classname/method_name.txt
             ArrayList<String> associatedMethods = classMethodMapping.get(this.currentJavaFile.getName());
             if (associatedMethods.contains(methodToTest)) {
-                File outFile = new File(outputFolder, methodToTest);
-                try {
-                    FileWriter fw = new FileWriter(outFile);
-                    ArrayList<String> methods = methodBodies.get(methodToTest);
-                    for (String method : methods) {
-                        fw.write(method);
-                        fw.write("\n\n");
+                if(!methodToTest.isEmpty()) {
+                    // TODO: BUG; Constructors sometimes parsed as method?
+                    File outFile = new File(outputFolder, methodToTest);
+                    try {
+                        FileWriter fw = new FileWriter(outFile);
+                        ArrayList<String> methods = methodBodies.get(methodToTest);
+                        for (String method : methods) {
+                            fw.write(method);
+                            fw.write("\n\n");
+                        }
+                        fw.close();
+
+                    } catch (Exception e) {
+                        System.err.println("Could not write output file " + outFile);
+                        e.printStackTrace();
                     }
-                    fw.close();
-                } catch (Exception e) {
-                    System.err.println("Could not write output file " + outFile);
-                    e.printStackTrace();
                 }
             }
 
