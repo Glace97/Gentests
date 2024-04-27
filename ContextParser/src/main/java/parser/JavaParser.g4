@@ -184,15 +184,15 @@ genericMethodDeclaration
     ;
 
 genericConstructorDeclaration
-    : typeParameters constructorDeclaration
+    : javadoc? modifier typeParameters constructorDeclaration
     ;
 
 constructorDeclaration
-    : identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
+    : javadoc? modifier identifier formalParameters (THROWS qualifiedNameList)? constructorBody = block
     ;
 
 compactConstructorDeclaration
-    : modifier* identifier constructorBody = block
+    : javadoc? modifier* identifier constructorBody = block
     ;
 
 fieldDeclaration
