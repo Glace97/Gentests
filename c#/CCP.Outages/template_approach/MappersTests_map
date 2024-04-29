@@ -1,0 +1,62 @@
+I need to generate unit tests for Map() in Mappers using XUnit and Mockito. The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
+
+using Xunit;
+using Moq;
+using System;
+// Add more using statements here
+
+namespace CCP.Outages.Tests;
+{
+    public class MappersTests
+    {
+        [Fact]
+        public void ${MethodName}_Test()
+        {
+            // Instantiate all necessary variables here
+            // Write the test code here following the given rules
+        }
+
+        // Add more test methods here
+    }
+}
+
+// Code to be tested
+using CCP.Outages.Api.Models;
+
+namespace CCP.Outages.Api.Helpers;
+
+public interface IMappers
+{
+    Client.Models.Outage Map(Outage outage, string? localizedMessage = null);
+}
+
+public class Mappers : IMappers
+{
+    public Mappers(ITimeHelper timeHelper)
+    {
+        _timeHelper = timeHelper;
+    }
+
+    public Client.Models.Outage Map(Outage outage, string? localizedMessage = null)
+    {
+        return new Client.Models.Outage(
+            Id: outage.Id,
+            Type: Map(outage.Type),
+            AppName: outage.AppName,
+            StartTime: outage.StartTime,
+            EndTime: outage.EndTime,
+            Message: new Client.Models.MessageType(
+                Value: localizedMessage ?? outage.Message,
+                IsLocalized: localizedMessage != null
+            ),
+            IsActive: IsActive(outage),
+            DisplayOptions: outage.DisplayOptions
+        );
+    }
+}
+// Rules to Follow:
+// 1. All variables should be instantiated within the test method itself.
+// 2. Do not access any private variables, methods, or classes directly.
+// 3. Use Moq for mocking dependencies and xUnit for assertions.
+// 4. The test suite should strive to achieve high code and branch coverage, and cover edge cases.
+// 5. Return the entire code section in one coherent piece.

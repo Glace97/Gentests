@@ -1,0 +1,31 @@
+I need to generate unit tests for ${methodName} in ${className} using Xunit and moq. The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
+
+using Xunit;
+using Moq;
+using System;
+// Add more using statements here
+
+namespace ${nameSpace}
+{
+    public class ${ClassName}Test
+    {
+        [Fact]
+        public void ${MethodName}_Test()
+        {
+            // Instantiate all necessary variables here
+            // Write the test code here following the given rules
+        }
+
+        // Add more test methods here
+    }
+}
+
+// Code to be tested
+${Method under test and relevant context}
+
+// Rules to Follow:
+// 1. All variables should be instantiated within the test method itself.
+// 2. Do not access any private variables, methods, or classes directly.
+// 3. Use Moq for mocking dependencies and xUnit for assertions.
+// 4. The test suite should strive to achieve high code and branch coverage, and cover edge cases.
+// 5. Return the entire code section in one coherent piece.

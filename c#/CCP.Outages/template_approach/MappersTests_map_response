@@ -1,0 +1,43 @@
+using Xunit;
+using Moq;
+using System;
+using CCP.Outages.Api.Helpers;
+using CCP.Outages.Api.Models;
+
+namespace CCP.Outages.Tests
+{
+    public class MappersTests
+    {
+        [Fact]
+        public void Map_WhenCalledWithNullLocalizedMessage_ReturnsOutageWithOriginalMessage()
+        {
+            // Instantiate all necessary variables here
+            var mockTimeHelper = new Mock<ITimeHelper>();
+            var mappers = new Mappers(mockTimeHelper.Object);
+            var outage = new Outage { Message = "Original message" };
+            string localizedMessage = null;
+
+            // Write the test code here following the given rules
+            var result = mappers.Map(outage, localizedMessage);
+            Assert.Equal("Original message", result.Message.Value);
+            Assert.False(result.Message.IsLocalized);
+        }
+
+        [Fact]
+        public void Map_WhenCalledWithLocalizedMessage_ReturnsOutageWithLocalizedMessage()
+        {
+            // Instantiate all necessary variables here
+            var mockTimeHelper = new Mock<ITimeHelper>();
+            var mappers = new Mappers(mockTimeHelper.Object);
+            var outage = new Outage { Message = "Original message" };
+            string localizedMessage = "Localized message";
+
+            // Write the test code here following the given rules
+            var result = mappers.Map(outage, localizedMessage);
+            Assert.Equal("Localized message", result.Message.Value);
+            Assert.True(result.Message.IsLocalized);
+        }
+
+        // Add more test methods here
+    }
+}
