@@ -63,7 +63,7 @@ public class MethodExtractor extends JavaParserBaseListener {
                 // We want to add all public method names
                 if(modifier != null) {
                 String accesModifer = modifier.getText();
-                    if (accesModifer.equals("public")) {
+                    if (accesModifer.equals("public") || accesModifer.equals("static")) {
                         // Testable method
                         allMethodsNames.add(foundName);
                         extractMethodBody(foundName, startIndex, stopIndex);

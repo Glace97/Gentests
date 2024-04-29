@@ -196,7 +196,7 @@ compactConstructorDeclaration
     ;
 
 fieldDeclaration
-    : javadoc? modifier STATIC? FINAL? typeType variableDeclarators ';'
+    : javadoc? modifier* FINAL? typeType variableDeclarators ';'
     ;
 
 interfaceBodyDeclaration

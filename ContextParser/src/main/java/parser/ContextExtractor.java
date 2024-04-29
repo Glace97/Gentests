@@ -3,10 +3,7 @@ package parser;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
@@ -29,6 +26,8 @@ public class ContextExtractor extends JavaParserBaseListener {
     HashSet<String>  entries;
 
     String packageName = "";
+
+    String declaration = "";
 
     public ContextExtractor(String outputDir) {
         this.outputDir = new File(outputDir);
@@ -62,6 +61,7 @@ public class ContextExtractor extends JavaParserBaseListener {
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         if(ctx != null) {
+            setFullDeclaration(ctx);
             for (int i = 0; i < ctx.getChildCount(); i++) {
                 ParseTree child = ctx.getChild(i);
                 if (child instanceof JavaParser.ClassBodyContext) {
@@ -77,8 +77,8 @@ public class ContextExtractor extends JavaParserBaseListener {
                                     // Check all members of class
                                     JavaParser.MemberDeclarationContext memberDeclaration = (JavaParser.MemberDeclarationContext) declarationChild;
                                     ParseTree memberDeclarationChild = memberDeclaration.getChild(0);
-                                    if (!(memberDeclarationChild instanceof JavaParser.MethodDeclarationContext) &&
-                                            !(memberDeclarationChild instanceof JavaParser.GenericMethodDeclarationContext) && (memberDeclarationChild != null)) {
+                                    if (!(memberDeclarationChild instanceof parser.JavaParser.MethodDeclarationContext) &&
+                                            !(memberDeclarationChild instanceof parser.JavaParser.GenericMethodDeclarationContext) && (memberDeclarationChild != null)) {
                                         // Not a method, but can be anything else within the class (variables, inner classes, enums).
                                         ParserRuleContext ruleCtx = (ParserRuleContext) declarationChild;
                                         int startIndex = ruleCtx.getStart().getStartIndex();
@@ -92,7 +92,7 @@ public class ContextExtractor extends JavaParserBaseListener {
                                                 break;
                                             }
                                         }
-                                        if(!duplicate & content.contains("public")) {
+                                        if(!duplicate) {
                                             // To avoid duplicates, like field variables, written twice
                                             context.add(content);
                                             entries.add(content);
@@ -105,6 +105,67 @@ public class ContextExtractor extends JavaParserBaseListener {
                 }
             }
         }
+    }
+
+    private void setFullDeclaration(JavaParser.ClassDeclarationContext ctx){
+        if(!isNestedClass(ctx)) {
+            ArrayList<String> classDeclaration = new ArrayList<>();
+
+
+            // Safely get identifier text
+            if (ctx.identifier() != null) {
+                classDeclaration.add(ctx.identifier().getText());
+            }
+
+            // Safely get type parameters text
+            if (ctx.typeParameters() != null) {
+                classDeclaration.add(ctx.typeParameters().getText());
+            }
+
+            // Safely get extends keyword text
+            if (ctx.EXTENDS() != null) {
+                classDeclaration.add(ctx.EXTENDS().getText());
+            }
+
+            // Safely get extends keyword text
+            if (ctx.typeType() != null) {
+                classDeclaration.add(ctx.typeType().getText());
+            }
+
+            // Safely get implements keyword text
+            if (ctx.IMPLEMENTS() != null) {
+                classDeclaration.add(ctx.IMPLEMENTS().getText());
+            }
+
+            // Safely get type list as a string
+            if (ctx.typeList() != null) {
+                if (!ctx.typeList().isEmpty()) {
+                    for(JavaParser.TypeListContext type : ctx.typeList()) {
+                        classDeclaration.add(type.getText());
+                    }
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            for(String part: classDeclaration) {
+                if(part != null) {  // Additional safeguard, redundant but safe
+                    sb.append(part);
+                    sb.append(" ");
+                }
+            }
+            declaration = sb.toString();
+        }
+    }
+
+    private boolean isNestedClass(ParserRuleContext context) {
+        ParserRuleContext parent = context.getParent();
+        while (parent != null) {
+            if (parent instanceof JavaParser.ClassBodyContext) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
 
     public void walkDirectory( File dirOrFile ) {
@@ -160,11 +221,18 @@ public class ContextExtractor extends JavaParserBaseListener {
         File outFilePackage = new File(outputFolder, "package");
         File outFileImports = new File(outputFolder, "imports");
         File outFileContext = new File(outputFolder, "context");
+        File classDeclaration = new File(outputFolder, "declaration");
 
         try {
             // Write package name (if there is one) to separate file
             FileWriter fw = new FileWriter(outFilePackage);
             fw.write(packageName);
+            fw.write("\n\n");
+            fw.close();
+
+            // Write class declaration
+            fw = new FileWriter(classDeclaration);
+            fw.write(declaration);
             fw.write("\n\n");
             fw.close();
 

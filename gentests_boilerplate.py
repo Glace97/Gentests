@@ -73,40 +73,48 @@ def construct_prompt(class_name, path_parsed_methods, path_context_folder,):
       parsed_methods = file.read()
     
     # Imports and context are separate to facilitate further parsing
+    path_package = path_context_folder + "/package"
     path_imports = path_context_folder + "/imports"
     path_context = path_context_folder + "/context"
-    
+    path_class_declaration = path_context_folder + "/declaration"
+
     # 3. Construct final prompt
+    with open(path_package, 'r') as file:
+      project_package = file.read()
+
     with open(path_imports, 'r') as file:
       imports = file.read()
 
     with open(path_context, 'r') as file:
       context = file.read()
-    
+
+    with open(path_class_declaration, 'r') as file:
+      class_declaration = file.read()
+
     # TODO: Beautify? + add javadoc comment prior to class decleration
-    code = imports + f'\nclass {class_name}' + ' {\n' + context + '\n'+ parsed_methods + '}'
+    code = f'{project_package}\n{imports}\nclass {class_declaration}' + ' {\n' + context + '\n'+ parsed_methods + '}'
     
     # Template for the prompt
     final_prompt = f"""
 I need to generate unit tests for {method_name}() in class {class_name} using JUnit5 and Mockito. The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
     
-    import static org.junit.jupiter.api.Assertions.*;
-    import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
+//Additional imports here
 
-    import org.junit.jupiter.api.Test;
+public class {class_name}Test {{
 
-    public class {class_name}Test {{
+    @Test
+    public void ExampleTest() {{
+        // Instantiate all necessary variables here
 
-        @Test
-        public void ExampleTest() {{
-            // Instantiate all necessary variables here
-
-            // Write the test code here following the given rules
-        }}
+        // Write the test code here following the given rules
     }}
+}}
 
-    // Code to be tested
-    {code}
+// Code to be tested
+{code}
 
 Rules to Follow:
 1. All variables should be instantiated within the test method itself.
@@ -236,7 +244,6 @@ def construct_testfile(class_name, test_directory):
         os.makedirs(local_save_for_debug, exist_ok=True)
         save_for_debug = os.path.join(local_save_for_debug, f'iteration_{i}.java')
         shutil.copy(reconstructed_test_class_path, save_for_debug)
-
     else:
         # File does not exist, create a new test class
         print("Create testfile from scratch")
@@ -327,7 +334,7 @@ def main():
     print("Generating tests for: ", java_file_path)
     # Create the prompt
     # Generate a context for the given file:
-   # parse_context(java_file_path)
+    parse_context(java_file_path)
     
     # Get method bodies
     #parse_method_bodies(java_file_path, selected_methods)
@@ -337,13 +344,14 @@ def main():
     class_name = os.path.splitext(java_filename)[0]
     path_context = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_context'
     path_methods = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_methods'
-   # location_prompts = construct_prompt(class_name, path_methods, path_context)
+    location_prompts = construct_prompt(class_name, path_methods, path_context)
+    #location_prompts = f'/Users/glacierali/repos/MEX/poc/prompts/{class_name}'
     #prompt_model(location_prompts, class_name)
 
-    construct_testfile(class_name, output_path)
+    #construct_testfile(class_name, output_path)
 
 #   cleanup(class_name)
-  #  print("Done generating tests for: ", java_file_path)
+    print("Done generating tests for: ", java_file_path)
     
 if __name__ == "__main__":
     main()
