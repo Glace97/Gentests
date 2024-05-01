@@ -7,12 +7,20 @@ from langchain_openai import ChatOpenAI
 from langchain_openai import AzureChatOpenAI
 import dotenv
 
-# Initialize model
-dotenv.load_dotenv()
-llm = AzureChatOpenAI(deployment_name="gpt-35-turbo-16k-SSNA",model_name="gpt-35-turbo-16k")
 
-#TODO invoke javaparser for parsing output. One file/class
 #TODO change path so that it maps to the homefolder (currently hardcoded to my local absolute path)
+def initialize_llm(model_choice):
+  # Default setting is gpt-3.5-turbo  
+  dotenv.load_dotenv()
+  if model_choice == 'gpt4':
+    # Overriding the default deployment name for gpt4
+    deployment_name = 'gpt-4-SSNA-playground'  # Update this to your GPT-4 deployment name
+    llm = AzureChatOpenAI(deployment_name=deployment_name, model_name="gpt-4")
+  else:
+    deployment_name = os.getenv('OPENAI_DEPLOYMENT_NAME')
+    llm = AzureChatOpenAI(deployment_name=deployment_name, model_name="gpt-35-turbo-16k")
+  
+  return llm
 
 '''
 Calls the javaparser program, which extracts the given methods and the method body from the java file.
@@ -136,7 +144,7 @@ Sends the prompt to the openAI chatGPT model.
 Input: Location to prompts, where each prompt is one textfile containing a query, context and function(s) to be tested. All prompts belong to the same class.
 Output: Writes each testsuite for a given function to a file, under ./model_responses/{class_name}/{methodName}
 '''
-def prompt_model(location_prompts, class_name):
+def prompt_model(location_prompts, class_name, llm):
   # 1. Location of responses
   location_ai_response = f'./model_responses/{class_name}'
   os.makedirs(location_ai_response, exist_ok=True)
@@ -236,7 +244,7 @@ def construct_testfile(class_name, test_directory):
         invoke_java_parsers(cmd)
 
         # The test class now including tests generated for the givene method
-        reconstructed_test_class_path = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}Test_reconstructed/{class_name}Test'
+        reconstructed_test_class_path = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}Test_reconstructed/{class_name}Test.java'
         print("reconstructed_test_class", reconstructed_test_class_path)
         shutil.copy(reconstructed_test_class_path, output_file)
         # 1. Save the merged testclass
@@ -292,17 +300,23 @@ def invoke_java_parsers(cmd):
 
 '''
 Example use case 1:
-    python gentests_boilerplate.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit
-Path to file is provided, -m flag to denote that specific methods are chosen.
+    # Specify model gpt-3.5-turbo explicitly
+    python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit --model gpt-3.5-turbo
+    # Specify model gpt4 explicitly
+    python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32bit is64bit --model gpt4
 
 Example use case 2:
-    python gentests_boilerplate.py  /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java
-Only path to file provided as arg. Will generate tests for all public methods.
+    # No model specified, defaults to gpt-3.5-turbo
+    python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java
+    # Specify model gpt4 explicitly
+    python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java --model gpt4
 
 Example for report:
-python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/LongRange.java -o /Users/glacierali/repos/MEX/commons-lang/src/test/java
+    # Default model
+    python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/LongRange.java -o /Users/glacierali/repos/MEX/commons-lang/src/test/java
+    # Specify model gpt4 explicitly
+    python gentests_boilerplate.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/LongRange.java -o /Users/glacierali/repos/MEX/commons-lang/src/test/java --model gpt4
 '''
-
 def main(): 
     
     # TODO: run gentests as application and not with python
@@ -313,17 +327,14 @@ def main():
     gentests.add_argument("javafile", type=str, help="Path to the Java file")
     gentests.add_argument("-m", "--methods", nargs="*", help="Sequence of methodnames separated by whitespace")
     gentests.add_argument("-o", "--path_output", type=str, help="Generated testfiles ara placed in the given path.")
+    gentests.add_argument("--model", choices=['gpt-3.5-turbo', 'gpt4'], default='gpt-3.5-turbo', 
+                          help="Choose the language model to use for generating tests (default: gpt-3.5-turbo)")
 
     args = gentests.parse_args()
     java_file_path = args.javafile
+    selected_methods = args.methods or [] 
+    chosen_model = args.model or ''
 
-    if args.methods:
-      # Use case 1: javafile and specific methods provided.
-      # -m methodName1 methodName2
-      selected_methods = args.methods
-    else:
-      selected_methods = []  
-    
     # Must define output path
     if args.path_output is None:
       print("Please provide a path for the output.")
@@ -331,13 +342,16 @@ def main():
     
     output_path = args.path_output
 
+    # Initilize the language model
+    llm = initialize_llm(chosen_model)
+
     print("Generating tests for: ", java_file_path)
     # Create the prompt
     # Generate a context for the given file:
     parse_context(java_file_path)
     
     # Get method bodies
-    #parse_method_bodies(java_file_path, selected_methods)
+    parse_method_bodies(java_file_path, selected_methods)
 
     # TODO: change to tmp/ folder once fixed in parser
     _, java_filename = os.path.split(java_file_path)
@@ -345,10 +359,10 @@ def main():
     path_context = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_context'
     path_methods = f'/Users/glacierali/repos/MEX/poc/parser_output/{class_name}_methods'
     location_prompts = construct_prompt(class_name, path_methods, path_context)
-    #location_prompts = f'/Users/glacierali/repos/MEX/poc/prompts/{class_name}'
-    #prompt_model(location_prompts, class_name)
+    location_prompts = f'/Users/glacierali/repos/MEX/poc/prompts/{class_name}'
+    prompt_model(location_prompts, class_name, llm)
 
-    #construct_testfile(class_name, output_path)
+    construct_testfile(class_name, output_path)
 
 #   cleanup(class_name)
     print("Done generating tests for: ", java_file_path)
