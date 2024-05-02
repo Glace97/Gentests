@@ -6,6 +6,8 @@ import argparse
 from langchain_openai import ChatOpenAI
 from langchain_openai import AzureChatOpenAI
 import dotenv
+import concurrent.futures
+import sys
 
 
 #TODO change path so that it maps to the homefolder (currently hardcoded to my local absolute path)
@@ -162,41 +164,48 @@ def prompt_model(location_prompts, class_name, llm):
      with open(path_to_prompt, 'r') as file:
         prompt = file.read()
 
+    # Use ThreadPoolExecutor to handle the API invocation
+     with concurrent.futures.ThreadPoolExecutor() as executor:
+      future = executor.submit(invoke_llm, llm, prompt)
+      try:         
+        print("Invoke model for ", prompt_file)
 
-        try:         
-          print("Invoke model for ", file)
+        # Wait for the invoke function to return or timeout after 300 seconds (5 minutes)
+        ai_response = future.result(timeout=300)
+        
+        print("Invokation done.")
 
-          ai_response = llm.invoke(prompt)
-          
-          print("Invokation done.")
+        # 3. Extract code content from response
+        full_content = ai_response.content
+        #print("Full content \n")
+        #print(full_content)
+        #print('\n\n')
 
-          # 3. Extract code content from response
-          full_content = ai_response.content
-          #print("Full content \n")
-          #print(full_content)
-          #print('\n\n')
+        # Model may respond with explanations aside from code, extract codeblock
+        pattern = r"```java.*?```"
+        match = re.search(pattern, full_content, re.DOTALL)
 
-          # Model may respond with explanations aside from code, extract codeblock
-          pattern = r"```java.*?```"
-          match = re.search(pattern, full_content, re.DOTALL)
+        if(match):
+          #print("match found")
+          # Remove code block backticks
+          generated_test_class = match.group(0).replace('```java', '').replace('```', '') 
+        else:
+          #print("no match found")
+          # We might have recieved only code with no backticks.
+          generated_test_class = full_content
 
-          if(match):
-            #print("match found")
-            # Remove code block backticks
-            generated_test_class = match.group(0).replace('```java', '').replace('```', '') 
-          else:
-            #print("no match found")
-            # We might have recieved only code with no backticks.
-            generated_test_class = full_content
-
-          print("Writing final output; the generated tests for file: ", file)
-          outputfile = prompt_file + ".java"
-          with open(os.path.join(location_ai_response, outputfile), 'w') as output:
-            #output.write(generated_tests_indented)
-            output.write(generated_test_class)
-        except Exception as e: 
-          print("Error occurred while invoking model: ", e)
-          print("Prompt (file): ", prompt_file)
+        print("Writing final output; the generated tests for file: ", file)
+        outputfile = prompt_file + ".java"
+        with open(os.path.join(location_ai_response, outputfile), 'w') as output:
+          #output.write(generated_tests_indented)
+          output.write(generated_test_class)
+      except concurrent.futures.TimeoutError:
+        print("Invocation timed out after 5 minutes.")
+        raise TimeoutError("The API call timed out after 5 minutes.")
+      except Exception as e: 
+        print("Error occurred while invoking model: ", e)
+        print("Prompt (file): ", prompt_file)
+        if 'ai_response' in locals():
           print("Model response: ", ai_response)
           
   print("Done prompting the model.")
@@ -299,6 +308,8 @@ def invoke_java_parsers(cmd):
   else:
     print(f"Error occurred while invoking program {program}: ", stderr.decode())
 
+def invoke_llm(llm, prompt):
+  return llm.invoke(prompt)
 
 '''
 Example use case 1:
