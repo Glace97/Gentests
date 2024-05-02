@@ -14,9 +14,11 @@ def initialize_llm(model_choice):
   dotenv.load_dotenv()
   if model_choice == 'gpt4':
     # Overriding the default deployment name for gpt4
+    print("INFO: Using GPT-4 model.")
     deployment_name = 'gpt-4-SSNA-playground'  # Update this to your GPT-4 deployment name
     llm = AzureChatOpenAI(deployment_name=deployment_name, model_name="gpt-4")
   else:
+    print("INFO: Using GPT3.5-Turbo model.")
     deployment_name = os.getenv('OPENAI_DEPLOYMENT_NAME')
     llm = AzureChatOpenAI(deployment_name=deployment_name, model_name="gpt-35-turbo-16k")
   
@@ -104,8 +106,9 @@ def construct_prompt(class_name, path_parsed_methods, path_context_folder,):
     
     # Template for the prompt
     final_prompt = f"""
-I need to generate unit tests for {method_name}() in class {class_name} using JUnit5 and Mockito. The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
-    
+Generate unit tests for {method_name}() in class {class_name} using JUnit5 and Mockito. The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
+
+{project_package}    
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import org.junit.jupiter.api.Test;
@@ -158,45 +161,44 @@ def prompt_model(location_prompts, class_name, llm):
 
      with open(path_to_prompt, 'r') as file:
         prompt = file.read()
-        print("Making the first invokation for ", file)
-        ai_response = llm.invoke(prompt)
-        
-        # 3. Extract code content from response
-        full_content = ai_response.content
-        #print("Full content \n")
-        #print(full_content)
-        #print('\n\n')
 
-        # Model may respond with explanations aside from code, extract codeblock
-        pattern = r"```java.*?```"
-        match = re.search(pattern, full_content, re.DOTALL)
 
-        if(match):
-          #print("match found")
-          # Remove code block backticks
-          generated_test_class = match.group(0).replace('```java', '').replace('```', '') 
-        else:
-          #print("no match found")
-          # We might have recieved only code with no backticks.
-          generated_test_class = full_content
+        try:         
+          print("Invoke model for ", file)
 
-        #4. Model typically responds with entire testclass, extract the @Test methods
-        """print("Making the second invokation for ", file)
-        second_prompt = f'{generated_test_class}\n\nFilter out only the @Test test functions. Java code: // Your Java code here'
-        ai_response = llm.invoke(second_prompt)
-        generated_tests = ai_response.content
-        
-        print("Performing some formatting to generated tests for file: ", file)
-        # Write the generated tests, with indentation
-        indentation = "    "  # Four spaces for indentation
-        lines = generated_tests.split('\n')
-        indented_code = [indentation + line for line in lines]
-        generated_tests_indented = '\n'.join(indented_code) """
-        print("Writing final output; the generated tests for file: ", file)
-        outputfile = prompt_file + ".java"
-        with open(os.path.join(location_ai_response, outputfile), 'w') as output:
-          #output.write(generated_tests_indented)
-          output.write(generated_test_class)
+          ai_response = llm.invoke(prompt)
+          
+          print("Invokation done.")
+
+          # 3. Extract code content from response
+          full_content = ai_response.content
+          #print("Full content \n")
+          #print(full_content)
+          #print('\n\n')
+
+          # Model may respond with explanations aside from code, extract codeblock
+          pattern = r"```java.*?```"
+          match = re.search(pattern, full_content, re.DOTALL)
+
+          if(match):
+            #print("match found")
+            # Remove code block backticks
+            generated_test_class = match.group(0).replace('```java', '').replace('```', '') 
+          else:
+            #print("no match found")
+            # We might have recieved only code with no backticks.
+            generated_test_class = full_content
+
+          print("Writing final output; the generated tests for file: ", file)
+          outputfile = prompt_file + ".java"
+          with open(os.path.join(location_ai_response, outputfile), 'w') as output:
+            #output.write(generated_tests_indented)
+            output.write(generated_test_class)
+        except Exception as e: 
+          print("Error occurred while invoking model: ", e)
+          print("Prompt (file): ", prompt_file)
+          print("Model response: ", ai_response)
+          
   print("Done prompting the model.")
 
 '''
