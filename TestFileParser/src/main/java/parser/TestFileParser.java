@@ -148,6 +148,8 @@ public class TestFileParser extends JavaParserBaseListener {
             fw.write(String.format("public class %s {\n", className));
             fw.write("\n");
 
+            // Write package name
+            fw.write('');
             for(String classBodyContent : classContents) {
                 fw.write(classBodyContent);
                 fw.write("\n");
