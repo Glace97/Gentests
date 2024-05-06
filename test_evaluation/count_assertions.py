@@ -2,6 +2,20 @@ import os
 import re
 import csv
 
+# Subset of test files to analyze
+target_files = [
+    "ProcessorTest.java",
+    "AnnotationUtilsTest.java",
+    "ArrayUtilsTest.java",
+    "CharSequenceUtilsTest.java",
+    "CharUtilsTest.java",
+    "ClassUtilsTest.java",
+    "FunctionsTest.java",
+    "LongRangeTest.java",
+    "ObjectUtilsTest.java",
+    "StringUtilsTest.java"
+]
+
 # Count the total number of assertions
 assertion_functions = [
     "assertArrayEquals",
@@ -45,8 +59,12 @@ def count_assertions_in_file(file_path):
 # Recursively search for Java files in the directory
 for root, dirs, files in os.walk(directory):
     for file in files:
-        if file.endswith(".java"):
-            count_assertions_in_file(os.path.join(root, file))
+        #check all files in directory
+        #if file.endswith(".java"):
+            #count_assertions_in_file(os.path.join(root, file))
+        #Only check subset
+        if file in target_files:
+            count_assertions_in_file(os.path.join(root, file)) 
 
 # Print the counts
 for func, count in counts.items():

@@ -1,0 +1,19 @@
+Assertion Function,Frequency
+assertArrayEquals,209
+assertIterableEquals,0
+assertLinesMatch,0
+assertEquals,1105
+assertNotEquals,17
+assertTrue,328
+assertFalse,350
+assertNotNull,31
+assertNotSame,7
+assertNull,196
+assertSame,2
+assertAll,0
+assertThrows,96
+assertThrowsExactly,0
+assertDoesNotThrow,3
+assertTimeout,0
+assertTimeoutPreemptively,0
+assertInstanceOf,0
