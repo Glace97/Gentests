@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Row labels and data
-rows = ["Randoop", "V1 gpt3.5-turbo-16k", "Manual"]
+rows = ["Randoop", "V1 gpt3.5-turbo-16k", "Human-written"]
 data = {
     "Assertion Density per LoC": [6368/30502, 5871/30502, 22201/30502],
     "Assertion Density per Unit Test": [6368/1379, 5871/6235, 22201/4195]

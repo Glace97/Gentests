@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 # Define the data for the plot
-rows = ["Randoop", "V1 gpt3.5-turbo-16k", "Manual"]
+rows = ["Randoop", "V1 gpt3.5-turbo-16k", "Human-written"]
 values = [0, 484, 1553]
 
 # Create a bar chart

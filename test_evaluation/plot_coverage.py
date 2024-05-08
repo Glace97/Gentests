@@ -9,7 +9,7 @@ Plot code coverage and branch coverage for different test types.
 data = {
     'Randoop': {'Code coverage': 39, 'Branch coverage': 25},
     'V1 gpt3.5-turbo-16k': {'Code coverage': 52, 'Branch coverage': 43},
-    'Manual': {'Code coverage': 95, 'Branch coverage': 92}
+    'Human-written': {'Code coverage': 95, 'Branch coverage': 92}
 }
 
 # Extracting labels and values

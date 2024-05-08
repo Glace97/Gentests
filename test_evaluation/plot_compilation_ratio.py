@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 
 # Data
-methods = ['Randoop', 'V1 gpt3.5-turbo-16k', 'Manual']
+methods = ['Randoop', 'V1 gpt3.5-turbo-16k', 'Human-written']
 ratios = [1379/1416, 6235/9434, 4195/4195]  # Actual ratios based on your values
 
 # Creating the bar chart
 plt.figure(figsize=(8, 4))  # Size of the figure
-plt.bar(methods, ratios, color=['blue', 'green', 'red'])
+plt.bar(methods, ratios, color=['#1f77b4', '#72b754', '#ef5050'])
 
 # Adding titles and labels
 plt.title('Compiling Tests Ratio')
