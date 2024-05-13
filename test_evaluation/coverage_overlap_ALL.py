@@ -2,9 +2,8 @@
 This version also accounts for the human written tests.
 '''
 import xml.etree.ElementTree as ET
-import csv
-import os
-
+import matplotlib.pyplot as plt
+from matplotlib_venn import venn2, venn2_circles, venn3, venn3_circles
 
 def extract_covered_lines(jacoco_report):
     tree = ET.parse(jacoco_report)
@@ -32,6 +31,24 @@ def compare_reports(report1, report2, report3):
     unique_lines3 = covered_lines3 - covered_lines1 - covered_lines2
 
     overlapping_lines = covered_lines1 & covered_lines2 & covered_lines3
+
+    # Create Venn diagram
+    plt.figure(figsize=(8, 6))
+
+    # For 2 sets
+    #venn2(subsets=(len(covered_lines1 - overlapping_lines), len(covered_lines2 - overlapping_lines), len(overlapping_lines)), set_labels=('Randoop', 'V1 GPT3.5-turbo-16k'))
+
+    # Extract the counts of elements for each part of the Venn diagram
+    venn_counts = [len(covered_lines1 - covered_lines2 - covered_lines3), len(covered_lines2 - covered_lines1 - covered_lines3), len(covered_lines1 & covered_lines2 - covered_lines3),
+                len(covered_lines3 - covered_lines1 - covered_lines2), len(covered_lines1 & covered_lines3 - covered_lines2), len(covered_lines2 & covered_lines3 - covered_lines1),
+                len(covered_lines1 & covered_lines2 & covered_lines3)]
+    
+    venn_labels = ('Randoop', 'V1 GPT3.5-turbo-16k', 'Human-written')
+    venn = venn3(subsets=venn_counts, set_labels=venn_labels)
+
+    plt.title("Unique Coverage and Overlap between Randoop, V1 GPT3.5-turbo-16k and Human-written tests")
+    plt.show()
+
     return unique_lines1, unique_lines2, unique_lines3, covered_lines1, covered_lines2, covered_lines3, overlapping_lines, executable_lines
 
 
@@ -47,29 +64,5 @@ manual = "/Users/glacierali/repos/MEX/reports/jacoco_manual/jacoco.xml"
 # Compare the three reports considering only the specified classes
 unique_lines_randoop, unique_lines_v1_gpt35, unique_lines_manual, all_lines_randoop, all_lines_v1_gpt35, all_lines_manual, overlapping_lines, executable_lines = compare_reports(
     randoop_coverage_report, poc_coverage_report, manual)
-
-print("Unique covered lines lines by randoop:")
-for line in unique_lines_randoop:
-    print(line)
-
-print("\nUnique covered lines by v1 gpt3.5-turbo-16k:")
-for line in unique_lines_v1_gpt35:
-    print(line)
-
-print("\nUnique covered lines by manually written tests:")
-for line in unique_lines_manual:
-    print(line)
-
-print(f'Number of unique lines covered by randoop: {len(unique_lines_randoop)}')
-print(f'Total number of lines covered by randoop: {len(all_lines_randoop)}')
-
-print(f'Number of unique lines covered by v1 gpt3.5-turbo: {len(unique_lines_v1_gpt35)}')
-print(f'Total number of lines covered by v1 gpt3.5-turbo: {len(all_lines_v1_gpt35)}')
-
-print(f'Number of unique lines covered by human written tests: {len(unique_lines_manual)}')
-print(f'Total number of lines covered by v2 human written tests: {len(all_lines_manual)}')
-
-print(f'Overlapping number of lines by all test suites {len(overlapping_lines)}')
-print(f'Total number of executable lines: {executable_lines}')
 
 
