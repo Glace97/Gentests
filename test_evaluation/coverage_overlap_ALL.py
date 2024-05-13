@@ -46,7 +46,7 @@ def compare_reports(report1, report2, report3):
     venn_labels = ('Randoop', 'V1 GPT3.5-turbo-16k', 'Human-written')
     venn = venn3(subsets=venn_counts, set_labels=venn_labels)
 
-    plt.title("Unique Coverage and Overlap between Randoop, V1 GPT3.5-turbo-16k and Human-written tests")
+    plt.title("Unique Coverage and Overlap of executable lines of Code")
     plt.show()
 
     return unique_lines1, unique_lines2, unique_lines3, covered_lines1, covered_lines2, covered_lines3, overlapping_lines, executable_lines
