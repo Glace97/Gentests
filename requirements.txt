@@ -1,3 +1,5 @@
 python-dotenv
 langchain_openai
-javac_parser
+argparse
+pandas
+matplotlib
