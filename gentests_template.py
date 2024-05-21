@@ -6,10 +6,22 @@ import argparse
 from langchain_openai import AzureChatOpenAI
 import dotenv
 import concurrent.futures
-import sys
 
 
 def initialize_llm(model_choice):
+  """
+  initialize_llm(model_choice)
+  --------------------------
+
+  Initializes an instance of the AzureChatOpenAI class based on the specified model choice.
+
+  :param model_choice: The choice of the model. 'gpt4' for GPT-4, else defaults to GPT-3.5-Turbo.
+  :type model_choice: str
+
+  :return: An instance of AzureChatOpenAI initialized with the chosen model.
+  :rtype: AzureChatOpenAI
+  """
+
   # Default setting is gpt-3.5-turbo  
   dotenv.load_dotenv()
   if model_choice == 'gpt4':
@@ -24,15 +36,21 @@ def initialize_llm(model_choice):
   
   return llm
 
-'''
-Calls the methodparser program, which extracts the given methods and the method body from the java file.
-Input: List of methods (names), path to java file
-Output: Void
-'''
 def parse_method_bodies(java_file_path, selected_methods):
-  # CLI command: 
-  # java -classpath /Users/glacierali/repos/MEX/poc/MethodParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.MethodExtractor <Path to file>
+  '''
+  parse_method_bodies(java_file_path, selected_methods)
+  -----------------------------------------------------
 
+  Calls the MethodParser program to extract specified methods and their bodies from a Java file.
+
+  :param java_file_path: Path to the Java file to parse.
+  :type java_file_path: str
+  :param selected_methods: List of method names to extract. If empty, all methods are parsed.
+  :type selected_methods: list[str]
+
+  :return: None
+  :rtype: None
+  '''
   method_parser_path = os.path.join(os.path.dirname(__file__), "MethodParser")
   print("path to method_parser programme: ", method_parser_path)
   cmd = ["java", 
@@ -49,15 +67,19 @@ def parse_method_bodies(java_file_path, selected_methods):
 
   invoke_java_parsers(cmd)
 
-'''
-Calls the contextparser program, which extracts class variables, fields, enums, inner classes, etc.
-Input: Path to javafile
-Output: Void
-'''
 def parse_context(java_file_path):
-   # CLI command
-   # java -classpath /Users/glacierali/repos/MEX/poc/ContextParser/target/classes:/Users/glacierali/.m2/repository/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar parser.ContextExtractor <args>
+  '''
+  parse_context(java_file_path)
+  -----------------------------
 
+  Calls the context parser program to extract class variables, fields, enums, inner classes, etc.
+
+  :param java_file_path: Path to the Java file to parse.
+  :type java_file_path: str
+
+  :return: None
+  :rtype: None
+  '''
   context_parser_path = os.path.join(os.path.dirname(__file__), "ContextParser")
   #print("path to context_parser programme: ", context_parser_path)
   cmd = ["java", 
@@ -67,14 +89,23 @@ def parse_context(java_file_path):
 
   invoke_java_parsers(cmd)
 
-'''
-Creates the prompt for generating unittests.
-Format: Generate a junit5 test suite for the following method {method_name}. The test suite should achieve high coverage and cover all edge cases. 
-Input: Name of method to test, path to the parsed methods from the source code (maybe one or several), path to the generated context
-Returns: location of constructed prompts
-'''
 def construct_prompt(class_name, path_parsed_methods, path_context_folder,):
+  '''
+  construct_prompt(class_name, path_parsed_methods, path_context_folder)
+  ----------------------------------------------------------------------
 
+  Creates a prompt for generating unit tests.
+
+  :param class_name: Name of the class containing the method to test.
+  :type class_name: str
+  :param path_parsed_methods: Path to the parsed methods from the source code.
+  :type path_parsed_methods: str
+  :param path_context_folder: Path to the generated context.
+  :type path_context_folder: str
+
+  :return: Location of constructed prompts.
+  :rtype: str
+  '''
   # 1. Create output folder for all prompts (1 prompt/method of the same name)
   location_prompts = f'./prompts/{class_name}'
   os.makedirs(location_prompts, exist_ok=True)
@@ -146,12 +177,24 @@ Rules to Follow:
   # Where to find the created prompts
   return location_prompts
 
-'''
-Sends the prompt to the openAI chatGPT model.
-Input: Location to prompts, where each prompt is one textfile containing a query, context and function(s) to be tested. All prompts belong to the same class.
-Output: Writes each testsuite for a given function to a file, under ./model_responses/{class_name}/{methodName}
-'''
 def prompt_model(location_prompts, class_name, llm):
+  '''
+  prompt_model(location_prompts, class_name, llm)
+  ----------------------------------------------
+
+  Sends prompts to the OpenAI ChatGPT model and writes the generated test suites to files.
+
+  :param location_prompts: Location of the prompt files, each containing a query, context, and function(s) to be tested.
+  :type location_prompts: str
+  :param class_name: Name of the class to which all prompts belong.
+  :type class_name: str
+  :param llm: The language model instance to use for generating responses.
+  :type llm: AzureChatOpenAI
+
+  :return: None
+  :rtype: None
+  '''
+
   # 1. Location of responses
   location_ai_response = f'./model_responses/{class_name}'
   os.makedirs(location_ai_response, exist_ok=True)
@@ -212,14 +255,22 @@ def prompt_model(location_prompts, class_name, llm):
           
   print("Done prompting the model.")
 
-'''
-Creats a test class by combining the generated testsuites (1 file /method) for a given class.
-Input: path to generated tests, name of CUT, location of where the testclass should be placed.
-Output: A full testclass with the test suite inserted in the given test directory.
-'''  
 def construct_testfile(class_name, test_directory):
-  
-  print("Start constructing testfile.")
+  '''
+  construct_testfile(class_name, test_directory)
+  ----------------------------------------------
+
+  Creates a test class by combining the generated test suites (one file per method) for a given class.
+
+  :param class_name: Name of the class under test (CUT).
+  :type class_name: str
+  :param test_directory: Location where the test class should be placed.
+  :type test_directory: str
+
+  :return: None
+  :rtype: None
+  '''
+
   #1. Create output directory if it does not exist
   with open(f'./parser_output/{class_name}_context/package', 'r') as input:
     original_pkg = input.read()
@@ -273,14 +324,24 @@ def construct_testfile(class_name, test_directory):
         print("Created new testfile for method: ", method_named_test_suite_file)
 
 
-  
+
 
 ################################################  HELPER METHODS ################################################## 
 
-'''
-Remove generated files after the test generation process is done.
-'''
+
 def cleanup(class_name):
+   '''
+    cleanup(class_name)
+    -------------------
+
+    Removes generated files after the test generation process is completed.
+
+    :param class_name: Name of the class for which files were generated.
+    :type class_name: str
+
+    :return: None
+    :rtype: None
+    '''
    path_context = f'./parser_output/{class_name}_context'
    path_methods = f'./parser_output/{class_name}_methods'
    prompts = f'./prompts/{class_name}/'
@@ -304,10 +365,21 @@ def cleanup(class_name):
      print(f"Error: : {e.strerror}")
 
 
-'''
-Invokes the java parser programs.
-'''
+
 def invoke_java_parsers(cmd):
+  '''
+  invoke_java_parsers(cmd)
+  -------------------------
+
+  Invokes the Java parser programs.
+
+  :param cmd: Command to invoke the Java parser program.
+  :type cmd: list[str]
+
+  :return: None
+  :rtype: None
+  '''
+
   # Invoke context extractor program
   process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
   stdout, stderr = process.communicate()
@@ -324,23 +396,46 @@ def invoke_java_parsers(cmd):
     print(f"Error occurred while invoking program {program}: ", stderr.decode())
 
 def invoke_llm(llm, prompt):
+  '''
+  invoke_llm(llm, prompt)
+  ------------------------
+
+  Invokes the provided language model instance to generate a response based on the given prompt.
+
+  :param llm: The language model instance to use for generating the response.
+  :type llm: AzureChatOpenAI
+  :param prompt: The prompt to generate a response for.
+  :type prompt: str
+
+  :return: The response generated by the language model.
+  :rtype: str
+  '''
   return llm.invoke(prompt)
 
-'''
-Example use case 1:
-    # Specify model gpt-3.5-turbo explicitly and methods 
-    python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32Bit is64Bit --model gpt-3.5-turbo -o tmp/
-    # Specify model gpt4 explicitly
-    python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32Bit is64Bit --model gpt4 -o tmp/
 
-Example use case 2:
-    # No model specified, defaults to gpt-3.5-turbo
-    python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -o tmp/
-    # Specify model gpt4 explicitly
-    python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java --model gpt4 -o tmp/
-'''
 def main(): 
-    
+    '''
+    main()
+    ----
+
+    Main method of the program to generate unit tests for a given Java file.
+
+    Usage Examples:
+        # Specify model gpt-3.5-turbo explicitly and selected methods. Testfile placed in tmp/ folder
+        python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32Bit is64Bit --model gpt-3.5-turbo -o tmp/
+        
+        # Specify model gpt4 explicitly
+        python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -m is32Bit is64Bit --model gpt4 -o tmp/
+
+        # No model specified, defaults to gpt-3.5-turbo. Generates tests for all methods in the file. Testfile placed in tmp/ folder
+        python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java -o tmp/
+        
+        # Specify model gpt4 explicitly. No methods specified, generates tests for all methods in the file. Testfile placed in tmp/ folder
+        python gentests_template.py /Users/glacierali/repos/MEX/commons-lang/src/main/java/org/apache/commons/lang3/arch/Processor.java --model gpt4 -o tmp/
+
+    :return: None
+    :rtype: None
+    '''
     gentests = argparse.ArgumentParser(description="Generate unit tests for a given javafile.")
     gentests.add_argument("javafile", type=str, help="Path to the Java file")
     gentests.add_argument("-m", "--methods", nargs="*", help="Sequence of methodnames separated by whitespace")
