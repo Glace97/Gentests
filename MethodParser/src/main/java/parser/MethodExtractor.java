@@ -11,8 +11,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 /**
- * Extracts information from Javafiles.
- * Imports, packages, methods, class variables, enums.
+ * Extracts methods and the method bodiees from Java files.
  */
 public class MethodExtractor extends JavaParserBaseListener {
     String[] methodNamesToMatch;
@@ -22,40 +21,65 @@ public class MethodExtractor extends JavaParserBaseListener {
     HashMap<String, ArrayList<String>> methodBodies;
     HashMap<String, ArrayList<String>> classMethodMapping;
     CharStream input;
-    static Logger logger;
     ArrayList<String> allMethodsNames;
+
+    // Flag indicating whether to extract all method names
     static boolean allMethods = false;
 
+    /**
+     * Constructor for MethodExtractor.
+     * Initializes method names to match, output directory, and logger.
+     * @param methodNames Names of methods to match and extract.
+     * @param outputDir Path to the output directory where extracted information will be stored.
+     */
     public MethodExtractor(String[] methodNames, String outputDir) {
         this.methodNamesToMatch = methodNames;
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
         this.methodBodies = new HashMap<>();
         this.classMethodMapping = new HashMap<>();
-        logger = Logger.getLogger(MethodExtractor.class.getName());
-        // logging.properties overides programmatical setting
-        //logger.setLevel(Level.INFO);
     }
 
+    /**
+     * Overloaded constructor for MethodExtractor.
+     * Initializes output directory and logger.
+     * @param outputDir Path to the output directory where extracted information will be stored.
+     */
     public MethodExtractor(String outputDir) {
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
         this.methodBodies = new HashMap<>();
         this.classMethodMapping = new HashMap<>();
-        logger = Logger.getLogger(MethodExtractor.class.getName());
     }
 
+    /**
+     * Callback when entering a method declaration.
+     * Extracts information about method names and bodies.
+     * @param ctx The method declaration context.
+     */
     @Override
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
         parseMethods(ctx.identifier(), ctx.modifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
     }
 
+    /**
+     * Callback when entering a generic method declaration.
+     * Extracts information about method names and bodies.
+     * @param ctx The generic method declaration context.
+     */
     @Override
     public void enterGenericMethodDeclaration(JavaParser.GenericMethodDeclarationContext ctx) {
 
         parseMethods(ctx.identifier(), ctx.modifier(), ctx.start.getStartIndex(), ctx.stop.getStopIndex());
     }
 
+    /**
+     * Parses method names and bodies based on specified criteria.
+     * @param identifier The identifier context representing the method name.
+     * @param modifier The modifier context representing the method modifier.
+     * @param startIndex The start index of the method declaration.
+     * @param stopIndex The stop index of the method declaration.
+     */
     private void parseMethods(JavaParser.IdentifierContext identifier, JavaParser.ModifierContext modifier, int startIndex, int stopIndex) {
         if (identifier != null) {
             String foundName = identifier.getText();
@@ -83,6 +107,13 @@ public class MethodExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Extracts the body of a method and associates it with its name.
+     * Keeps track of methods belonging to the current Java file for organization.
+     * @param name The name of the method.
+     * @param startIndex The start index of the method declaration.
+     * @param stopIndex The stop index of the method declaration.
+     */
     private void extractMethodBody(String name, int startIndex, int stopIndex) {
         Interval interval = new Interval(startIndex, stopIndex);
         String methodBody = input.getText(interval);
@@ -105,10 +136,13 @@ public class MethodExtractor extends JavaParserBaseListener {
     }
 
 
+    /**
+     * Recursively walks through the directory structure to parse Java files.
+     * @param dirOrFile The directory or file to start walking from.
+     */
     public void walkDirectory(File dirOrFile) {
         if (dirOrFile.getName().endsWith(".java")) {
             // A file was directly provided instead of a directory
-            logger.info("Parsing a single file instead of directory");
             parseFile(dirOrFile);
         } else {
             // Recursively check all .java files in the given directory
@@ -124,6 +158,10 @@ public class MethodExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Parses a Java file, extracting method bodies and associated information.
+     * @param child The Java file to be parsed.
+     */
     private void parseFile(File child) {
         try {
             currentJavaFile = child;
@@ -141,14 +179,12 @@ public class MethodExtractor extends JavaParserBaseListener {
 
             ParserRuleContext tree = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
-            logger.info("Current file: " + child);
-            //logger.info(tree.toStringTree(parser));
             walker.walk(this, tree);
             if (!methodBodies.isEmpty()) {
-                logger.info("Collected parser intervals.");
+                System.out.println("Collected parser intervals.");
                 writeOutputFile();
             } else {
-                logger.info("No methodbodies recovered");
+                System.out.println("No methodbodies recovered");
             }
         } catch (IOException e) {
             System.err.println("Could not parse " + child.getPath());
@@ -156,6 +192,9 @@ public class MethodExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Writes the extracted method bodies to output files.
+     */
     private void writeOutputFile() {
         String nameWithExtension = this.currentJavaFile.getName();
         String className = nameWithExtension.split("\\.")[0];
@@ -178,7 +217,6 @@ public class MethodExtractor extends JavaParserBaseListener {
             ArrayList<String> associatedMethods = classMethodMapping.get(this.currentJavaFile.getName());
             if (associatedMethods.contains(methodToTest)) {
                 if(!methodToTest.isEmpty()) {
-                    // TODO: BUG; Constructors sometimes parsed as method?
                     File outFile = new File(outputFolder, methodToTest);
                     try {
                         FileWriter fw = new FileWriter(outFile);
@@ -197,10 +235,15 @@ public class MethodExtractor extends JavaParserBaseListener {
             }
 
         }
-
     }
 
 
+    /**
+     * Main method to initiate the Java file parsing and method extraction process.
+     * Accepts command line arguments specifying the path to the project directory or file, and optionally, method names to match and extract.
+     * @param args Command line arguments. If no method names are provided, all public methods are extracted.
+     * @throws IOException If an I/O error occurs.
+     */
     public static void main(String[] args) throws IOException {
         if (args.length < 1) {
             System.out.println("Please provide a path to the project directory or file");
@@ -219,8 +262,6 @@ public class MethodExtractor extends JavaParserBaseListener {
                 // Only path to file was provided, get all public methods
                 allMethods = true;
                 MethodExtractor extractor = new MethodExtractor(outputDir);
-                logger.info("Directory to parse: " + pathToProject);
-                logger.info("Will parse methods.");
                 extractor.walkDirectory(input_dir);
             } else {
                 // DEBUG
@@ -230,17 +271,12 @@ public class MethodExtractor extends JavaParserBaseListener {
                 String[] methods = new String[numMethods];
                 System.arraycopy(args, 1, methods, 0, numMethods);
                 MethodExtractor extractor = new MethodExtractor(methods, outputDir);
-
-                logger.info("Directory to parse: " + pathToProject);
-                logger.info("Methods to look for: " + Arrays.toString(methods));
-
                 extractor.walkDirectory(input_dir);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             System.exit(1);
         }
-
     }
 }
 
