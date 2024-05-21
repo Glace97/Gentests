@@ -1,0 +1,24 @@
+using Xunit;
+using System;
+using CCP.Outages.Api.Helpers;
+
+namespace CCP.Outages.Tests;
+public class TimeHelperTests
+{
+    [Fact]
+    public void Now_WhenCalled_ReturnsCurrentUtcDateTime()
+    {
+        // Instantiate all necessary variables here
+        var timeHelper = new TimeHelper();
+
+        // Write the test code here following the given rules
+        var result = timeHelper.Now();
+        var currentUtcDateTime = DateTime.UtcNow;
+
+        // Assert that the result is within a reasonable time frame of the current UTC date/time
+        // to account for the time it takes to execute the method
+        Assert.True((currentUtcDateTime - result).TotalSeconds < 1);
+    }
+
+    // Add more test methods here
+}
