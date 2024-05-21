@@ -1,4 +1,4 @@
-package parser;// Generated from src/main/java/JavaLexer.g4 by ANTLR 4.13.1
+package parser;// Generated from MethodParser/src/main/java/JavaLexer.g4 by ANTLR 4.13.1
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

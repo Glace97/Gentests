@@ -162,7 +162,7 @@ memberDeclaration
  */
 methodDeclaration
     // Tripple modifiers examlpe: protected final Synchronized
-    :  javadoc? annotation? modifier* typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
+    :  javadoc? annotation? modifier? STATIC? typeTypeOrVoid identifier formalParameters ('[' ']')* (THROWS qualifiedNameList)? methodBody
     ;
 
 staticInitializer

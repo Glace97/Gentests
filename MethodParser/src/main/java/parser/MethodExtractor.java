@@ -24,7 +24,7 @@ public class MethodExtractor extends JavaParserBaseListener {
     CharStream input;
     static Logger logger;
     ArrayList<String> allMethodsNames;
-    static boolean allMethods;
+    static boolean allMethods = false;
 
     public MethodExtractor(String[] methodNames, String outputDir) {
         this.methodNamesToMatch = methodNames;
