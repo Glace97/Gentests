@@ -64,4 +64,14 @@ python gentests_template.py /path/to/javafile.java --model gpt4 -o tmp/
 
 - v1 folder contains the first implementation of the Proof Of Concept.
 
+- Set environment variables in `.env`file placed in the root of the project. Example format:
+ ```
+OPENAI_API_TYPE='azure'
+OPENAI_API_KEY='{SECRET-KEY}'
+AZURE_OPENAI_ENDPOINT='{ENDPOINT}'
+OPENAI_DEPLOYMENT_NAME='{DEPLOYMENT-NAME}'
+OPENAI_API_VERSION='2023-05-15'
+ ```
+
+
 
