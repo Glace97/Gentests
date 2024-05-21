@@ -12,10 +12,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 
 /**
- * Extracts information from Javafiles.
- * Imports, packages,  class variables, enums.
+ * Extracts information from Java files such as imports, packages, class variables, and enums.
  */
-//TODO: add logging
 public class ContextExtractor extends JavaParserBaseListener {
     File currentJavaFile;
     File outputDir;
@@ -29,21 +27,39 @@ public class ContextExtractor extends JavaParserBaseListener {
 
     String declaration = "";
 
+
+    /**
+     * Constructor to initialize output directory and data structures.
+     * @param outputDir Path to the output directory where extracted information will be stored.
+     */
     public ContextExtractor(String outputDir) {
         this.outputDir = new File(outputDir);
         this.outputDir.mkdirs();
         this.entries = new HashSet<>();
     }
 
+    /**
+     * Callback when entering a package declaration in the Java file.
+     * @param ctx The package declaration context.
+     */
     @Override public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) {
         packageName = getTextFromContext(ctx);
     }
 
+    /**
+     * Callback when entering an import declaration in the Java file.
+     * @param ctx The import declaration context.
+     */
     @Override public void enterImportDeclaration(JavaParser.ImportDeclarationContext ctx) {
         String importString = getTextFromContext(ctx);
         imports.add(importString);
     }
 
+    /**
+     * Extracts String text from a given context.
+     * @param ctx The context from which text is to be extracted.
+     * @return Extracted readable text from the context.
+     */
     private String getTextFromContext(ParserRuleContext ctx) {
         if (ctx != null) {
             int startIndex = ctx.start.getStartIndex();
@@ -54,10 +70,16 @@ public class ContextExtractor extends JavaParserBaseListener {
         return " ";
     }
 
-    // Class declaration consists of a classBody Context
-    // The classBody context consists of a class Body
-    // The classBody consists of members
-    // Members has methodDeclarations, fieldDeclarations, inner classDeclarations, constructors etc.
+    /**
+     * Callback when entering a class declaration in the Java file.
+     * Extracts information about class members.
+     * <p>
+     * Class declaration consists of a classBody Context. The classBody context consists of a class Body.
+     * The classBody consists of members such as methodDeclarations, fieldDeclarations, inner classDeclarations, constructors, etc.
+     * </p>
+     *
+     * @param ctx The class declaration context.
+     */
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         if(ctx != null) {
@@ -107,6 +129,10 @@ public class ContextExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Constructs the full declaration of the class including its name, type parameters, inheritance, etc.
+     * @param ctx The class declaration context.
+     */
     private void setFullDeclaration(JavaParser.ClassDeclarationContext ctx){
         if(!isNestedClass(ctx)) {
             ArrayList<String> classDeclaration = new ArrayList<>();
@@ -157,6 +183,11 @@ public class ContextExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Checks if the class is a nested class.
+     * @param context The class context.
+     * @return True if the class is nested, otherwise false.
+     */
     private boolean isNestedClass(ParserRuleContext context) {
         ParserRuleContext parent = context.getParent();
         while (parent != null) {
@@ -168,12 +199,16 @@ public class ContextExtractor extends JavaParserBaseListener {
         return false;
     }
 
+    /**
+     * Recursively walks through a directory to parse all Java files.
+     * @param dirOrFile The directory or file to be parsed.
+     */
     public void walkDirectory( File dirOrFile ) {
         if(dirOrFile.getName().endsWith(".java")) {
             // A file was directly provided instead of a directory
             parseFile(dirOrFile);
         } else {
-            // Recursively check all .java files in the given directory
+            // Xheck all .java files in the given directory
             for( File child : Objects.requireNonNull(dirOrFile.listFiles())) {
                 if( child.isDirectory() ) {
                     walkDirectory( child );
@@ -186,6 +221,10 @@ public class ContextExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Parses a Java file, extracting its context, imports, and other information.
+     * @param child The Java file to be parsed.
+     */
     private void parseFile(File child) {
         try {
             currentJavaFile = child;
@@ -210,6 +249,9 @@ public class ContextExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Writes the extracted information to the corresponding output files.
+     */
     private void writeOutputFile() {
         String nameWithExtension =  this.currentJavaFile.getName();
         String className = nameWithExtension.split("\\.")[0];
@@ -259,6 +301,11 @@ public class ContextExtractor extends JavaParserBaseListener {
         }
     }
 
+    /**
+     * Entry point of the application. Parses the specified directory or file.
+     * @param args Command-line arguments. Expects the path to the project directory or file.
+     * @throws IOException If an I/O error occurs.
+     */
     public static void main(String[] args) throws IOException {
         if(args.length < 1) {
             System.out.println("Please provide a path to the project directory or file");
