@@ -1,4 +1,4 @@
-I need to generate unit tests for ${methodName} in ${className} using JUnit5 and Mockito. 
+You are a coding assistant. Generate unit tests for ${methodName} in ${className} using JUnit5 and Mockito. 
 The tests should strictly follow the provided boilerplate structure. Here’s the boilerplate for each test method:
 
 ${packageName}
@@ -29,3 +29,10 @@ Rules to follow:
 3. Use Mockito for mocking dependencies and JUnit for assertions.
 4. The test suite should strive to achieve high code and branch coverage, and cover edge cases.
 5. Return the entire code section in one coherent piece.
+
+
+
+
+
+
+
