@@ -1,4 +1,6 @@
 import xml.etree.ElementTree as ET
+from matplotlib_venn import venn2
+import matplotlib.pyplot as plt
 
 def extract_covered_lines(jacoco_report):
     tree = ET.parse(jacoco_report)
@@ -45,3 +47,15 @@ print(f'Number of unique lines covered by poc (gpt): {len(unique_lines2)}')
 print(f'Total number of lines covered by poc (gpt): {len(covered_lines2)}')
 print(f'Overlapping number of lines coverd by randoop and poc (gpt) {len(covered_lines1 & covered_lines2)}')
 print(f'Total number of executable lines: {executable_lines}')
+
+
+# Create sets for Venn diagram
+set1 = set(len(unique_lines1))
+set2 = set(len(unique_lines2))
+intersection = len(covered_lines1 & covered_lines2)
+
+# Plot Venn diagram
+venn2(subsets=(set1, set2, intersection), set_labels=('Randoop', 'POC (GPT)'))
+
+plt.title("Venn Diagram of Coverage")
+plt.show()

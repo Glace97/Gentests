@@ -1,8 +1,15 @@
 import matplotlib.pyplot as plt
 
 # Define the data for the plot
-rows = ["Randoop", "V1 gpt3.5-turbo-16k", "Human-written"]
-values = [0, 484, 1553]
+'''
+rows = ["Randoop", "V1 GPT3.5-turbo-16k", "Human-written"]
+values = [333, 484, 1553]
+'''
+
+#'''
+rows = ["V1 GPT3.5-turbo-16k", "V2 GPT3.5-turbo-16k", "V2 GPT4"]
+values = [72, 52, 99]
+#'''
 
 # Create a bar chart
 plt.figure(figsize=(8, 6))  # Set the figure size

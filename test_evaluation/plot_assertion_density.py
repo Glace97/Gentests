@@ -1,12 +1,23 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Row labels and data
-rows = ["Randoop", "V1 gpt3.5-turbo-16k", "Human-written"]
+# FULL DATASET
+#'''
+rows = ["Randoop", "V1 GPT3.5-turbo-16k", "Human-written"]
 data = {
-    "Assertion Density per LoC": [6368/30502, 5871/30502, 22201/30502],
-    "Assertion Density per Unit Test": [6368/1379, 5871/6235, 22201/4195]
+    "Assertion Density per LoC": [6368/86614, 5871/86614, 22201/86614],
+    "Assertion Density per Unit Test": [6368/1379, 5871/4876, 22201/4195]
 }
+#'''
+
+# SUBSET
+'''
+rows = ["V1 GPT3.5-turbo-16k","V2 GPT3.5-turbo-16k", "V2 GPT4"]
+data = {
+    "Assertion Density per LoC": [2255/23481, 2260/23481, 2344/23481],
+    "Assertion Density per Unit Test": [2255/1441, 2260/1823, 2344/1562]
+}
+'''
 
 # Create figure and axis
 fig, ax1 = plt.subplots()
@@ -33,7 +44,7 @@ ax2.set_ylim(0, max(data["Assertion Density per Unit Test"]) * 1.2)  # Extend ra
 ax1.set_xlabel('Method')
 ax1.set_ylabel('Assertion Density per LoC', color='#1f77b4')
 ax2.set_ylabel('Assertion Density per Unit Test', color='#ff7f0e')
-ax1.set_title('Assertion Metrics by Type and Row')
+ax1.set_title('Assertion Metrics')
 ax1.set_xticks(index)
 ax1.set_xticklabels(rows)
 
