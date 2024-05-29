@@ -319,7 +319,7 @@ public class ContextExtractor extends JavaParserBaseListener {
             //File input = new File("/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses")
             File input = new File(pathToProject);
 
-            String outputDir = "/Users/glacierali/repos/MEX/poc/parser_output";
+            String outputDir = "/Users/glacierali/repos/MEX/Gentests/parser_output";
             ContextExtractor extractor = new ContextExtractor(outputDir);
             extractor.walkDirectory(input);
         } catch (Exception ex) {

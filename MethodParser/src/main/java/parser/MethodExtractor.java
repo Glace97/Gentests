@@ -255,7 +255,7 @@ public class MethodExtractor extends JavaParserBaseListener {
             // DEBUG
             //pathToProject = "/Users/glacierali/repos/MEX/poc/Parser/src/main/java/testclasses";
             File input_dir = new File(pathToProject);
-            String outputDir = "/Users/glacierali/repos/MEX/poc/parser_output";
+            String outputDir = "/Users/glacierali/repos/MEX/Gentests/parser_output";
 
             int numMethods = args.length - 1; // Do not include path to project in count
             if (numMethods == 0) {
