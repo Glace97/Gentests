@@ -237,7 +237,7 @@ public class TestFileParser extends JavaParserBaseListener {
             String testFilePath = args[0];
             String generatedTestFilePath = args[1];
 
-            String outputDir = "/Users/glacierali/repos/MEX/poc/parser_output";
+            String outputDir = "/Users/glacierali/repos/MEX/Gentests/parser_output";
 
             ArrayList<String> inputs = new ArrayList<>();
             inputs.add(testFilePath);
